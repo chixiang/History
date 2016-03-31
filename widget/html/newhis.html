@@ -12,7 +12,30 @@
             padding: 120px 0;
         }
         #main{
-            padding: 50px 0px;
+            padding: 0px 0px;
+        }
+        header{
+            background-color: #f2f2f2;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            font-size: 18px;
+        }
+        #topleft button{
+            height: 50px;
+            width:50px;
+            line-height: 50px;
+            float: left;
+            font-size: 15px;
+            text-align: center;
+        }
+        #topright button{
+            height: 50px;
+            width:50px;
+            line-height: 50px;
+            float: right;
+            font-size: 15px;
+            text-align: center;
         }
         .his_label{
             height: 50px;
@@ -29,10 +52,27 @@
         .his_info{
             border: 0px;
         }
+        textarea{
+            font-size: 18px;
+            padding-top: 10px;
+            height:100px;
+            width:100%;
+        }
     </style>
 </head>
 <body>
     <div id="main">
+        <header>
+            <div id="topleft">
+                <button name="cancel">取消</button>
+            </div>
+            <div id="topright">
+                <button name="save">保存</button>
+            </div>
+            <div id="toptitle">
+                <span>新建病历</span>
+            </div>
+        </header>
         <div class="his_label">
             <label>患者姓名：<input type="text" class="his_info" /></label>
         </div>
@@ -41,6 +81,9 @@
         </div>
         <div class="his_label">
             <label>患者年龄：<input type="text" class="his_info" /></label>
+        </div>
+        <div>
+            <textarea name="" id=""></textarea>
         </div>
     </div>
 </body>
