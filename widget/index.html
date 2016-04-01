@@ -10,64 +10,36 @@
         header{
             background-color: #f2f2f2;
         }
-        header ul li {
+        .top-button{
+            margin: 0 1em;
+            text-align: center;
             height: 50px;
             line-height: 50px;
-            text-align: center;
-            display: none;
-            color: #323237;
-            position: relative;
-            font-size: 18px;
-            margin-left: 50px;
+            font-size: 16px;
         }
-        header ul li.active{
-            display: block;
+        .fl{
+            float: left;
         }
-        .topright{
+        .fr {
             float: right;
-            height: 50px;
-            width:50px;
-            line-height: 50px;
-            font-size: 15px;
-            text-align: center;
-            z-index: 10;
         }
-        #footer{  background-color: #f2f2f2; }
-        #footer ul li{  padding-top: 36px; padding-bottom: 4px; background: url() no-repeat center 2px; background-size: auto 30px; text-align: center; }
-        #footer ul li.active{ color: #6ab494; }
-        #footer ul li:nth-child(1){ background-image: url(./image/bottombtn0101.png); }
-        #footer ul li:nth-child(2){ background-image: url(./image/bottombtn0201.png); }
-        #footer ul li:nth-child(3){ background-image: url(./image/bottombtn0301.png); }
-        #footer ul li:nth-child(4){ background-image: url(./image/bottombtn0401.png); }
-        #footer ul li:nth-child(1).active{ background-image: url(./image/bottombtn0102.png); }
-        #footer ul li:nth-child(2).active{ background-image: url(./image/bottombtn0202.png); }
-        #footer ul li:nth-child(3).active{ background-image: url(./image/bottombtn0302.png); }
-        #footer ul li:nth-child(4).active{ background-image: url(./image/bottombtn0402.png); }
     </style>
 </head>
 <body>
 <div id="wrap" class="flex-wrap flex-vertical">
     <header>
-        <span class="topright">
-            <a href="" tapmode="presshover" onclick="openNewHisWindow()">新建</a>
-        </span>
-        <ul>
-            <li class="border-b active" >病历</li>
-            <li class="border-b" >随访</li>
-            <li class="border-b" >科室</li>
-            <li class="border-b" >我</li>
-        </ul>
+        <div class='top-button fl' >
+            <a href="" tapmode="presshover" onclick="openWin('option')">设置</a>
+        </div>
+        <div class='top-button fr' >
+            <a href="" tapmode="presshover" onclick="openWin('search')">查找</a>
+        </div>
+        <div class='top-button fr' >
+            <a href="" tapmode="presshover" onclick="openWin('newhis')">新增</a>
+        </div>
     </header>
     <div id="main" class="flex-con">
 
-    </div>
-    <div id="footer" class="border-t">
-        <ul class="flex-wrap" >
-            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active" >病历</li>
-            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >随访</li>
-            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >科室</li>
-            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >我</li>
-        </ul>
     </div>
 </div>
 </body>
@@ -75,67 +47,124 @@
 <script type="text/javascript" src="script/api.js"></script>
 <script type="text/javascript">
     apiready = function () {
-        $api.fixStatusBar( $api.dom('header') );
-        api.setStatusBarStyle({
-            style: 'dark',
-            color: '#6ab494'
-        });
-        funIniGroup();
-    }
+        var listView = api.require('listView');
+        listView.open({jj
+            "x": 0,
+            "y": 50px,
+            "w": api.frameWidth,
+            "h": api.frameHeight,
+            "leftBtn": [
+                {
+                    "color": "#E76B65",
+                    "selectColor": "#bc534d",
+                    "title": "修改"
+                }, {
+                    "color": "#E76B65",
+                    "selectColor": "#bc534d",
+                    "title": "删除"
+                }
+            ],
+            "leftBg": "#e9e9e9",
+            "borderColor": "#CCCCCC",
+            "cellBgColor": "#F0F5F5",
+            "cellSelectColor": "#E9E9E9",
+            "data":[
+                {   
+                    "placeHoldImg": "./image/bottombtn0101.png",
+                    "title": "患者甲",
+                    "titleLocation": "left",
+                    "titleSize": "16",
+                    "titleColor": "#999999",
+                    "subTitle": "白内障",
+                    "subLocation": "left",
+                    "subTitleSize": "14",
+                    "subTitleColor": "#999999"
+                }, {
+                    "placeHoldImg": "./image/bottombtn0201.png",
+                    "title": "患者乙",
+                    "titleLocation": "left",
+                    "titleSize": "16",
+                    "titleColor": "#999999",
+                    "subTitle": "青光眼",
+                    "subLocation": "left",
+                    "subTitleSize": "14",
+                    "subTitleColor": "#999999"
+                }
+            ],
+            fixedOn: api.frameName
+        },
+        function(ret, err) {
+            var msg;
 
-    function funIniGroup(){
-        var eHeaderLis = $api.domAll('header li'),
-            frames = [];
-        for (var i = 0,len = eHeaderLis.length; i < len; i++) {
-                frames.push( {
-                    name: 'frame'+i,
-                    url: './html/frame'+i+'.html',
-                    bgColor : 'rgba(0,0,0,.2)',
-                    bounces:true
-                } )
-        }
-        api.openFrameGroup({
-            name: 'group',
-            scrollEnabled: false,
-            rect: {
-                x: 0,
-                y: $api.dom('header').offsetHeight,
-                w: api.winWidth,
-                h: $api.dom('#main').offsetHeight
-            },
-            index: 0,
-            frames: frames
-        }, function (ret, err) {
-
-        });
-    }
-
-    // 随意切换按钮
-    function randomSwitchBtn( tag ) {
-        if( tag == $api.dom('#footer li.active') )return;
-        var eFootLis = $api.domAll('#footer li'),
-            eHeaderLis = $api.domAll('header li'),
-            index = 0;
-        for (var i = 0,len = eFootLis.length; i < len; i++) {
-            if( tag == eFootLis[i] ){
-                index = i;
-            }else{
-                $api.removeCls(eFootLis[i], 'active');
-                $api.removeCls(eHeaderLis[i], 'active');
+            if(0 == ret.clickType){
+                msg = "您点击了第 " + ret.index +" 个单元格";
             }
+
+            if(1 == ret.clickType){
+                msg += " 右边第 " + ret.btnIndex + " 个按钮";
+            }
+
+            if(2 == ret.clickType){
+                msg += " 左边第 " + ret.btnIndex + " 个按钮";
         }
-        $api.addCls( eFootLis[index], 'active');
-        $api.addCls( eHeaderLis[index], 'active');
-        api.setFrameGroupIndex({
-            name: 'group',
-            index: index
+
+        api.toast({
+            msg: msg,
+            duration: 1000,
+            location: "top"
+        });
         });
     }
 
-    function openNewHisWindow() {
+    listView.setRefreshHeader({
+            bgColor: "#f5f5f5",
+            loadingImg : "./image/bottombtn0301.png"
+        }, 
+        function(ret,err){
+            /* 触发加载事件, 此处应使用使用 reloadData 方法.*/
+            listView.reloadData({
+                data:[
+                    {
+                        "placeHoldImg":"./image/bottombtn0301.png",
+                        "title":"新标题1",
+                        "subTitle":"新子标题1"
+                    },
+                    {
+                        "placeHoldImg":"./image/bottombtn0401.png",
+                        "title":"新标题2",
+                        "subTitle":"新子标题2"
+                    }]
+            }
+        );
+
+    });
+
+    listView.setRefreshFooter({
+            bgColor: "#f5f5f5",
+            loadingImg : "./image/bottombtn0301.png"
+        },
+        function(ret,err){
+            /* 触发加载事件, 此处应使用使用 appendData 方法.*/
+            listView.appendData({
+                data:[
+                    {
+                        "placeHoldImg":"./image/bottombtn0301.png",
+                        "title":"新标题3",
+                        "subTitle":"新子标题3"
+                    },
+                    {
+                        "placeHoldImg":"./image/bottombtn0401.png",
+                        "title":"新标题4",
+                        "subTitle":"新子标题4"
+                    }]
+            }
+        );
+    });
+
+    function openWin(type) {
         api.openWin({
-            name: "newhis",
-            url: './html/newhis.html',
+            name: type,
+            url: './html/' + type + '.html',
             pageParam: {},
             bounces: false,
             opaque: false
