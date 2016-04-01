@@ -51,7 +51,7 @@
         var listView = api.require('listView');
         listView.open({
             "x": 0,
-            "y": 50px,
+            "y": 0,
             "w": api.frameWidth,
             "h": api.frameHeight,
             "leftBtn": [
@@ -115,7 +115,6 @@
             location: "top"
         });
         });
-    }
 
     listView.setRefreshHeader({
             bgColor: "#f5f5f5",
@@ -161,6 +160,7 @@
             }
         );
     });
+    }
 
     function openWin(type) {
         api.openWin({
