@@ -48,12 +48,13 @@
 <script type="text/javascript" src="script/api.js"></script>
 <script type="text/javascript">
     apiready = function () {
+        $api.fixStatusBar( $api.dom('header') );
         var listView = api.require('listView');
         listView.open({
             "x": 0,
-            "y": 0,
-            "w": api.frameWidth,
-            "h": api.frameHeight,
+            "y": $api.dom('header').offsetHeight,
+            "w": api.winWidth,
+            "h": $api.dom('#main').offsetHeight,
             "leftBtn": [
                 {
                     "color": "#E76B65",
