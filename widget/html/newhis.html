@@ -3,19 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-    <title>病历</title>
+    <title>新建病历</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <style>
-        header{
+        /*header{
             background-color: #f2f2f2;
             height: 50px;
             line-height: 50px;
             text-align: center;
             font-size: 18px;
             position: relative;
+        }*/
+        html,body,header,nav,div,img,a,span,strong,label,input,textarea{
+            margin:0;
+            border:0;
+            padding:0;
         }
-        #topleft button{
+        html,body{
+            height: 100%;
+            width:100%;
+            -webkit-touch-callout:none;
+            -webkit-text-size-adjust:none;
+            -webkit-tap-highlight-color:rgba(0, 0, 0, 0);
+            -webkit-user-select:none;
+        }
+        a,a:visited{
+            text-decoration:none;
+        }
+        #header {
+            /* Webkit (Safari/Chrome 10) */
+            /*background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #285E82), color-stop(1, #4F879C));*/
+            /* Webkit (Chrome 11+) */
+            /*background-image: -webkit-linear-gradient(top, #285E82 0%, #4F879C 100%);*/
+            /* W3C Markup, IE10 Release Preview */
+            /*background-image: linear-gradient(to bottom, #285E82 0%, #4F879C 100%);*/
+            background-color: #f2f2f2;
+        }
+        #nav{
+            display:-webkit-box;
+            height:50px;
+            line-height: 50px;
+        }
+        #left {
+            width:80px;
+            background:url(../image/navbtn_back.png) no-repeat 14px 15px;
+            -webkit-background-size:12px 20px;
+        }
+        #left>span {
+            /*margin-top:13px;*/
+            margin-left:36px;
+            font-size:16px;
+            /*height:18px;*/
+            /*line-height:18px;*/
+        }
+        #middle {
+            -webkit-box-flex:1;
+            width:100%;
+            display:-webkit-box;
+            -webkit-box-pack:center;
+            -webkit-box-align:center;
+        }
+        #title {
+            font-size:18px;
+            text-align:center;
+        }
+        #right {
+            width:80px;
+        }#right>span {
+            /*margin-top:13px;*/
+            margin-right:36px;
+            font-size:16px;
+            /*height:18px;*/
+            /*line-height:18px;*/
+        }
+        /*#topleft button{
             height: 50px;
             width:50px;
             line-height: 50px;
@@ -30,18 +92,20 @@
             float: right;
             font-size: 15px;
             text-align: center;
-        }
+        }*/
         .his_label{
             height: 50px;
             width: 100%;
             font-size: 18px;
-            border-bottom: 1px;
-            border-style: solid;
-            border-color: #ccc;
         }
         .his_label label{
             line-height: 50px;
             padding-left: 10px;
+        }
+        .uline{
+            border-bottom: 1px;
+            border-style: solid;
+            border-color: #f2f2f2;
         }
         .his_info{
             border: 0px;
@@ -49,14 +113,14 @@
         textarea{
             font-size: 18px;
             padding-top: 10px;
-            height:100px;
+            height:500px;
             width:100%;
         }
     </style>
 </head>
 <body>
     <div id="wrap" class="flex-wrap flex-vertical">
-        <header>
+        <!-- <header>
             <div id="topleft">
                 <button name="cancel">取消</button>
             </div>
@@ -66,15 +130,31 @@
             <div id="toptitle">
                 <span>新建病历</span>
             </div>
+        </header> -->
+        <header id='header'>
+            <nav id="nav">
+                <a id="left" tapmode="" onclick="window.closeWin();">
+                    <span>取消</span>
+                </a>
+                <div id="middle">
+                    <strong id="title">新建病历</strong>
+                </div>
+                <a id="right">
+                    <span>保存</span>
+                </a>
+            </nav>
         </header>
-        <div class="his_label">
-            <label>患者姓名：<input type="text" class="his_info" /></label>
+        <div class="his_label uline">
+            <label>姓名：<input type="text" class="his_info" /></label>
+        </div>
+        <div class="his_label uline">
+            <label>性别：<input type="text" class="his_info" /></label>
+        </div>
+        <div class="his_label uline">
+            <label>年龄：<input type="text" class="his_info" /></label>
         </div>
         <div class="his_label">
-            <label>患者性别：<input type="text" class="his_info" /></label>
-        </div>
-        <div class="his_label">
-            <label>患者年龄：<input type="text" class="his_info" /></label>
+            <label>病情：</label>
         </div>
         <div>
             <textarea name="" id=""></textarea>
