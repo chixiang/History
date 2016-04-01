@@ -107,59 +107,59 @@
 
             if(2 == ret.clickType){
                 msg += " 左边第 " + ret.btnIndex + " 个按钮";
-        }
-
-        api.toast({
-            msg: msg,
-            duration: 1000,
-            location: "top"
-        });
-        });
-
-    listView.setRefreshHeader({
-            bgColor: "#f5f5f5",
-            loadingImg : "./image/bottombtn0301.png"
-        }, 
-        function(ret,err){
-            /* 触发加载事件, 此处应使用使用 reloadData 方法.*/
-            listView.reloadData({
-                data:[
-                    {
-                        "placeHoldImg":"./image/bottombtn0301.png",
-                        "title":"新标题1",
-                        "subTitle":"新子标题1"
-                    },
-                    {
-                        "placeHoldImg":"./image/bottombtn0401.png",
-                        "title":"新标题2",
-                        "subTitle":"新子标题2"
-                    }]
             }
-        );
 
-    });
+            api.toast({
+                msg: msg,
+                duration: 1000,
+                location: "top"
+            });
+        });
 
-    listView.setRefreshFooter({
-            bgColor: "#f5f5f5",
-            loadingImg : "./image/bottombtn0301.png"
-        },
-        function(ret,err){
-            /* 触发加载事件, 此处应使用使用 appendData 方法.*/
-            listView.appendData({
-                data:[
-                    {
-                        "placeHoldImg":"./image/bottombtn0301.png",
-                        "title":"新标题3",
-                        "subTitle":"新子标题3"
-                    },
-                    {
-                        "placeHoldImg":"./image/bottombtn0401.png",
-                        "title":"新标题4",
-                        "subTitle":"新子标题4"
-                    }]
-            }
-        );
-    });
+        listView.setRefreshHeader({
+                bgColor: "#f5f5f5",
+                loadingImg : "./image/bottombtn0301.png"
+            }, 
+            function(ret,err){
+                /* 触发加载事件, 此处应使用使用 reloadData 方法.*/
+                listView.reloadData({
+                    data:[
+                        {
+                            "placeHoldImg":"./image/bottombtn0301.png",
+                            "title":"新标题1",
+                            "subTitle":"新子标题1"
+                        },
+                        {
+                            "placeHoldImg":"./image/bottombtn0401.png",
+                            "title":"新标题2",
+                            "subTitle":"新子标题2"
+                        }]
+                }
+            );
+
+        });
+
+        listView.setRefreshFooter({
+                bgColor: "#f5f5f5",
+                loadingImg : "./image/bottombtn0301.png"
+            },
+            function(ret,err){
+                /* 触发加载事件, 此处应使用使用 appendData 方法.*/
+                listView.appendData({
+                    data:[
+                        {
+                            "placeHoldImg":"./image/bottombtn0301.png",
+                            "title":"新标题3",
+                            "subTitle":"新子标题3"
+                        },
+                        {
+                            "placeHoldImg":"./image/bottombtn0401.png",
+                            "title":"新标题4",
+                            "subTitle":"新子标题4"
+                        }]
+                }
+            );
+        });
     }
 
     function openWin(type) {
