@@ -49,112 +49,105 @@
 <script type="text/javascript">
     apiready = function () {
         $api.fixStatusBar( $api.dom('header') );
-        var listView = api.require('listView');
-        listView.open({
-            "x": 0,
-            "y": $api.dom('header').offsetHeight,
-            "w": api.winWidth,
-            "h": $api.dom('#main').offsetHeight,
-            "leftBtn": [
-                {
-                    "color": "#E76B65",
-                    "selectColor": "#bc534d",
-                    "title": "修改"
-                }, {
-                    "color": "#E76B65",
-                    "selectColor": "#bc534d",
-                    "title": "删除"
+        var UIListView = api.require('UIListView');
+        UIListView.open({
+            rect: {
+                x: 0,
+                y: $api.dom('header').offsetHeight,
+                w: api.winWidth,
+                h: $api.dom('#main').offsetHeight
+            },
+            data: [{
+                uid: '1001',    //开发者自定义的唯一标识
+                title: '患者一',
+                subTitle: '青光眼',
+                remark: '2016-02-24',
+            },{
+                uid: '1002',    //开发者自定义的唯一标识
+                title: '患者二',
+                subTitle: '白内障',
+                remark: '2016-02-28',
+            },{
+                uid: '1003',    //开发者自定义的唯一标识
+                title: '患者三',
+                subTitle: '眼压偏高',
+                remark: '2016-03-14',
+            }],
+            rightBtns: [{
+                bgColor: '#888', //（可选项）字符串类型；按钮背景色，支持rgb、rgba、#；默认：'#388e8e'
+                activeBgColor: '',  //（可选项）字符串类型；按钮按下时的背景色，支持rgb、rgba、#
+                width: 70,          //（可选项）数字类型；按钮的宽度；默认：w / 4       
+                title: '修改',          //（可选项）字符串类型；按钮标题，水平、垂直居中
+                titleSize: 12,      //（可选项）数字类型；按钮标题文字大小；默认：12
+                titleColor: '#fff', //（可选项）字符串类型；按钮标题文字颜色，支持rgb、rgba、#；默认：'#ffffff'
+                icon: '',           //（可选项）字符串类型；按钮标题前的图标路径（本地路径，支持fs://，widget://），水平、垂直居中，图标为正方形
+                iconWidth: 20       //（可选项）数字类型；按钮标题前的图标宽度，图标为正方形；默认：20
+            },{
+                bgColor: '#888', //（可选项）字符串类型；按钮背景色，支持rgb、rgba、#；默认：'#388e8e'
+                activeBgColor: '',  //（可选项）字符串类型；按钮按下时的背景色，支持rgb、rgba、#
+                width: 70,          //（可选项）数字类型；按钮的宽度；默认：w / 4       
+                title: '删除',          //（可选项）字符串类型；按钮标题，水平、垂直居中
+                titleSize: 12,      //（可选项）数字类型；按钮标题文字大小；默认：12
+                titleColor: '#fff', //（可选项）字符串类型；按钮标题文字颜色，支持rgb、rgba、#；默认：'#ffffff'
+                icon: '',           //（可选项）字符串类型；按钮标题前的图标路径（本地路径，支持fs://，widget://），水平、垂直居中，图标为正方形
+                iconWidth: 20       //（可选项）数字类型；按钮标题前的图标宽度，图标为正方形；默认：20
+            }],
+            styles: {
+                borderColor: '#696969',
+                item: {
+                    bgColor: '#eee',
+                    activeBgColor: '#F5F5F5',
+                    height: 55.0,
+                    imgWidth: 40,
+                    imgHeight: 40,
+                    imgCorner: 4,
+                    placeholderImg: '',
+                    titleSize: 12.0,
+                    titleColor: '#000',
+                    subTitleSize: 12.0,
+                    subTitleColor: '#000', 
+                    remarkColor: '#000',
+                    remarkSize: 16,
+                    remarkIconWidth: 30
                 }
-            ],
-            "leftBg": "#e9e9e9",
-            "borderColor": "#CCCCCC",
-            "cellBgColor": "#F0F5F5",
-            "cellSelectColor": "#E9E9E9",
-            "data":[
-                {
-                    "placeHoldImg": "image/bottombtn0101.png",
-                    "title": "患者甲",
-                    "titleLocation": "left",
-                    "titleSize": "16",
-                    "titleColor": "#999999",
-                    "subTitle": "白内障",
-                    "subLocation": "left",
-                    "subTitleSize": "14",
-                    "subTitleColor": "#999999"
-                }, {
-                    "placeHoldImg": "image/bottombtn0201.png",
-                    "title": "患者乙",
-                    "titleLocation": "left",
-                    "titleSize": "16",
-                    "titleColor": "#999999",
-                    "subTitle": "青光眼",
-                    "subLocation": "left",
-                    "subTitleSize": "14",
-                    "subTitleColor": "#999999"
-                }
-            ],
+            },
+
             fixedOn: api.frameName
-        },
-        function(ret, err) {
-            var msg;
-
-            if(0 == ret.clickType){
-                msg = "您点击了第 " + ret.index +" 个单元格";
-            }
-
-            if(1 == ret.clickType){
-                msg += " 右边第 " + ret.btnIndex + " 个按钮";
-            }
-
-            if(2 == ret.clickType){
-                msg += " 左边第 " + ret.btnIndex + " 个按钮";
-            }
-
-            api.toast({
-                msg: msg,
-                duration: 1000,
-                location: "top"
-            });
+        }, function( ret, err ){
+            
         });
-
-        listView.setRefreshHeader({
+        UIListView.setRefreshHeader({
                 bgColor: "#f5f5f5",
                 loadingImg : "image/bottombtn0301.png"
             },
             function(ret,err){
                 /* 触发加载事件, 此处应使用使用 reloadData 方法.*/
-                listView.reloadData({
+                UIListView.reloadData({
                     data:[
                         {
-                            "placeHoldImg":"image/bottombtn0301.png",
                             "title":"新标题1",
                             "subTitle":"新子标题1"
                         },
                         {
-                            "placeHoldImg":"image/bottombtn0401.png",
                             "title":"新标题2",
                             "subTitle":"新子标题2"
                         }]
                 }
             );
-
         });
-
-        listView.setRefreshFooter({
+        UIListView.setRefreshFooter({
                 bgColor: "#f5f5f5",
                 loadingImg : "image/bottombtn0301.png"
             },
             function(ret,err){
                 /* 触发加载事件, 此处应使用使用 appendData 方法.*/
-                listView.appendData({
+                UIListView.appendData({
                     data:[
                         {
-                            "placeHoldImg":"image/bottombtn0301.png",
                             "title":"新标题3",
                             "subTitle":"新子标题3"
                         },
                         {
-                            "placeHoldImg":"image/bottombtn0401.png",
                             "title":"新标题4",
                             "subTitle":"新子标题4"
                         }]
@@ -162,6 +155,119 @@
             );
         });
     }
+    //     var listView = api.require('listView');
+    //     listView.open({
+    //         "x": 0,
+    //         "y": $api.dom('header').offsetHeight,
+    //         "w": api.winWidth,
+    //         "h": $api.dom('#main').offsetHeight,
+    //         "leftBtn": [
+    //             {
+    //                 "color": "#E76B65",
+    //                 "selectColor": "#bc534d",
+    //                 "title": "修改"
+    //             }, {
+    //                 "color": "#E76B65",
+    //                 "selectColor": "#bc534d",
+    //                 "title": "删除"
+    //             }
+    //         ],
+    //         "leftBg": "#e9e9e9",
+    //         "borderColor": "#CCCCCC",
+    //         "cellBgColor": "#F0F5F5",
+    //         "cellSelectColor": "#E9E9E9",
+    //         "data":[
+    //             {
+    //                 "placeHoldImg": "image/bottombtn0101.png",
+    //                 "title": "患者甲",
+    //                 "titleLocation": "left",
+    //                 "titleSize": "16",
+    //                 "titleColor": "#999999",
+    //                 "subTitle": "白内障",
+    //                 "subLocation": "left",
+    //                 "subTitleSize": "14",
+    //                 "subTitleColor": "#999999"
+    //             }, {
+    //                 "placeHoldImg": "image/bottombtn0201.png",
+    //                 "title": "患者乙",
+    //                 "titleLocation": "left",
+    //                 "titleSize": "16",
+    //                 "titleColor": "#999999",
+    //                 "subTitle": "青光眼",
+    //                 "subLocation": "left",
+    //                 "subTitleSize": "14",
+    //                 "subTitleColor": "#999999"
+    //             }
+    //         ],
+    //         fixedOn: api.frameName
+    //     },
+    //     function(ret, err) {
+    //         var msg;
+
+    //         if(0 == ret.clickType){
+    //             msg = "您点击了第 " + ret.index +" 个单元格";
+    //         }
+
+    //         if(1 == ret.clickType){
+    //             msg += " 右边第 " + ret.btnIndex + " 个按钮";
+    //         }
+
+    //         if(2 == ret.clickType){
+    //             msg += " 左边第 " + ret.btnIndex + " 个按钮";
+    //         }
+
+    //         api.toast({
+    //             msg: msg,
+    //             duration: 1000,
+    //             location: "top"
+    //         });
+    //     });
+
+    //     listView.setRefreshHeader({
+    //             bgColor: "#f5f5f5",
+    //             loadingImg : "image/bottombtn0301.png"
+    //         },
+    //         function(ret,err){
+    //             /* 触发加载事件, 此处应使用使用 reloadData 方法.*/
+    //             listView.reloadData({
+    //                 data:[
+    //                     {
+    //                         "placeHoldImg":"image/bottombtn0301.png",
+    //                         "title":"新标题1",
+    //                         "subTitle":"新子标题1"
+    //                     },
+    //                     {
+    //                         "placeHoldImg":"image/bottombtn0401.png",
+    //                         "title":"新标题2",
+    //                         "subTitle":"新子标题2"
+    //                     }]
+    //             }
+    //         );
+
+    //     });
+
+    //     listView.setRefreshFooter({
+    //             bgColor: "#f5f5f5",
+    //             loadingImg : "image/bottombtn0301.png"
+    //         },
+    //         function(ret,err){
+    //             /* 触发加载事件, 此处应使用使用 appendData 方法.*/
+    //             listView.appendData({
+    //                 data:[
+    //                     {
+    //                         "placeHoldImg":"image/bottombtn0301.png",
+    //                         "title":"新标题3",
+    //                         "subTitle":"新子标题3"
+    //                     },
+    //                     {
+    //                         "placeHoldImg":"image/bottombtn0401.png",
+    //                         "title":"新标题4",
+    //                         "subTitle":"新子标题4"
+    //                     }]
+    //             }
+    //         );
+    //     });
+    // }
 
     function openWin(type) {
         api.openWin({
