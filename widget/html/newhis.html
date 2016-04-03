@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>新建病历</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <style>
-        /*header{
+    /*header{
             background-color: #f2f2f2;
             height: 50px;
             line-height: 50px;
@@ -16,44 +17,54 @@
             font-size: 18px;
             position: relative;
         }*/
-        header{
-            position: relative;
-            background-color: #f2f2f2;
-        }
-        a,a:visited{
-            text-decoration:none;
-        }
-        #nav{
-            display:-webkit-box;
-            height:50px;
-            line-height: 50px;
-        }
-        #left {
-            width:80px;
-        }
-        #left>span {
-            margin-left:36px;
-            font-size:16px;
-        }
-        #middle {
-            -webkit-box-flex:1;
-            width:100%;
-            display:-webkit-box;
-            -webkit-box-pack:center;
-            -webkit-box-align:center;
-        }
-        #title {
-            font-size:18px;
-            text-align:center;
-        }
-        #right {
-            width:80px;
-        }
-        #right>span {
-            margin-right:36px;
-            font-size:16px;
-        }
-        /*#topleft button{
+
+    header {
+        position: relative;
+        background-color: #f2f2f2;
+    }
+
+    a,
+    a:visited {
+        text-decoration: none;
+    }
+
+    #nav {
+        display: -webkit-box;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    #left {
+        width: 80px;
+    }
+
+    #left>span {
+        margin-left: 36px;
+        font-size: 16px;
+    }
+
+    #middle {
+        -webkit-box-flex: 1;
+        width: 100%;
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+    }
+
+    #title {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    #right {
+        width: 80px;
+    }
+
+    #right>span {
+        margin-right: 36px;
+        font-size: 16px;
+    }
+    /*#topleft button{
             height: 50px;
             width:50px;
             line-height: 50px;
@@ -69,31 +80,37 @@
             font-size: 15px;
             text-align: center;
         }*/
-        .his_label{
-            height: 50px;
-            width: 100%;
-            font-size: 18px;
-        }
-        .his_label label{
-            line-height: 50px;
-            padding-left: 10px;
-        }
-        .uline{
-            border-bottom: 1px;
-            border-style: solid;
-            border-color: #f2f2f2;
-        }
-        .his_info{
-            border: 0px;
-        }
-        textarea{
-            font-size: 18px;
-            padding-top: 10px;
-            height:500px;
-            width:100%;
-        }
+
+    .his_label {
+        height: 50px;
+        width: 100%;
+        font-size: 18px;
+    }
+
+    .his_label label {
+        line-height: 50px;
+        padding-left: 10px;
+    }
+
+    .uline {
+        border-bottom: 1px;
+        border-style: solid;
+        border-color: #f2f2f2;
+    }
+
+    .his_info {
+        border: 0px;
+    }
+
+    textarea {
+        font-size: 18px;
+        padding-top: 10px;
+        height: 500px;
+        width: 100%;
+    }
     </style>
 </head>
+
 <body>
     <div id="wrap" class="flex-wrap flex-vertical">
         <!-- <header>
@@ -121,13 +138,19 @@
             </nav>
         </header>
         <div class="his_label uline">
-            <label>姓名：<input type="text" class="his_info" /></label>
+            <label>姓名：
+                <input type="text" class="his_info" />
+            </label>
         </div>
         <div class="his_label uline">
-            <label>性别：<input type="text" class="his_info" /></label>
+            <label>性别：
+                <input type="text" class="his_info" />
+            </label>
         </div>
         <div class="his_label uline">
-            <label>年龄：<input type="text" class="his_info" /></label>
+            <label>年龄：
+                <input type="text" class="his_info" />
+            </label>
         </div>
         <div class="his_label">
             <label>病情：</label>
@@ -138,12 +161,12 @@
     </div>
 </body>
 <script type="text/javascript">
-    apiready = function () {
-        $api.fixStatusBar( $api.dom('header') );
-        window.closeWin= function(winName) {
-            api.closeWin();
-        }
+apiready = function() {
+    $api.fixStatusBar($api.dom('header'));
+    window.closeWin = function(winName) {
+        api.closeWin();
     }
+}
 </script>
-</html>
 
+</html>

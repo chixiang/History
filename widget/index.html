@@ -1,49 +1,54 @@
 <!doctype html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>主页</title>
-    <link rel="stylesheet" type="text/css" href="./css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="./css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
     <style>
-        header{
-            background-color: #f2f2f2;
-            position: relative;
-        }
-        .top-button{
-            margin: 0 1em;
-            text-align: center;
-            height: 50px;
-            line-height: 50px;
-            font-size: 16px;
-        }
-        .fl{
-            float: left;
-        }
-        .fr {
-            float: right;
-        }
+    header {
+        background-color: #f2f2f2;
+        position: relative;
+    }
+
+    .top-button {
+        margin: 0 1em;
+        text-align: center;
+        height: 50px;
+        line-height: 50px;
+        font-size: 16px;
+    }
+
+    .fl {
+        float: left;
+    }
+
+    .fr {
+        float: right;
+    }
     </style>
 </head>
-<body>
-<div id="wrap" class="flex-wrap flex-vertical">
-    <header>
-        <div class='top-button fl' >
-            <a href="" tapmode="presshover" onclick="openWin('option')">设置</a>
-        </div>
-        <div class='top-button fr' >
-            <a href="" tapmode="presshover" onclick="openSearch()">查找</a>
-        </div>
-        <div class='top-button fr' >
-            <a href="" tapmode="presshover" onclick="openWin('newhis')">新增</a>
-        </div>
-    </header>
-    <div id="main" class="flex-con">
 
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header>
+            <div class='top-button fl'>
+                <a href="" tapmode="presshover" onclick="openWin('option')">设置</a>
+            </div>
+            <div class='top-button fr'>
+                <a href="" tapmode="presshover" onclick="openSearch()">查找</a>
+            </div>
+            <div class='top-button fr'>
+                <a href="" tapmode="presshover" onclick="openWin('newhis')">新增</a>
+            </div>
+        </header>
+        <div id="main" class="flex-con">
+        </div>
     </div>
-</div>
 </body>
+
 </html>
 <script type="text/javascript" src="script/api.js"></script>
 <script type="text/javascript" src="script/index.js"></script>
