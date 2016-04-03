@@ -93,13 +93,14 @@ var apiready = function() {
                         function(ret, err) {
                             /* 触发加载事件, 此处应使用使用 reloadData 方法.*/
                             UIListView.reloadData({
-                                data: [{
-                                    title: "新标题1",
-                                    subTitle: "新子标题1"
-                                }, {
-                                    title: "新标题2",
-                                    subTitle: "新子标题2"
-                                }]
+                                // data: [{
+                                //     title: "新标题1",
+                                //     subTitle: "新子标题1"
+                                // }, {
+                                //     title: "新标题2",
+                                //     subTitle: "新子标题2"
+                                // }]
+                                data: listViewData
                             });
                         });
                     UIListView.setRefreshFooter({
@@ -123,6 +124,7 @@ var apiready = function() {
         }
     });
 }
+
 
 function openWin(type) {
     api.openWin({

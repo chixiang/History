@@ -9,15 +9,6 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <style>
-    /*header{
-            background-color: #f2f2f2;
-            height: 50px;
-            line-height: 50px;
-            text-align: center;
-            font-size: 18px;
-            position: relative;
-        }*/
-
     header {
         position: relative;
         background-color: #f2f2f2;
@@ -64,22 +55,6 @@
         margin-right: 36px;
         font-size: 16px;
     }
-    /*#topleft button{
-            height: 50px;
-            width:50px;
-            line-height: 50px;
-            float: left;
-            font-size: 15px;
-            text-align: center;
-        }
-        #topright button{
-            height: 50px;
-            width:50px;
-            line-height: 50px;
-            float: right;
-            font-size: 15px;
-            text-align: center;
-        }*/
 
     .his_label {
         height: 50px;
@@ -113,17 +88,6 @@
 
 <body>
     <div id="wrap" class="flex-wrap flex-vertical">
-        <!-- <header>
-            <div id="topleft">
-                <button name="cancel">取消</button>
-            </div>
-            <div id="topright">
-                <button name="save">保存</button>
-            </div>
-            <div id="toptitle">
-                <span>新建病历</span>
-            </div>
-        </header> -->
         <header id='header'>
             <nav id="nav">
                 <a id="left" tapmode="" onclick="window.closeWin();">
@@ -132,31 +96,31 @@
                 <div id="middle">
                     <strong id="title">新建病历</strong>
                 </div>
-                <a id="right">
+                <a id="right" tapmode="" onclick="saveHis();">
                     <span>保存</span>
                 </a>
             </nav>
         </header>
         <div class="his_label uline">
             <label>姓名：
-                <input type="text" class="his_info" />
+                <input type="text" id="name" class="his_info" />
             </label>
         </div>
         <div class="his_label uline">
             <label>性别：
-                <input type="text" class="his_info" />
+                <input type="text" id="sex" class="his_info" />
             </label>
         </div>
         <div class="his_label uline">
             <label>年龄：
-                <input type="text" class="his_info" />
+                <input type="text" id="age" class="his_info" />
             </label>
         </div>
         <div class="his_label">
             <label>病情：</label>
         </div>
         <div>
-            <textarea name="" id=""></textarea>
+            <textarea name="" id="info"></textarea>
         </div>
     </div>
 </body>
@@ -166,6 +130,46 @@ apiready = function() {
     window.closeWin = function(winName) {
         api.closeWin();
     }
+
+}
+
+function saveHis() {
+    var name = $api.byId('name');
+    var sex = $api.byId('sex');
+    var age = $api.byId('age');
+    var info = $api.byId('info');
+
+    if (name.value == '') {
+        alert("请输入姓名!");
+        return;
+    }
+
+    var model = api.require('model');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    model.insert({
+            class: 'history',
+            value: {
+                name: name.value,
+                sex: sex.value,
+                age: age.value,
+                info: info.value,
+                disease: info.value,
+                comeDate: "2016-04-04"
+            }
+        },
+        function(ret, err) {
+            if (ret) {
+                alert("插入数据成功！");
+                window.closeWin();
+            } else {
+                alert("插入数据失败！");
+            }
+        }
+    );
 }
 </script>
 
