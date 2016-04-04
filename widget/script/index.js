@@ -91,17 +91,38 @@ var apiready = function() {
                             loadingImg: "image/bottombtn0301.png"
                         },
                         function(ret, err) {
-                            /* 触发加载事件, 此处应使用使用 reloadData 方法.*/
-                            UIListView.reloadData({
-                                // data: [{
-                                //     title: "新标题1",
-                                //     subTitle: "新子标题1"
-                                // }, {
-                                //     title: "新标题2",
-                                //     subTitle: "新子标题2"
-                                // }]
-                                data: listViewData
+                            var model = api.require('model');
+                            var query = api.require('query');
+                            model.config({
+                                appId: 'A6903478274381',
+                                appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+                                host: 'https://d.apicloud.com'
                             });
+                            query.createQuery(function(ret, err) {
+                                if (ret && ret.qid) {
+                                    model.findAll({
+                                            class: 'history',
+                                            qid: ret.id
+                                        },
+                                        function(ret, err) {
+                                            var idx = 0;
+                                            hislist = [];
+                                            while (ret[idx] != undefined) {
+                                                var listViewItem = {
+                                                    uid: ret[idx].id,
+                                                    title: ret[idx].name,
+                                                    subTitle: ret[idx].disease,
+                                                    remark: ret[idx].comeDate
+                                                };
+                                                listViewData.push(listViewItem);
+                                                idx = idx + 1;
+                                            }
+                                            UIListView.reloadData({
+                                                data: listViewData
+                                            })
+                                        })
+                                }
+                            })
                         });
                     UIListView.setRefreshFooter({
                             bgColor: "#f5f5f5",
@@ -125,6 +146,41 @@ var apiready = function() {
     });
 }
 
+function getAllMyHis(hislist, callback) {
+    var model = api.require('model');
+    var query = api.require('query');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            model.findAll({
+                    class: 'history',
+                    qid: ret.id
+                },
+                function(ret, err) {
+                    var idx = 0;
+                    hislist = [];
+                    while (ret[idx] != undefined) {
+                        var listViewItem = {
+                            uid: ret[idx].id,
+                            title: ret[idx].name,
+                            subTitle: ret[idx].disease,
+                            remark: ret[idx].comeDate
+                        };
+                        hislist.push(listViewItem);
+                        idx = idx + 1;
+                    }
+                    if (callback) {
+                        alert("hislist" + JSON.stringify(hislist));
+                        callback();
+                    }
+                })
+        }
+    })
+}
 
 function openWin(type) {
     api.openWin({
