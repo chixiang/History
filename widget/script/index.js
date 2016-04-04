@@ -106,7 +106,7 @@ var apiready = function() {
                                         },
                                         function(ret, err) {
                                             var idx = 0;
-                                            hislist = [];
+                                            listViewData = [];
                                             while (ret[idx] != undefined) {
                                                 var listViewItem = {
                                                     uid: ret[idx].id,
