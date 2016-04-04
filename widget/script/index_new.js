@@ -95,7 +95,7 @@ function pull_down_reload() {
             // });
             model.findAll({
                 class: "history",
-                qid: ret.id
+                qid: queryId
             }, function(ret, err) {
                 if (err) {
                     alert(JSON.stringify(err));
@@ -144,7 +144,7 @@ function pull_up_load_more() {
             // });
             model.findAll({
                 class: "history",
-                qid: ret.id
+                qid: queryId
             }, function(ret, err) {
                 if (err) {
                     alert(JSON.stringify(err));
