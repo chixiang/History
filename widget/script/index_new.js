@@ -1,9 +1,8 @@
 var apiready = function() {
     $api.fixStatusBar($api.dom('header'));
-    var UIListView;
     var listViewData = [];
-    var model = api.require('model');
-    var query = api.require('query');
+    model = api.require('model');
+    query = api.require('query');
     model.config({
         appId: 'A6903478274381',
         appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
@@ -65,7 +64,7 @@ var apiready = function() {
             loadingImg: "image/bottombtn0301.png"
         },
         function(ret, err) {
-            pull_down_reload(UIListView);
+            pull_down_reload();
         });
 
     UIListView.setRefreshFooter({
@@ -73,14 +72,12 @@ var apiready = function() {
             loadingImg: "image/bottombtn0301.png"
         },
         function(ret, err) {
-            pull_up_load_more(UIListView);
+            pull_up_load_more();
         });
 
 }
 
-function pull_down_reload(ui_list_view) {
-    var model = api.require('model');
-    var query = api.require('query');
+function pull_down_reload() {
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             var queryId = ret.qid;
@@ -117,7 +114,7 @@ function pull_down_reload(ui_list_view) {
                             idx = idx + 1;
                         }
                     }
-                    reloadData(ui_list_view, json_objs);
+                    reloadData(json_objs);
                 }
             });
         }
@@ -125,9 +122,7 @@ function pull_down_reload(ui_list_view) {
 
 }
 
-function pull_up_load_more(ui_list_view) {
-    var model = api.require('model');
-    var query = api.require('query');
+function pull_up_load_more() {
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             var queryId = ret.qid;
@@ -168,15 +163,15 @@ function pull_up_load_more(ui_list_view) {
                             idx = idx + 1;
                         }
                     }
-                    appendData(ui_list_view, json_objs);
+                    appendData(json_objs);
                 }
             });
         }
     })
 }
 
-function reloadData(ui_list_view, json_objs) {
-    ui_list_view.reloadData({
+function reloadData(json_objs) {
+    UIListView.reloadData({
         "data": json_objs
     },
     function(ret) {
@@ -188,8 +183,8 @@ function reloadData(ui_list_view, json_objs) {
     })
 }
 
-function appendData(ui_list_view, json_objs) {
-    ui_list_view.appendData({
+function appendData(json_objs) {
+    UIListView.appendData({
             "data": json_objs
         },
         function(ret) {
