@@ -1,5 +1,6 @@
 var apiready = function() {
     $api.fixStatusBar($api.dom('header'));
+    var UIListView;
     var listViewData = [];
     var model = api.require('model');
     var query = api.require('query');
@@ -26,7 +27,7 @@ var apiready = function() {
                         listViewData.push(listViewItem);
                         idx = idx + 1;
                     }
-                    var UIListView = api.require('UIListView');
+                    UIListView = api.require('UIListView');
                     UIListView.open({
                         rect: {
                             x: 0,
@@ -130,15 +131,16 @@ var apiready = function() {
                         },
                         function(ret, err) {
                             /* 触发加载事件, 此处应使用使用 appendData 方法.*/
-                            UIListView.appendData({
-                                data: [{
-                                    title: "新标题3",
-                                    subTitle: "新子标题3"
-                                }, {
-                                    title: "新标题4",
-                                    subTitle: "新子标题4"
-                                }]
-                            });
+                            // UIListView.appendData({
+                            //     data: [{
+                            //         title: "新标题3",
+                            //         subTitle: "新子标题3"
+                            //     }, {
+                            //         title: "新标题4",
+                            //         subTitle: "新子标题4"
+                            //     }]
+                            // });
+                            pull_up_load_more(UIListView);
                         });
                 }
             );
@@ -180,6 +182,69 @@ function getAllMyHis(hislist, callback) {
                 })
         }
     })
+}
+
+function pull_up_load_more(ui_list_view) {
+    var model = api.require('model');
+    var query = api.require('query');
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            var queryId = ret.qid;
+            query.limit({
+                qid: queryId,
+                value: 5
+            });
+            query.skip({
+                qid: queryId,
+                value: 5
+            });
+            // query.justFields({
+            //     qid: queryId,
+            //     value: ["id", "msg", "updatedAt"]
+            // });
+            // query.desc({
+            //     qid: queryId,
+            //     column: "updatedAt"
+            // });
+            model.findAll({
+                class: "history",
+                qid: ret.id
+            }, function(ret, err) {
+                if (err) {
+                    alert(JSON.stringify(err));
+                } else {
+                    if (ret) {
+                        var idx = 0;
+                        var json_objs = [];
+                        while (ret[idx] != undefined) {
+                            var listViewItem = {
+                                uid: ret[idx].id,
+                                title: ret[idx].name,
+                                subTitle: ret[idx].disease,
+                                remark: ret[idx].comeDate
+                            };
+                            json_objs.push(listViewItem);
+                            idx = idx + 1;
+                        }
+                    }
+                    appendData(ui_list_view, json_objs);
+                }
+            });
+        }
+    })
+}
+
+function appendData(ui_list_view, json_objs) {
+    ui_list_view.appendData({
+            "data": json_objs
+        },
+        function(ret) {
+            if (ret.status) {
+                api.toast({
+                    msg: '追加数据成功'
+                });
+            }
+        });
 }
 
 function openWin(type) {
