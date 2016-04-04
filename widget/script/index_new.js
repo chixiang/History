@@ -58,11 +58,7 @@ var apiready = function() {
         },
         fixedOn: api.frameName
     }, function(ret, err) {
-        // api.toast({
-        //     msg: ret,
-        //     duration: 2000,
-        //     location: "top"
-        // });
+        pull_down_reload(UIListView);
     });
     UIListView.setRefreshHeader({
             bgColor: "#f5f5f5",
