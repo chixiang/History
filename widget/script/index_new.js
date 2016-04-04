@@ -1,6 +1,7 @@
 var apiready = function() {
     $api.fixStatusBar($api.dom('header'));
     var listViewData = [];
+    v_loaded_recors = 5;
     model = api.require('model');
     query = api.require('query');
     model.config({
@@ -83,7 +84,7 @@ function pull_down_reload() {
             var queryId = ret.qid;
             query.limit({
                 qid: queryId,
-                value: 10
+                value: 5
             });
             // query.justFields({
             //     qid: queryId,
@@ -128,11 +129,11 @@ function pull_up_load_more() {
             var queryId = ret.qid;
             query.limit({
                 qid: queryId,
-                value: 10
+                value: 5
             });
             query.skip({
                 qid: queryId,
-                value: 10
+                value: v_loaded_recors
             });
             // query.justFields({
             //     qid: queryId,
@@ -172,28 +173,36 @@ function pull_up_load_more() {
 
 function reloadData(json_objs) {
     UIListView.reloadData({
-        "data": json_objs
-    },
-    function(ret) {
-        if (ret.status) {
-                api.toast({
-                    msg: '加载数据成功'
-                });
-            }
-    })
-}
-
-function appendData(json_objs) {
-    UIListView.appendData({
             "data": json_objs
         },
         function(ret) {
             if (ret.status) {
                 api.toast({
-                    msg: '追加数据成功'
+                    msg: '加载数据成功'
                 });
+                v_loaded_recors = 5;
             }
+        })
+}
+
+function appendData(json_objs) {
+    if (json_objs[0] != undefined) {
+        UIListView.appendData({
+                "data": json_objs
+            },
+            function(ret) {
+                if (ret.status) {
+                    api.toast({
+                        msg: '追加数据成功'
+                    });
+                    v_loaded_recors = v_loaded_recors + 5;
+                }
+            });
+    } else {
+        api.toast({
+            msg: '没有更多数据了'
         });
+    }
 }
 
 function openWin(type) {
