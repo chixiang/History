@@ -11,8 +11,10 @@
     <style>
     header {
         position: relative;
-        background-color: #655A55;
         color: #FFF;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
+        background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
+        background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
     }
 
     body {
@@ -101,7 +103,7 @@
                     <span>取消</span>
                 </a>
                 <div id="middle">
-                    <strong id="title">新建病历</strong>
+                    <span id="title">新建病历</span>
                 </div>
                 <a id="right" tapmode="" onclick="saveHis();">
                     <span>保存</span>
