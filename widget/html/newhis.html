@@ -10,12 +10,15 @@
     <script type="text/javascript" src="../script/api.js"></script>
     <style>
     header {
-        position: relative;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
         color: #FFF;
         background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
         background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
         background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
-        height: 64px;
+        height: 50px;
         line-height: 50px;
     }
 
@@ -31,8 +34,8 @@
 
     #nav {
         display: -webkit-box;
-        /*height: 50px;
-        line-height: 50px;*/
+        height: 50px;
+        line-height: 50px;
     }
 
     #left {
@@ -66,14 +69,18 @@
         font-size: 16px;
     }
 
+    #main {
+        margin-top: 50px;
+    }
+
     .his_label {
-        height: 50px;
+        height: 40px;
         width: 100%;
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .his_label label {
-        line-height: 50px;
+        line-height: 40px;
         padding-left: 10px;
         color: #655A55;
     }
@@ -81,7 +88,7 @@
     .uline {
         border-bottom: 1px;
         border-style: solid;
-        border-color: #f2f2f2;
+        border-color: #EED6B0;
     }
 
     .his_info {
@@ -89,7 +96,7 @@
     }
 
     textarea {
-        font-size: 18px;
+        font-size: 16px;
         padding-top: 10px;
         height: 500px;
         width: 100%;
@@ -112,32 +119,37 @@
                 </a>
             </nav>
         </header>
-        <div class="his_label uline">
-            <label>姓名：
-                <input type="text" id="name" class="his_info" />
-            </label>
-        </div>
-        <div class="his_label uline">
-            <label>性别：
-                <input type="text" id="sex" class="his_info" />
-            </label>
-        </div>
-        <div class="his_label uline">
-            <label>年龄：
-                <input type="text" id="age" class="his_info" />
-            </label>
-        </div>
-        <div class="his_label">
-            <label>病情：</label>
-        </div>
-        <div>
-            <textarea name="" id="info"></textarea>
+        <div id="main">
+            <div class="his_label uline">
+                <label>姓名：
+                    <input type="text" id="name" class="his_info" />
+                </label>
+            </div>
+            <div class="his_label uline">
+                <label>性别：
+                    <input type="text" id="sex" class="his_info" />
+                </label>
+            </div>
+            <div class="his_label uline">
+                <label>年龄：
+                    <input type="text" id="age" class="his_info" />
+                </label>
+            </div>
+            <div class="his_label">
+                <label>病情：</label>
+            </div>
+            <div>
+                <textarea name="" id="info"></textarea>
+            </div>
         </div>
     </div>
 </body>
 <script type="text/javascript">
 apiready = function() {
     // $api.fixStatusBar($api.dom('header'));
+    // $api.fixIos7Bar($api.dom('header'));
+    // var header = document.querySelector('#header');
+    // $api.fixIos7Bar(header);
     window.closeWin = function(winName) {
         api.closeWin();
     }
