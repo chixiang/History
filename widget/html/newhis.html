@@ -71,6 +71,7 @@
 
     #main {
         margin-top: 50px;
+        background: #F7F3EA;
     }
 
     .his_label {
@@ -95,11 +96,37 @@
         border: 0px;
     }
 
-    textarea {
+    #info {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    /*    textarea {
         font-size: 16px;
-        padding-top: 10px;
-        height: 500px;
         width: 100%;
+        height: 100%;
+        overflow-y:visible;
+    } */
+
+    .textarea {
+        width: 100%;
+        min-height: 40px;
+        max-height: 4000px;
+        /*_height: 120px;*/
+        /*margin-left: auto;*/
+        /*margin-right: auto;*/
+        /*padding: 3px;*/
+        outline: 0;
+        /*border: 1px solid #a0b3d6;*/
+        font-size: 16px;
+        line-height: 30px;
+        /*padding: 2px;*/
+        word-wrap: break-word;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: #F7F3EA;
+        border-bottom: 1px #EED6B0 solid;
+        /*border-color: rgba(82, 168, 236, 0.8);*/
+        /*box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);*/
     }
     </style>
 </head>
@@ -138,8 +165,10 @@
             <div class="his_label">
                 <label>病情：</label>
             </div>
-            <div>
-                <textarea name="" id="info"></textarea>
+            <div id="info">
+                <div class="textarea" id="ta_info" contenteditable="true">
+                    <br />
+                </div>
             </div>
         </div>
     </div>
@@ -147,7 +176,7 @@
 <script type="text/javascript">
 apiready = function() {
     // $api.fixStatusBar($api.dom('header'));
-    // $api.fixIos7Bar($api.dom('header'));
+    $api.fixIos7Bar($api.dom('header'));
     // var header = document.querySelector('#header');
     // $api.fixIos7Bar(header);
     window.closeWin = function(winName) {
@@ -160,7 +189,7 @@ function saveHis() {
     var name = $api.byId('name');
     var sex = $api.byId('sex');
     var age = $api.byId('age');
-    var info = $api.byId('info');
+    var info = $api.byId('ta_info');
 
     if (name.value == '') {
         alert("请输入姓名!");
