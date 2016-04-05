@@ -5,8 +5,8 @@
 var apiready = function() {
     $api.fixStatusBar($api.dom('header'));
     var listViewData = [];
-    v_loaded_recors = 10;
     per_page_num = 10;
+    v_loaded_recors = per_page_num;
     model = api.require('model');
     query = api.require('query');
     model.config({
@@ -198,7 +198,7 @@ function reloadData(json_objs) {
                 api.toast({
                     msg: '加载数据成功'
                 });
-                v_loaded_recors = 5;
+                v_loaded_recors = per_page_num;
             }
         })
 }
@@ -218,7 +218,7 @@ function appendData(json_objs) {
                     api.toast({
                         msg: '追加数据成功'
                     });
-                    v_loaded_recors = v_loaded_recors + 5;
+                    v_loaded_recors = v_loaded_recors + per_page_num;
                 }
             });
     } else {
