@@ -15,6 +15,8 @@
         background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
         background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
         background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
+        height: 64px;
+        line-height: 50px;
     }
 
     body {
@@ -29,16 +31,16 @@
 
     #nav {
         display: -webkit-box;
-        height: 50px;
-        line-height: 50px;
+        /*height: 50px;
+        line-height: 50px;*/
     }
 
     #left {
-        width: 80px;
+        width: 50px;
     }
 
     #left>span {
-        margin-left: 36px;
+        margin-left: 18px;
         font-size: 16px;
     }
 
@@ -56,11 +58,11 @@
     }
 
     #right {
-        width: 80px;
+        width: 50px;
     }
 
     #right>span {
-        margin-right: 36px;
+        margin-right: 18px;
         font-size: 16px;
     }
 
@@ -135,7 +137,7 @@
 </body>
 <script type="text/javascript">
 apiready = function() {
-    $api.fixStatusBar($api.dom('header'));
+    // $api.fixStatusBar($api.dom('header'));
     window.closeWin = function(winName) {
         api.closeWin();
     }

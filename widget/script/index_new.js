@@ -3,7 +3,7 @@
  * @return {[type]} [description]
  */
 var apiready = function() {
-    $api.fixStatusBar($api.dom('header'));
+    // $api.fixStatusBar($api.dom('header'));
     var listViewData = [];
     per_page_num = 10;
     v_loaded_recors = per_page_num;
@@ -24,26 +24,26 @@ var apiready = function() {
         },
         data: listViewData,
         rightBtns: [{
-            bgColor: '#888', //（可选项）字符串类型；按钮背景色，支持rgb、rgba、#；默认：'#388e8e'
+            bgColor: '#EED6B0', //（可选项）字符串类型；按钮背景色，支持rgb、rgba、#；默认：'#388e8e'
             activeBgColor: '', //（可选项）字符串类型；按钮按下时的背景色，支持rgb、rgba、#
             width: 70, //（可选项）数字类型；按钮的宽度；默认：w / 4
             title: '修改', //（可选项）字符串类型；按钮标题，水平、垂直居中
-            titleSize: 12, //（可选项）数字类型；按钮标题文字大小；默认：12
-            titleColor: '#fff', //（可选项）字符串类型；按钮标题文字颜色，支持rgb、rgba、#；默认：'#ffffff'
+            titleSize: 14, //（可选项）数字类型；按钮标题文字大小；默认：12
+            titleColor: '#655A55', //（可选项）字符串类型；按钮标题文字颜色，支持rgb、rgba、#；默认：'#ffffff'
             icon: '', //（可选项）字符串类型；按钮标题前的图标路径（本地路径，支持fs://，widget://），水平、垂直居中，图标为正方形
             iconWidth: 20 //（可选项）数字类型；按钮标题前的图标宽度，图标为正方形；默认：20
         }, {
-            bgColor: '#888', //（可选项）字符串类型；按钮背景色，支持rgb、rgba、#；默认：'#388e8e'
+            bgColor: '#EED6B0', //（可选项）字符串类型；按钮背景色，支持rgb、rgba、#；默认：'#388e8e'
             activeBgColor: '', //（可选项）字符串类型；按钮按下时的背景色，支持rgb、rgba、#
             width: 70, //（可选项）数字类型；按钮的宽度；默认：w / 4
             title: '删除', //（可选项）字符串类型；按钮标题，水平、垂直居中
-            titleSize: 12, //（可选项）数字类型；按钮标题文字大小；默认：12
-            titleColor: '#fff', //（可选项）字符串类型；按钮标题文字颜色，支持rgb、rgba、#；默认：'#ffffff'
+            titleSize: 14, //（可选项）数字类型；按钮标题文字大小；默认：12
+            titleColor: '#655A55', //（可选项）字符串类型；按钮标题文字颜色，支持rgb、rgba、#；默认：'#ffffff'
             icon: '', //（可选项）字符串类型；按钮标题前的图标路径（本地路径，支持fs://，widget://），水平、垂直居中，图标为正方形
             iconWidth: 20 //（可选项）数字类型；按钮标题前的图标宽度，图标为正方形；默认：20
         }],
         styles: {
-            borderColor: '#696969',
+            borderColor: '#EED6B0',
             item: {
                 bgColor: '#F7F3EA',
                 activeBgColor: '#F5F5F5',
@@ -57,7 +57,7 @@ var apiready = function() {
                 subTitleSize: 12.0,
                 subTitleColor: '#E1D7CA',
                 remarkColor: '#655A55',
-                remarkSize: 16,
+                remarkSize: 14,
                 remarkIconWidth: 30
             }
         },

@@ -15,8 +15,8 @@
 	<preference name="autoUpdate" value="true"/>
 	<preference name="smartUpdate" value="false"/>
 	<preference name="debug" value="false"/>
-	<preference name="statusBarAppearance" value="true"/>
-    <preference name="iOS7StatusBarAppearance" value="true"/>
+	<!-- <preference name="statusBarAppearance" value="true"/> -->
+    <!-- <preference name="iOS7StatusBarAppearance" value="true"/> -->
 	<permission name="location"/>
 	<permission name="internet"/>
 	<access origin="*"/>
