@@ -1,7 +1,12 @@
+/**
+ * [apiready description]
+ * @return {[type]} [description]
+ */
 var apiready = function() {
     $api.fixStatusBar($api.dom('header'));
     var listViewData = [];
-    v_loaded_recors = 5;
+    v_loaded_recors = 10;
+    per_page_num = 10;
     model = api.require('model');
     query = api.require('query');
     model.config({
@@ -40,7 +45,7 @@ var apiready = function() {
         styles: {
             borderColor: '#696969',
             item: {
-                bgColor: '#eee',
+                bgColor: '#F7F3EA',
                 activeBgColor: '#F5F5F5',
                 height: 55.0,
                 imgWidth: 40,
@@ -48,10 +53,10 @@ var apiready = function() {
                 imgCorner: 4,
                 placeholderImg: '',
                 titleSize: 12.0,
-                titleColor: '#000',
+                titleColor: '#655A55',
                 subTitleSize: 12.0,
-                subTitleColor: '#000',
-                remarkColor: '#000',
+                subTitleColor: '#E1D7CA',
+                remarkColor: '#655A55',
                 remarkSize: 16,
                 remarkIconWidth: 30
             }
@@ -78,13 +83,17 @@ var apiready = function() {
 
 }
 
+/**
+ * [pull_down_reload description]
+ * @return {[type]} [description]
+ */
 function pull_down_reload() {
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             var queryId = ret.qid;
             query.limit({
                 qid: queryId,
-                value: 5
+                value: per_page_num
             });
             // query.justFields({
             //     qid: queryId,
@@ -123,13 +132,17 @@ function pull_down_reload() {
 
 }
 
+/**
+ * [pull_up_load_more description]
+ * @return {[type]} [description]
+ */
 function pull_up_load_more() {
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             var queryId = ret.qid;
             query.limit({
                 qid: queryId,
-                value: 5
+                value: per_page_num
             });
             query.skip({
                 qid: queryId,
@@ -171,6 +184,11 @@ function pull_up_load_more() {
     })
 }
 
+/**
+ * [reloadData description]
+ * @param  {[type]} json_objs [description]
+ * @return {[type]}           [description]
+ */
 function reloadData(json_objs) {
     UIListView.reloadData({
             "data": json_objs
@@ -185,6 +203,11 @@ function reloadData(json_objs) {
         })
 }
 
+/**
+ * [appendData description]
+ * @param  {[type]} json_objs [description]
+ * @return {[type]}           [description]
+ */
 function appendData(json_objs) {
     if (json_objs[0] != undefined) {
         UIListView.appendData({
@@ -205,6 +228,11 @@ function appendData(json_objs) {
     }
 }
 
+/**
+ * [openWin description]
+ * @param  {[type]} type [description]
+ * @return {[type]}      [description]
+ */
 function openWin(type) {
     api.openWin({
         name: type,
@@ -215,6 +243,10 @@ function openWin(type) {
     });
 }
 
+/**
+ * [openSearch description]
+ * @return {[type]} [description]
+ */
 function openSearch() {
     var UISearchBar = api.require('UISearchBar');
     UISearchBar.open({
