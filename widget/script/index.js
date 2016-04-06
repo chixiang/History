@@ -63,7 +63,16 @@ var apiready = function() {
         },
         fixedOn: api.frameName
     }, function(ret, err) {
-        pull_down_reload(UIListView);
+        if (ret.eventType == "show") {
+            pull_down_reload(UIListView);
+        }
+        if (ret.eventType == "clickContent") {
+            UIListView.getDataByIndex({
+                index: ret.index
+            }, function(ret, err) {
+                displayHis(ret.data);
+            });
+        }
     });
     UIListView.setRefreshHeader({
             bgColor: "#f5f5f5",
@@ -99,10 +108,10 @@ function pull_down_reload() {
             //     qid: queryId,
             //     value: ["id", "msg", "updatedAt"]
             // });
-            // query.desc({
-            //     qid: queryId,
-            //     column: "updatedAt"
-            // });
+            query.desc({
+                qid: queryId,
+                column: "updatedAt"
+            });
             model.findAll({
                 class: "history",
                 qid: queryId
@@ -118,7 +127,9 @@ function pull_down_reload() {
                                 uid: ret[idx].id,
                                 title: ret[idx].name,
                                 subTitle: ret[idx].disease,
-                                remark: ret[idx].comeDate
+                                remark: ret[idx].comeDate,
+                                age: ret[idx].age,
+                                sex: ret[idx].sex
                             };
                             json_objs.push(listViewItem);
                             idx = idx + 1;
@@ -152,10 +163,10 @@ function pull_up_load_more() {
             //     qid: queryId,
             //     value: ["id", "msg", "updatedAt"]
             // });
-            // query.desc({
-            //     qid: queryId,
-            //     column: "updatedAt"
-            // });
+            query.desc({
+                 qid: queryId,
+                 column: "updatedAt"
+            });
             model.findAll({
                 class: "history",
                 qid: queryId
@@ -171,7 +182,9 @@ function pull_up_load_more() {
                                 uid: ret[idx].id,
                                 title: ret[idx].name,
                                 subTitle: ret[idx].disease,
-                                remark: ret[idx].comeDate
+                                remark: ret[idx].comeDate,
+                                age: ret[idx].age,
+                                sex: ret[idx].sex
                             };
                             json_objs.push(listViewItem);
                             idx = idx + 1;
@@ -241,6 +254,16 @@ function openWin(type) {
         reload: true,
         bounces: false
     });
+}
+
+function displayHis(data) {
+    api.openWin({
+        name: "history",
+        url: './html/history.html',
+        pageParam: data,
+        reload: true,
+        bounces: false
+    })
 }
 
 /**
