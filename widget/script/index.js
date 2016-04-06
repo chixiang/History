@@ -63,7 +63,6 @@ var apiready = function() {
         },
         fixedOn: api.frameName
     }, function(ret, err) {
-        alert(JSON.stringify(ret));
         if (ret.eventType == "show") {
             pull_down_reload(UIListView);
         }
@@ -72,6 +71,13 @@ var apiready = function() {
                 index: ret.index
             }, function(ret, err) {
                 displayHis(ret.data);
+            });
+        }
+        if (ret.eventType == "clickRightBtn" && ret.btnIndex == "0") {
+            UIListView.getDataByIndex({
+                index: ret.index
+            }, function(ret, err) {
+                modiHis(ret.data);
             });
         }
     });
@@ -257,10 +263,30 @@ function openWin(type) {
     });
 }
 
+/**
+ * [displayHis description]
+ * @param  {[type]} data [description]
+ * @return {[type]}      [description]
+ */
 function displayHis(data) {
     api.openWin({
         name: "history",
         url: './html/history.html',
+        pageParam: data,
+        reload: true,
+        bounces: false
+    })
+}
+
+/**
+ * [modiHis description]
+ * @param  {[type]} data [description]
+ * @return {[type]}      [description]
+ */
+function modiHis(data) {
+   api.openWin({
+        name: "history",
+        url: './html/modihis.html',
         pageParam: data,
         reload: true,
         bounces: false
