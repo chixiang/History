@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
-    <title>查看病历</title>
+    <title>修改病历</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <script type="text/javascript" src="../script/api.js"></script>
@@ -136,13 +136,13 @@
         <header id='header'>
             <nav id="nav">
                 <a id="left" tapmode="" onclick="window.closeWin();">
-                    <span>后退</span>
+                    <span>取消</span>
                 </a>
                 <div id="middle">
-                    <span id="title">查看病历</span>
+                    <span id="title">修改病历</span>
                 </div>
-                <a id="right" tapmode="" onclick="modiHis();">
-                    <span>修改</span>
+                <a id="right" tapmode="" onclick="saveHis();">
+                    <span>保存</span>
                 </a>
             </nav>
         </header>
@@ -182,14 +182,6 @@ apiready = function() {
         api.closeWin();
     }
 
-    // $api.byId('right').text = "修改";
-    // $api.byId('right').onclick = modiHis;
-
-    $api.attr($api.byId('name'), 'readonly', 'true');
-    $api.attr($api.byId('age'), 'readonly', 'true');
-    $api.attr($api.byId('sex'), 'readonly', 'true');
-    $api.attr($api.byId('ta_info'), 'contenteditable', 'false');
-
     $api.byId('name').value = api.pageParam.title;
     $api.byId('age').value = api.pageParam.age;
     $api.byId('sex').value = api.pageParam.sex;
@@ -197,20 +189,11 @@ apiready = function() {
 
 }
 
-function modiHis() {
-   api.openWin({
-        name: "history",
-        url: './modihis.html',
-        pageParam: api.pageParam,
-        reload: true,
-        bounces: false
-    })
-}
-
 function saveHis() {
     var name = $api.byId('name');
     var sex = $api.byId('sex');
     var age = $api.byId('age');
+    // var info = $api.byId('ta_info');
     var info = $api.byId('ta_info').innerHTML;
 
     if (name.value == '') {
@@ -229,7 +212,6 @@ function saveHis() {
         appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
         host: 'https://d.apicloud.com'
     });
-    alert(api.pageParam.uid);
     model.updateById({
             class: 'history',
             id: api.pageParam.uid,

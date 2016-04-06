@@ -63,6 +63,7 @@ var apiready = function() {
         },
         fixedOn: api.frameName
     }, function(ret, err) {
+        alert(JSON.stringify(ret));
         if (ret.eventType == "show") {
             pull_down_reload(UIListView);
         }
