@@ -167,7 +167,6 @@
             </div>
             <div id="info">
                 <div class="textarea" id="ta_info" contenteditable="true">
-                    <br />
                 </div>
             </div>
         </div>
@@ -189,10 +188,16 @@ function saveHis() {
     var name = $api.byId('name');
     var sex = $api.byId('sex');
     var age = $api.byId('age');
-    var info = $api.byId('ta_info');
+    // var info = $api.byId('ta_info');
+    var info = $api.byId('ta_info').innerHTML;
 
     if (name.value == '') {
         alert("请输入姓名!");
+        return;
+    }
+
+    if ($api.trim(info) == '') {
+        alert("请输入病情!");
         return;
     }
 
