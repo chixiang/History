@@ -315,6 +315,7 @@ function delHis(id) {
         function(ret, err) {
             if (ret) {
                 alert("删除病历成功！");
+                pull_down_reload();
             } else {
                 alert("删除病历失败！");
             }
