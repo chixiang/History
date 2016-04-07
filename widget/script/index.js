@@ -56,17 +56,17 @@ var apiready = function() {
             item: {
                 bgColor: '#F7F3EA',
                 activeBgColor: '#F5F5F5',
-                height: 55.0,
+                height: 100.0,
                 imgWidth: 40,
                 imgHeight: 40,
                 imgCorner: 4,
                 placeholderImg: '',
-                titleSize: 12.0,
+                titleSize: 20.0,
                 titleColor: '#655A55',
-                subTitleSize: 12.0,
+                subTitleSize: 16.0,
                 subTitleColor: '#E1D7CA',
                 remarkColor: '#655A55',
-                remarkSize: 14,
+                remarkSize: 18,
                 remarkIconWidth: 30
             }
         },
