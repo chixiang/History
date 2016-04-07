@@ -80,6 +80,15 @@ var apiready = function() {
                 modiHis(ret.data);
             });
         }
+        if (ret.eventType == "clickRightBtn" && ret.btnIndex == "1") {
+            if(confirm("确定删除？")) {
+                UIListView.getDataByIndex({
+                    index: ret.index
+                }, function(ret, err) {
+                    delHis(ret.date.uid);
+                });
+            }
+        }
     });
     UIListView.setRefreshHeader({
             bgColor: "#f5f5f5",
@@ -216,7 +225,7 @@ function reloadData(json_objs) {
         function(ret) {
             if (ret.status) {
                 api.toast({
-                    msg: '加载数据成功'
+                    msg: '加载病历成功'
                 });
                 v_loaded_recors = per_page_num;
             }
@@ -235,15 +244,15 @@ function appendData(json_objs) {
             },
             function(ret) {
                 if (ret.status) {
-                    api.toast({
-                        msg: '追加数据成功'
-                    });
+                    // api.toast({
+                    //     msg: '追加数据成功'
+                    // });
                     v_loaded_recors = v_loaded_recors + per_page_num;
                 }
             });
     } else {
         api.toast({
-            msg: '没有更多数据了'
+            msg: '没有更多病历了'
         });
     }
 }
@@ -294,13 +303,33 @@ function modiHis(data) {
 }
 
 /**
+ * [modiHis description]
+ * @param  {[type]} data [description]
+ * @return {[type]}      [description]
+ */
+function delHis(id) {
+    model.deleteById({
+            class: 'history',
+            id: id
+        },
+        function(ret, err) {
+            if (ret) {
+                alert("删除病历成功！");
+            } else {
+                alert("删除病历失败！");
+            }
+        }
+    );
+}
+
+/**
  * [openSearch description]
  * @return {[type]} [description]
  */
 function openSearch() {
     var UISearchBar = api.require('UISearchBar');
     UISearchBar.open({
-        placeholder: '请输入搜索关键字',
+        placeholder: '请输入病历关键字',
         historyCount: 10,
         showRecordBtn: true,
         texts: {

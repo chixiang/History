@@ -182,9 +182,6 @@ apiready = function() {
         api.closeWin();
     }
 
-    // $api.byId('right').text = "修改";
-    // $api.byId('right').onclick = modiHis;
-
     $api.attr($api.byId('name'), 'readonly', 'true');
     $api.attr($api.byId('age'), 'readonly', 'true');
     $api.attr($api.byId('sex'), 'readonly', 'true');
@@ -207,51 +204,6 @@ function modiHis() {
     })
 }
 
-function saveHis() {
-    var name = $api.byId('name');
-    var sex = $api.byId('sex');
-    var age = $api.byId('age');
-    var info = $api.byId('ta_info').innerHTML;
-
-    if (name.value == '') {
-        alert("请输入姓名!");
-        return;
-    }
-
-    if ($api.trim(info) == '') {
-        alert("请输入病情!");
-        return;
-    }
-
-    var model = api.require('model');
-    model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
-    });
-    alert(api.pageParam.uid);
-    model.updateById({
-            class: 'history',
-            id: api.pageParam.uid,
-            value: {
-                name: name.value,
-                sex: sex.value,
-                age: age.value,
-                info: info,
-                disease: info,
-                comeDate: "2016-04-04"
-            }
-        },
-        function(ret, err) {
-            if (ret) {
-                alert("修改数据成功！");
-                window.closeWin();
-            } else {
-                alert("修改数据失败！");
-            }
-        }
-    );
-}
 </script>
 
 </html>
