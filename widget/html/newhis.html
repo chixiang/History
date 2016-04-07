@@ -222,12 +222,19 @@ function saveHis() {
         function(ret, err) {
             if (ret) {
                 alert("新增病历成功！");
+                BacktoReload();
                 window.closeWin();
             } else {
                 alert("新增病历失败！");
             }
         }
     );
+}
+
+function BacktoReload() {
+    api.sendEvent({
+        name: 'reloadHis'
+    })
 }
 
 </script>

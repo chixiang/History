@@ -4,6 +4,15 @@
  */
 var apiready = function() {
     $api.fixIos7Bar($api.dom('header'));
+
+    api.addEventListener({
+        name: 'reloadHis'
+    }, function(ret, err) {
+        if(ret && ret.value) {
+            pull_down_reload();
+        }
+    })
+
     var listViewData = [];
     per_page_num = 10;
     v_loaded_recors = per_page_num;
@@ -86,6 +95,7 @@ var apiready = function() {
                     index: ret.index
                 }, function(ret, err) {
                     delHis(ret.data.uid);
+                    pull_down_reload();
                 });
             }
         }
@@ -315,7 +325,6 @@ function delHis(id) {
         function(ret, err) {
             if (ret) {
                 alert("删除病历成功！");
-                pull_down_reload();
             } else {
                 alert("删除病历失败！");
             }
