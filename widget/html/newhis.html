@@ -215,7 +215,7 @@ function saveHis() {
                 age: age.value,
                 info: info,
                 disease: info,
-                comeDate: "2016-04-04"
+                comeDate: getDate()
             }
         },
         function(ret, err) {
@@ -228,6 +228,13 @@ function saveHis() {
         }
     );
 }
+
+function getDate() {
+    var date = new Date();
+    var formatDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    return formatDate.replace(/\b(\w)\b/g, '0$1');
+}
+
 </script>
 
 </html>
