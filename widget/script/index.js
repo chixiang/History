@@ -85,7 +85,7 @@ var apiready = function() {
                 UIListView.getDataByIndex({
                     index: ret.index
                 }, function(ret, err) {
-                    delHis(ret.date.uid);
+                    delHis(ret.data.uid);
                 });
             }
         }

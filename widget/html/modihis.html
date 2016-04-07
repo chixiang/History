@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/util.js"></script>
     <style>
     header {
         position: fixed;
@@ -221,7 +222,7 @@ function saveHis() {
                 age: age.value,
                 info: info,
                 disease: info,
-                comeDate: "2016-04-04"
+                comeDate: getDate() 
             }
         },
         function(ret, err) {

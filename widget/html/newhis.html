@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
-    <title>新建病历</title>
+    <title>新增病历</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/util.js"></script>
     <style>
     header {
         position: fixed;
@@ -139,7 +140,7 @@
                     <span>取消</span>
                 </a>
                 <div id="middle">
-                    <span id="title">新建病历</span>
+                    <span id="title">新增病历</span>
                 </div>
                 <a id="right" tapmode="" onclick="saveHis();">
                     <span>保存</span>
@@ -227,12 +228,6 @@ function saveHis() {
             }
         }
     );
-}
-
-function getDate() {
-    var date = new Date();
-    var formatDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-    return formatDate.replace(/\b(\w)\b/g, '0$1');
 }
 
 </script>
