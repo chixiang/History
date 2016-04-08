@@ -202,13 +202,17 @@ function refreshList() {
                                         historyItem.phone = ret[0].phone;
                                         historyItem.address = ret[0].address;
                                         historyItem.job = ret[0].job;
-                                        alert(JSON.stringify(historyItem));
+                                        // 给slipList展示字段赋值
+                                        historyItem.title = ret[0].record_date;
+                                        historyItem.headline = ret[0].name;
+                                        historyItem.subTitle = ret[0].diagnosis;
+                                        historyItem.remark = ret[0].treatment;
                                     }
                                 });
                             }
                         });
 
-                        json_objs = addListText(json_objs, historyItem);
+                        json_objs.push(historyItem);
                         idx = idx + 1;
                     }
                     loadData(json_objs);
