@@ -241,7 +241,6 @@ function appendData(json_objs) {
                     });
                 }
                 v_loaded_recors = v_loaded_recors + json_objs.length;
-                alert(v_loaded_recors);
             }
         });
 }
