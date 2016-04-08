@@ -205,7 +205,6 @@ function pull_up_load_more() {
                         var json_objs = [];
                         while (ret[idx] != undefined) {
                             var listViewItem = {
-                                uid: ret[idx].id,
                                 title: ret[idx].name,
                                 subTitle: ret[idx].disease,
                                 remark: ret[idx].comeDate,

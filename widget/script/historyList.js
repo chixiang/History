@@ -9,9 +9,9 @@ var apiready = function() {
         name: 'reloadHistory'
     }, function(ret, err) {
         if (ret && ret.value) {
-            refreshList();
+            loadList("refresh");
         }
-    })
+    });
 
     var historyListData = [];
     per_page_num = 5;
@@ -23,113 +23,107 @@ var apiready = function() {
         appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
         host: 'https://d.apicloud.com'
     });
-    historyList = api.require('slipList');
+    historyList = api.require('UIListView');
     historyList.open({
-        x: 0,
-        y: $api.dom('header').offsetHeight,
-        w: api.winWidth,
-        h: $api.dom('#main').offsetHeight,
-        leftBtn: [{
-            bg: '#EED6B0',
-            title: '删除',
-            titleSize: 14,
-            titleColor: '#655A55'
-                // selectedColor: ''
-        }],
-        leftBg: '',
-        rightBtn: [{
-            bg: '#EED6B0',
+        rect: {
+            x: 0,
+            y: $api.dom('header').offsetHeight,
+            w: api.winWidth,
+            h: $api.dom('#main').offsetHeight
+        },
+        rightBtns: [{
+            bgColor: '#EED6B0',
+            activeBgColor: '',
+            width: 70,
             title: '修改',
             titleSize: 14,
-            titleColor: '#655A55'
-                // selectedColor: ''
-        }],
-        rightBg: '',
-        itemStyle: {
-            borderColor: '#EED6B0',
-            bgColor: '#F7F3EA',
-            selectedColor: '#F5F5F5',
-            height: 100,
-            placeholderImg: null,
-            titleSize: 10,
             titleColor: '#655A55',
-            headlineSize: '10',
-            headlineColor: '$655A55',
-            subTitleSize: 16,
-            subTitleColor: '#E1D7CA',
-            remarkSize: 18,
-            remarkColor: '#655A55',
-            remarkMargin: 10
+            icon: '',
+            iconWidth: 20
+        }, {
+            bgColor: '#EED6B0',
+            activeBgColor: '',
+            width: 70,
+            title: '删除',
+            titleSize: 14,
+            titleColor: '#655A55',
+            icon: '',
+            iconWidth: 20
+        }],
+        styles: {
+            borderColor: '#EED6B0',
+            item: {
+                bgColor: '#F7F3EA',
+                activeBgColor: '#F5F5F5',
+                height: 80,
+                imgWidth: 40,
+                imgHeight: 40,
+                imgCorner: 4,
+                placeholderImg: '',
+                titleSize: 24.0,
+                titleColor: '#655A55',
+                subTitleSize: 16.0,
+                subTitleColor: '#E1D7CA',
+                remarkColor: '#655A55',
+                remarkSize: 14,
+                remarkIconWidth: 30
+            }
         },
-        datas: historyListData,
-        fixedOn: api.frameName,
-        fixed: true
-            // datas: [{
-            //     img: 'widget://res/img/ic/sliplist.jpg',
-            //     title: '12:00',
-            //     headline: '刘德华',
-            //     subTitle: 'APICloud粉丝见面会',
-            //     titleIcon: 'widget://res/img/ic/slipList_watch.png',
-            //     subTitleIcon: 'widget://res/img/ic/slipList_star.png',
-            //     remark: '完成'
-            // }]
+        data: historyListData
+            // fixedOn: api.frameName,
     }, function(ret, err) {
-        alert(JSON.stringify(ret));
-        if (ret) {
-            alert("刷新列表");
-            refreshList();
+        if (ret.eventType == "show") {
+            loadList("refresh");
         }
-        // if (ret.eventType == "show") {
-        //     pull_down_reload(UIListView);
-        // }
-        // if (ret.eventType == "clickContent") {
-        //     UIListView.getDataByIndex({
-        //         index: ret.index
-        //     }, function(ret, err) {
-        //         displayHis(ret.data);
-        //     });
-        // }
-        // if (ret.eventType == "clickRightBtn" && ret.btnIndex == "0") {
-        //     UIListView.getDataByIndex({
-        //         index: ret.index
-        //     }, function(ret, err) {
-        //         modiHis(ret.data);
-        //     });
-        // }
-        // if (ret.eventType == "clickRightBtn" && ret.btnIndex == "1") {
-        //     if (confirm("确定删除？")) {
-        //         UIListView.getDataByIndex({
-        //             index: ret.index
-        //         }, function(ret, err) {
-        //             delHis(ret.data.uid);
-        //             pull_down_reload();
-        //         });
-        //     }
-        // }
+        if (ret.eventType == "clickContent") {
+            historyList.getDataByIndex({
+                index: ret.index
+            }, function(ret, err) {
+                displayHis(ret.data);
+            });
+        }
+        if (ret.eventType == "clickRightBtn" && ret.btnIndex == "0") {
+            historyList.getDataByIndex({
+                index: ret.index
+            }, function(ret, err) {
+                modiHis(ret.data);
+            });
+        }
+        if (ret.eventType == "clickRightBtn" && ret.btnIndex == "1") {
+            if (confirm("确定删除？")) {
+                historyList.getDataByIndex({
+                    index: ret.index
+                }, function(ret, err) {
+                    delHis(ret.data.uid);
+                    loadList();
+                });
+            }
+        }
     });
     historyList.setRefreshHeader({
-            bgColor: "#f5f5f5",
-            // loadingImg: "image/bottombtn0301.png"
+            bgColor: "#f5f5f5"
+                // loadingImg: "image/bottombtn0301.png"
         },
         function(ret, err) {
-            refreshList();
+            loadList();
         });
 
-    // UIListView.setRefreshFooter({
-    //         bgColor: "#f5f5f5",
-    //         loadingImg: "image/bottombtn0301.png"
-    //     },
-    //     function(ret, err) {
-    //         pull_up_load_more();
-    //     });
+    historyList.setRefreshFooter({
+            bgColor: "#f5f5f5"
+                // loadingImg: "image/bottombtn0301.png"
+        },
+        function(ret, err) {
+            loadList("append");
+        });
 
 }
 
 /**
- * [pull_down_reload description]
- * @return {[type]} [description]
+ * [loadList 加载病历列表]
+ * @param  {[type]} type [refresh: 刷新, append: 追加]
+ * @return {[type]}      [description]
  */
-function refreshList() {
+function loadList(type) {
     var userName = "me";
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
@@ -138,19 +132,26 @@ function refreshList() {
                 qid: queryId1,
                 value: per_page_num
             });
-            // query.justFields({
-            //     qid: queryId,
-            //     value: ["id", "msg", "updatedAt"]
-            // });
+            if (type == "append") {
+                query.skip({
+                    qid: queryId1,
+                    value: v_loaded_recors
+                });
+            }
             query.desc({
                 qid: queryId1,
                 column: "updatedAt"
+            });
+            query.include({
+                qid: ret.qid,
+                column: 'patient_pointer'
             });
             query.whereEqual({
                 qid: queryId1,
                 column: 'record_doctor',
                 value: userName
-            })
+            });
+            var json_objs = [];
             model.findAll({
                 class: "caseHistory",
                 qid: queryId1
@@ -158,144 +159,69 @@ function refreshList() {
                 if (err) {
                     alert(JSON.stringify(err));
                 } else {
-                    var idx = 0;
-                    var json_objs = [];
-                    while (ret[idx] != undefined) {
-                        var historyItem = {
-                            caseHistory_id: ret[idx].id,
-                            patient_id: ret[idx].patient_id,
-                            record_date: ret[idx].record_date,
-                            consultation_department: ret[idx].consultation_department,
-                            chief_complaint: ret[idx].chief_complaint,
-                            physical_id: ret[idx].physical_id,
-                            accessory_exam_id: ret[idx].accessory_exam_id,
-                            diagnosis: ret[idx].diagnosis,
-                            treatment: ret[idx].treatment,
-                            follow_up_id: ret[idx].follow_up_id,
-                            record_doctor: ret[idx].record_doctor
-                        };
-
-
-
-                        query.createQuery(function(ret, err) {
-                            if (ret && ret.qid) {
-                                var queryId2 = ret.qid;
-                                var patient_id = historyItem.patient_id;
-                                query.whereEqual({
-                                    qid: queryId2,
-                                    column: 'id',
-                                    value: patient_id
-                                });
-                                model.findAll({
-                                    class: 'patient',
-                                    qid: queryId2
-                                }, function(ret, err) {
-                                    if (err) {
-                                        alert(JSON.stringify(err));
-                                    } else {
-                                        historyItem.name = ret[0].name;
-                                        historyItem.gender = ret[0].gender;
-                                        historyItem.birthday = ret[0].birthday;
-                                        historyItem.age = ret[0].age;
-                                        historyItem.admission_number = ret[0].admission_number;
-                                        historyItem.outpatient_number = ret[0].outpatient_number;
-                                        historyItem.phone = ret[0].phone;
-                                        historyItem.address = ret[0].address;
-                                        historyItem.job = ret[0].job;
-                                        // 给slipList展示字段赋值
-                                        historyItem.title = ret[0].record_date;
-                                        historyItem.headline = ret[0].name;
-                                        historyItem.subTitle = ret[0].diagnosis;
-                                        historyItem.remark = ret[0].treatment;
-                                    }
-                                });
-                            }
-                        });
-
-                        json_objs.push(historyItem);
-                        idx = idx + 1;
-                    }
-                    loadData(json_objs);
-                }
-            });
-        }
-    })
-
-}
-
-function addListText(listData, item) {
-    item.title = item.record_date;
-    item.headline = item.name;
-    item.subTitle = item.diagnosis;
-    item.remark = item.treatment;
-    listData.push(item);
-    return listData;
-}
-
-/**
- * [pull_up_load_more description]
- * @return {[type]} [description]
- */
-function pull_up_load_more() {
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            var queryId = ret.qid;
-            query.limit({
-                qid: queryId,
-                value: per_page_num
-            });
-            query.skip({
-                qid: queryId,
-                value: v_loaded_recors
-            });
-            // query.justFields({
-            //     qid: queryId,
-            //     value: ["id", "msg", "updatedAt"]
-            // });
-            query.desc({
-                qid: queryId,
-                column: "updatedAt"
-            });
-            model.findAll({
-                class: "history",
-                qid: queryId
-            }, function(ret, err) {
-                if (err) {
-                    alert(JSON.stringify(err));
-                } else {
                     if (ret) {
                         var idx = 0;
-                        var json_objs = [];
                         while (ret[idx] != undefined) {
-                            var listViewItem = {
-                                uid: ret[idx].id,
-                                title: ret[idx].name,
-                                subTitle: ret[idx].disease,
-                                remark: ret[idx].comeDate,
-                                age: ret[idx].age,
-                                sex: ret[idx].sex
+                            var historyItem = {
+                                caseHistory_id: ret[idx].id,
+                                patient_id: ret[idx].patient_id,
+                                record_date: ret[idx].record_date,
+                                consultation_department: ret[idx].consultation_department,
+                                chief_complaint: ret[idx].chief_complaint,
+                                physical_id: ret[idx].physical_id,
+                                accessory_exam_id: ret[idx].accessory_exam_id,
+                                diagnosis: ret[idx].diagnosis,
+                                treatment: ret[idx].treatment,
+                                follow_up_id: ret[idx].follow_up_id,
+                                record_doctor: ret[idx].record_doctor,
+                                patient_pointer: ret[idx].patient_pointer.id,
+                                name: ret[idx].patient_pointer.name,
+                                gender: ret[idx].patient_pointer.gender,
+                                birthday: ret[idx].patient_pointer.birthday,
+                                age: ret[idx].patient_pointer.age,
+                                admission_number: ret[idx].patient_pointer.admission_number,
+                                outpatient_number: ret[idx].patient_pointer.outpatient_number,
+                                phone: ret[idx].patient_pointer.phone,
+                                address: ret[idx].patient_pointer.address,
+                                job: ret[idx].patient_pointer.job,
+                                // 给UIListView展示字段赋值
+                                title: ret[idx].patient_pointer.name + "   " + (ret[idx].patient_pointer.gender?"男":"女") + "   " + ret[idx].patient_pointer.age + "岁",
+                                subTitle: ret[idx].diagnosis,
+                                remark: ret[idx].record_date
                             };
-                            json_objs.push(listViewItem);
+                            json_objs.push(historyItem);
                             idx = idx + 1;
                         }
+
+                        if (type == "append") {
+                            appendData(json_objs);
+                        } else {
+                            loadData(json_objs);
+                        }
+
                     }
-                    appendData(json_objs);
                 }
             });
         }
-    })
+    });
 }
 
 /**
- * [reloadData description]
+ * [loadData description]
  * @param  {[type]} json_objs [description]
  * @return {[type]}           [description]
  */
 function loadData(json_objs) {
     historyList.reloadData({
-        "datas": json_objs
+        "data": json_objs
+    }, function(ret, err) {
+        if (ret.status) {
+            api.toast({
+                msg: "刷新病历成功"
+            });
+        }
     });
-    v_loaded_recors = per_page_num;
+    v_loaded_recors = json_objs.length;
 }
 
 /**
@@ -304,23 +230,20 @@ function loadData(json_objs) {
  * @return {[type]}           [description]
  */
 function appendData(json_objs) {
-    if (json_objs[0] != undefined) {
-        UIListView.appendData({
-                "data": json_objs
-            },
-            function(ret) {
-                if (ret.status) {
-                    // api.toast({
-                    //     msg: '追加数据成功'
-                    // });
-                    v_loaded_recors = v_loaded_recors + per_page_num;
+    historyList.appendData({
+            "data": json_objs
+        },
+        function(ret) {
+            if (ret.status) {
+                if (json_objs.length != per_page_num) {
+                    api.toast({
+                        msg: '到底了~~~别再拉了~~~'
+                    });
                 }
-            });
-    } else {
-        api.toast({
-            msg: '没有更多病历了'
+                v_loaded_recors = v_loaded_recors + json_objs.length;
+                alert(v_loaded_recors);
+            }
         });
-    }
 }
 
 /**
@@ -350,7 +273,7 @@ function displayHis(data) {
         pageParam: data,
         reload: true,
         bounces: false
-    })
+    });
 }
 
 /**
@@ -365,7 +288,7 @@ function modiHis(data) {
         pageParam: data,
         reload: true,
         bounces: false
-    })
+    });
 }
 
 /**
@@ -384,8 +307,7 @@ function delHis(id) {
             } else {
                 alert("删除病历失败！");
             }
-        }
-    );
+        });
 }
 
 /**
