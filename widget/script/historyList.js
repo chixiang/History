@@ -13,9 +13,16 @@ var apiready = function() {
         }
     });
 
-    var historyListData = [];
+    // 测试发现ios初始列表数组为空的话不加载UIListView，所以初始先一个空列表
+    var historyListData = [{
+        title: '',
+        subTitle: '',
+        remark: ''
+    }];
     per_page_num = 5;
-    v_loaded_recors = per_page_num;
+
+    // 设置初始为0，打开页面时判断如果为0则进行第一次加载
+    v_loaded_recors = 0;
     model = api.require('model');
     query = api.require('query');
     model.config({
@@ -31,6 +38,7 @@ var apiready = function() {
             w: api.winWidth,
             h: $api.dom('#main').offsetHeight
         },
+        data: historyListData,
         rightBtns: [{
             bgColor: '#EED6B0',
             activeBgColor: '',
@@ -60,18 +68,21 @@ var apiready = function() {
                 imgHeight: 40,
                 imgCorner: 4,
                 placeholderImg: '',
-                titleSize: 22,
+                titleSize: 20,
                 titleColor: '#655A55',
-                subTitleSize: 16.0,
+                subTitleSize: 14.0,
                 subTitleColor: '#E1D7CA',
                 remarkColor: '#655A55',
                 remarkSize: 14,
                 remarkIconWidth: 30
             }
         },
-        data: historyListData
-            // fixedOn: api.frameName,
+        fixedOn: api.frameName
     }, function(ret, err) {
+        // 发现有时第一次打开不加载，所以设置了v_loaded_recors初始值为0，判断如果为0则进行一次加载
+        if (v_loaded_recors == 0) {
+            loadList("refresh");
+        }
         if (ret.eventType == "show") {
             loadList("refresh");
         }
