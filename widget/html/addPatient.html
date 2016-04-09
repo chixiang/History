@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>新增患者</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/util.js"></script>
+    <style>
+    header {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        color: #FFF;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
+        background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
+        background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
+        height: 50px;
+        line-height: 50px;
+    }
+
+    body {
+        background-color: #F7F3EA;
+        color: #655A55;
+    }
+
+    a,
+    a:visited {
+        text-decoration: none;
+    }
+
+    #nav {
+        display: -webkit-box;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    #left {
+        width: 50px;
+    }
+
+    #left>span {
+        margin-left: 18px;
+        font-size: 16px;
+    }
+
+    #middle {
+        -webkit-box-flex: 1;
+        width: 100%;
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+    }
+
+    #title {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    #right {
+        width: 50px;
+    }
+
+    #right>span {
+        margin-right: 18px;
+        font-size: 16px;
+    }
+
+    #main {
+        width: 100%;
+        margin-top: 50px;
+        background: #F7F3EA;
+    }
+
+    .field {
+        height: 40px;
+        font-size: 16px;
+        line-height: 40px;
+        padding-left: 10px;
+        padding-right: 10px;
+        color: #655A55;
+        border-bottom: 1px;
+        border-style: solid;
+        border-color: #EED6B0;
+    }
+
+    .no_underline {
+        border-bottom: 0px;
+    }
+
+    .field_name {
+        float: left;
+    }
+
+    .more {
+        float: right;
+    }
+
+    input {
+        margin-left: 10px;
+        width: 200px;
+        overflow-x: visible;
+        overflow-y: visible;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header id='header'>
+            <nav id="nav">
+                <a id="left" tapmode="" onclick="window.closeWin();">
+                    <span>返回</span>
+                </a>
+                <div id="middle">
+                    <span id="title">患者信息</span>
+                </div>
+                <a id="right">
+                    <span></span>
+                </a>
+            </nav>
+        </header>
+        <div id="main">
+            <div class="field">
+                <div class="field_name">姓名:</div>
+                <div>
+                    <input type="text" id="name" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">性别:</div>
+                <div>
+                    <input type="text" id="gender" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">出生日期:</div>
+                <div>
+                    <input type="text" id="birthday" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">年龄:</div>
+                <div>
+                    <input type="text" id="age" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">住院号:</div>
+                <div>
+                    <input type="text" id="admission_number" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">门诊号:</div>
+                <div>
+                    <input type="text" id="outpatient_number" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">电话:</div>
+                <div>
+                    <input type="text" id="phone" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">地址:</div>
+                <div>
+                    <input type="text" id="address" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">职业:</div>
+                <div>
+                    <input type="text" id="job" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+apiready = function() {
+    // $api.fixStatusBar($api.dom('header'));
+    $api.fixIos7Bar($api.dom('header'));
+    // var header = document.querySelector('#header');
+    // $api.fixIos7Bar(header);
+    window.closeWin = function(winName) {
+        returnPatient();
+        api.closeWin();
+    }
+
+    if (api.pageParam.data.length != 0) {
+        data = api.pageParam.data;
+        $api.byId('name').value = data.name;
+        $api.byId('gender').value = data.gender;
+        $api.byId('birthday').value = data.birthday;
+        $api.byId('age').value = data.age;
+        $api.byId('admission_number').value = data.admission_number;
+        $api.byId('outpatient_number').value = data.outpatient_number;
+        $api.byId('phone').value = data.phone;
+        $api.byId('address').value = data.address;
+        $api.byId('job').value = data.job;
+    }
+
+}
+
+function returnPatient() {
+    api.sendEvent({
+        name: 'returnPatient',
+        extra: {
+            name: $api.byId('name').value,
+            gender: $api.byId('gender').value,
+            birthday: $api.byId('birthday').value,
+            age: $api.byId('age').value,
+            admission_number: $api.byId('admission_number').value,
+            outpatient_number: $api.byId('outpatient_number').value,
+            phone: $api.byId('phone').value,
+            address: $api.byId('address').value,
+            job: $api.byId('job').value
+        }
+    });
+}
+
+function saveHis() {
+    var name = $api.byId('name');
+    var sex = $api.byId('sex');
+    var age = $api.byId('age');
+    // var info = $api.byId('ta_info');
+    var info = $api.byId('ta_info').innerHTML;
+
+    if (name.value == '') {
+        alert("请输入姓名!");
+        return;
+    }
+
+    if ($api.trim(info) == '') {
+        alert("请输入病情!");
+        return;
+    }
+
+    var model = api.require('model');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    model.insert({
+            class: 'history',
+            value: {
+                name: name.value,
+                sex: sex.value,
+                age: age.value,
+                info: info,
+                disease: info,
+                comeDate: getDate()
+            }
+        },
+        function(ret, err) {
+            if (ret) {
+                alert("新增病历成功！");
+                BacktoReload();
+                window.closeWin();
+            } else {
+                alert("新增病历失败！");
+            }
+        }
+    );
+}
+</script>
+
+</html>

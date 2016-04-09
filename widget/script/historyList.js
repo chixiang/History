@@ -8,7 +8,7 @@ var apiready = function() {
     api.addEventListener({
         name: 'reloadHistory'
     }, function(ret, err) {
-        if (ret && ret.value) {
+        if (ret) {
             loadList("refresh");
         }
     });
@@ -266,7 +266,7 @@ function openWin(type) {
         name: type,
         url: './html/' + type + '.html',
         pageParam: {},
-        reload: true,
+        reload: false,
         bounces: false
     });
 }

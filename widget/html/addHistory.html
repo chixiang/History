@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>新增病历</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/util.js"></script>
+    <style>
+    header {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        color: #FFF;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
+        background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
+        background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
+        height: 50px;
+        line-height: 50px;
+    }
+
+    body {
+        background-color: #F7F3EA;
+        color: #655A55;
+    }
+
+    a,
+    a:visited {
+        text-decoration: none;
+    }
+
+    #nav {
+        display: -webkit-box;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    #left {
+        width: 50px;
+    }
+
+    #left>span {
+        margin-left: 18px;
+        font-size: 16px;
+    }
+
+    #middle {
+        -webkit-box-flex: 1;
+        width: 100%;
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+    }
+
+    #title {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    #right {
+        width: 50px;
+    }
+
+    #right>span {
+        margin-right: 18px;
+        font-size: 16px;
+    }
+
+    #main {
+        width: 100%;
+        margin-top: 50px;
+        background: #F7F3EA;
+    }
+
+    .field {
+        height: 40px;
+        font-size: 16px;
+        line-height: 40px;
+        padding-left: 10px;
+        padding-right: 10px;
+        color: #655A55;
+        border-bottom: 1px;
+        border-style: solid;
+        border-color: #EED6B0;
+    }
+
+    .no_underline {
+        border-bottom: 0px;
+    }
+
+    .field_name {
+        float: left;
+    }
+
+    .more {
+        float: right;
+    }
+
+    input {
+        margin-left: 10px;
+        width: 200px;
+        overflow-x: visible;
+        overflow-y: visible;
+    }
+
+    #info {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .textarea {
+        width: 100%;
+        min-height: 40px;
+        max-height: 4000px;
+        /*_height: 120px;*/
+        /*margin-left: auto;*/
+        /*margin-right: auto;*/
+        /*padding: 3px;*/
+        outline: 0;
+        /*border: 1px solid #a0b3d6;*/
+        font-size: 16px;
+        line-height: 30px;
+        /*padding: 2px;*/
+        word-wrap: break-word;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: #F7F3EA;
+        border-bottom: 1px #EED6B0 solid;
+        /*border-color: rgba(82, 168, 236, 0.8);*/
+        /*box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);*/
+    }
+    </style>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header id='header'>
+            <nav id="nav">
+                <a id="left" tapmode="" onclick="window.closeWin();">
+                    <span>取消</span>
+                </a>
+                <div id="middle">
+                    <span id="title">新增病历</span>
+                </div>
+                <a id="right" tapmode="" onclick="saveHis();">
+                    <span>保存</span>
+                </a>
+            </nav>
+        </header>
+        <div id="main">
+            <div class="field" onclick="openWin('addPatient')">
+                <div class="field_name">患者信息</div>
+                <div class="more"><span>&gt;</span></div>
+            </div>
+            <div class="field">
+                <div class="field_name">会诊科室:</div>
+                <div><input type="text" id="consultation_department" /></div>
+            </div>
+            <div class="field">
+                <div class="field_name">主诉:</div>
+                <div><input type="text" id="diagnosis" /></div>
+            </div>
+            <div class="field">
+                <div class="field_name">体检</div>
+                <div class="more"><span>&gt;</span></div>
+            </div>
+            <div class="field">
+                <div class="field_name">辅助检查</div>
+                <div class="more"><span>&gt;</span></div>
+            </div>
+            <div class="field">
+                <div class="field_name">诊断:</div>
+                <div><input type="text" id="treatment" /></div>
+            </div>
+            <div class="field">
+                <div class="field_name">治疗:</div>
+                <div><input type="text" id="treatment" /></div>
+            </div>
+            <div class="field">
+                <div class="field_name">随访</div>
+                <div class="more"><span>&gt;</span></div>
+            </div>
+            <div class="field no_underline">
+                <span>病情：</span>
+            </div>
+            <div id="info">
+                <div class="textarea" id="ta_info" contenteditable="true">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+apiready = function() {
+    // $api.fixStatusBar($api.dom('header'));
+    $api.fixIos7Bar($api.dom('header'));
+    // var header = document.querySelector('#header');
+    // $api.fixIos7Bar(header);
+    window.closeWin = function(winName) {
+        BacktoReload();
+        api.closeWin();
+    }
+
+    patient_pointer = [];
+
+    api.addEventListener({
+        name: 'returnPatient'
+    }, function(ret, err) {
+        if (ret && ret.value) {
+            patient_pointer = ret.value;
+        }
+    });
+
+}
+
+function saveHis() {
+    var name = $api.byId('name');
+    var sex = $api.byId('sex');
+    var age = $api.byId('age');
+    // var info = $api.byId('ta_info');
+    var info = $api.byId('ta_info').innerHTML;
+
+    if (name.value == '') {
+        alert("请输入姓名!");
+        return;
+    }
+
+    if ($api.trim(info) == '') {
+        alert("请输入病情!");
+        return;
+    }
+
+    var model = api.require('model');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    model.insert({
+            class: 'history',
+            value: {
+                name: name.value,
+                sex: sex.value,
+                age: age.value,
+                info: info,
+                disease: info,
+                comeDate: getDate()
+            }
+        },
+        function(ret, err) {
+            if (ret) {
+                alert("新增病历成功！");
+                BacktoReload();
+                window.closeWin();
+            } else {
+                alert("新增病历失败！");
+            }
+        }
+    );
+}
+
+/**
+ * [openWin description]
+ * @param  {[type]} type [description]
+ * @return {[type]}      [description]
+ */
+function openWin(type) {
+    api.openWin({
+        name: type,
+        url: './' + type + '.html',
+        pageParam: {
+            data: patient_pointer
+        },
+        reload: false,
+        bounces: false
+    });
+}
+
+function BacktoReload() {
+    api.sendEvent({
+        name: 'reloadHistory'
+    })
+}
+</script>
+
+</html>
