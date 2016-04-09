@@ -60,7 +60,7 @@ var apiready = function() {
                 imgHeight: 40,
                 imgCorner: 4,
                 placeholderImg: '',
-                titleSize: 24.0,
+                titleSize: 22,
                 titleColor: '#655A55',
                 subTitleSize: 16.0,
                 subTitleColor: '#E1D7CA',
@@ -185,9 +185,9 @@ function loadList(type) {
                                 address: ret[idx].patient_pointer.address,
                                 job: ret[idx].patient_pointer.job,
                                 // 给UIListView展示字段赋值
-                                title: ret[idx].patient_pointer.name + "   " + (ret[idx].patient_pointer.gender?"男":"女") + "   " + ret[idx].patient_pointer.age + "岁",
-                                subTitle: ret[idx].diagnosis,
-                                remark: ret[idx].record_date
+                                title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
+                                subTitle: (ret[idx].patient_pointer.gender?"男":"女") + "   " + ret[idx].patient_pointer.age + "岁   " + ret[idx].consultation_department + "   " + ret[idx].record_date,
+                                remark: (ret[idx].patient_pointer.admission_number!="")?ret[idx].patient_pointer.admission_number:ret[idx].patient_pointer.outpatient_number
                             };
                             json_objs.push(historyItem);
                             idx = idx + 1;
