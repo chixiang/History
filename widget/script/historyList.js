@@ -174,7 +174,7 @@ function loadList(type) {
                         var idx = 0;
                         while (ret[idx] != undefined) {
                             var historyItem = {
-                                caseHistory_id: ret[idx].id,
+                                id: ret[idx].id,
                                 patient_id: ret[idx].patient_id,
                                 record_date: ret[idx].record_date,
                                 consultation_department: ret[idx].consultation_department,

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
-    <title>新增病历</title>
+    <title>病历</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <script type="text/javascript" src="../script/api.js"></script>
@@ -144,7 +144,7 @@
                     <span>取消</span>
                 </a>
                 <div id="middle">
-                    <span id="title">新增病历</span>
+                    <span id="title">病历</span>
                 </div>
                 <a id="right" tapmode="" onclick="savePatient();">
                     <span>保存</span>
@@ -223,6 +223,16 @@ apiready = function() {
         }
     });
 
+    type = api.pageParam.type;
+    if (type == "modi") {
+        var data = api.pageParam.data;
+        $api.byId('consultation_department').value = data.consultation_department;
+        $api.byId('diagnosis').value = data.diagnosis;
+        $api.byId('chief_complaint').value = data.chief_complaint;
+        $api.byId('treatment').value = data.treatment;
+
+        patient_pointer = data.patient_pointer;
+    }
 }
 
 function savePatient() {
@@ -236,7 +246,32 @@ function savePatient() {
         appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
         host: 'https://d.apicloud.com'
     });
-    model.insert({
+    if (type == "modi") {
+        model.updateById({
+            class: 'patient',
+            id: api.pageParam.data.patient_pointer.id,
+            value: {
+                name: patient_pointer.name,
+                gender: patient_pointer.gender,
+                birthday: patient_pointer.birthday,
+                age: patient_pointer.age,
+                admission_number: patient_pointer.admission_number,
+                outpatient_number: patient_pointer.outpatient_number,
+                phone: patient_pointer.phone,
+                address: patient_pointer.address,
+                job: patient_pointer.job
+            }
+        }, function(ret, err) {
+            if (ret) {
+                saveHistory();
+                return true;
+            } else {
+                alert("修改患者信息失败，请重试！");
+                return false;
+            }
+        });
+    } else {
+        model.insert({
             class: 'patient',
             value: {
                 name: patient_pointer.name,
@@ -249,8 +284,7 @@ function savePatient() {
                 address: patient_pointer.address,
                 job: patient_pointer.job
             }
-        },
-        function(ret, err) {
+        }, function(ret, err) {
             if (ret) {
                 patient_pointer.id = ret.id;
                 saveHistory();
@@ -259,8 +293,8 @@ function savePatient() {
                 alert("保存患者信息失败，请重试！");
                 return false;
             }
-        }
-    );
+        });
+    }
 }
 
 function saveHistory() {
@@ -275,7 +309,31 @@ function saveHistory() {
         appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
         host: 'https://d.apicloud.com'
     });
-    model.insert({
+    if (type == "modi") {
+        model.updateById({
+            class: 'caseHistory',
+            id: api.pageParam.data.id,
+            value: {
+                patient_id: patient_pointer.id,
+                record_date: getDate(),
+                consultation_department: consultation_department.value,
+                chief_complaint: chief_complaint.value,
+                diagnosis: diagnosis.value,
+                treatment: treatment.value,
+                record_doctor: "me",
+                patient_pointer: patient_pointer.id
+            }
+        }, function(ret, err) {
+            if (ret) {
+                alert("修改病历成功！");
+                BacktoReload();
+                window.closeWin();
+            } else {
+                alert("修改病历失败！");
+            }
+        });
+    } else {
+        model.insert({
             class: 'caseHistory',
             value: {
                 patient_id: patient_pointer.id,
@@ -287,8 +345,7 @@ function saveHistory() {
                 record_doctor: "me",
                 patient_pointer: patient_pointer.id
             }
-        },
-        function(ret, err) {
+        }, function(ret, err) {
             if (ret) {
                 alert("新增病历成功！");
                 BacktoReload();
@@ -296,8 +353,8 @@ function saveHistory() {
             } else {
                 alert("新增病历失败！");
             }
-        }
-    );
+        });
+    }
 }
 
 /**
@@ -322,6 +379,7 @@ function BacktoReload() {
         name: 'reloadHistory'
     })
 }
+
 </script>
 
 </html>
