@@ -19,3 +19,4 @@ function setPatient(data) {
     $api.byId('address').value = data.address;
     $api.byId('job').value = data.job;
 }
+

@@ -242,7 +242,7 @@ function savePatient() {
                 name: patient_pointer.name,
                 gender: patient_pointer.gender,
                 birthday: patient_pointer.birthday,
-                age: patient_pointer.value,
+                age: patient_pointer.age,
                 admission_number: patient_pointer.admission_number,
                 outpatient_number: patient_pointer.outpatient_number,
                 phone: patient_pointer.phone,
@@ -252,12 +252,11 @@ function savePatient() {
         },
         function(ret, err) {
             if (ret) {
-                alert("新增患者成功！");
                 patient_pointer.id = ret.id;
                 saveHistory();
                 return true;
             } else {
-                alert("新增患者失败！");
+                alert("保存患者信息失败，请重试！");
                 return false;
             }
         }

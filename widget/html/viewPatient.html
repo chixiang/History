@@ -210,68 +210,6 @@ apiready = function() {
 
 }
 
-// function returnPatient() {
-//     api.sendEvent({
-//         name: 'returnPatient',
-//         extra: {
-//             name: $api.byId('name').value,
-//             gender: $api.byId('gender').value,
-//             birthday: $api.byId('birthday').value,
-//             age: $api.byId('age').value,
-//             admission_number: $api.byId('admission_number').value,
-//             outpatient_number: $api.byId('outpatient_number').value,
-//             phone: $api.byId('phone').value,
-//             address: $api.byId('address').value,
-//             job: $api.byId('job').value
-//         }
-//     });
-// }
-
-// function saveHis() {
-//     var name = $api.byId('name');
-//     var sex = $api.byId('sex');
-//     var age = $api.byId('age');
-//     // var info = $api.byId('ta_info');
-//     var info = $api.byId('ta_info').innerHTML;
-
-//     if (name.value == '') {
-//         alert("请输入姓名!");
-//         return;
-//     }
-
-//     if ($api.trim(info) == '') {
-//         alert("请输入病情!");
-//         return;
-//     }
-
-//     var model = api.require('model');
-//     model.config({
-//         appId: 'A6903478274381',
-//         appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-//         host: 'https://d.apicloud.com'
-//     });
-//     model.insert({
-//             class: 'history',
-//             value: {
-//                 name: name.value,
-//                 sex: sex.value,
-//                 age: age.value,
-//                 info: info,
-//                 disease: info,
-//                 comeDate: getDate()
-//             }
-//         },
-//         function(ret, err) {
-//             if (ret) {
-//                 alert("新增病历成功！");
-//                 BacktoReload();
-//                 window.closeWin();
-//             } else {
-//                 alert("新增病历失败！");
-//             }
-//         }
-//     );
-// }
 </script>
 
 </html>

@@ -368,10 +368,5 @@ function openSearch() {
             duration: 2000,
             location: "top"
         });
-        // if( ret ){
-        //      alert( JSON.stringify( ret ) );
-        // }else{
-        //      alert( JSON.stringify( err ) );
-        // }
     });
 }
