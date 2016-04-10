@@ -22,32 +22,32 @@
         height: 50px;
         line-height: 50px;
     }
-
+    
     body {
         background-color: #F7F3EA;
         color: #655A55;
     }
-
+    
     a,
     a:visited {
         text-decoration: none;
     }
-
+    
     #nav {
         display: -webkit-box;
         height: 50px;
         line-height: 50px;
     }
-
+    
     #left {
         width: 50px;
     }
-
+    
     #left>span {
         margin-left: 18px;
         font-size: 16px;
     }
-
+    
     #middle {
         -webkit-box-flex: 1;
         width: 100%;
@@ -55,27 +55,27 @@
         -webkit-box-pack: center;
         -webkit-box-align: center;
     }
-
+    
     #title {
         font-size: 18px;
         text-align: center;
     }
-
+    
     #right {
         width: 50px;
     }
-
+    
     #right>span {
         margin-right: 18px;
         font-size: 16px;
     }
-
+    
     #main {
         width: 100%;
         margin-top: 50px;
         background: #F7F3EA;
     }
-
+    
     .field {
         height: 40px;
         font-size: 16px;
@@ -87,31 +87,31 @@
         border-style: solid;
         border-color: #EED6B0;
     }
-
+    
     .no_underline {
         border-bottom: 0px;
     }
-
+    
     .field_name {
         float: left;
     }
-
+    
     .more {
         float: right;
     }
-
+    
     input {
         margin-left: 10px;
         width: 200px;
         overflow-x: visible;
         overflow-y: visible;
     }
-
+    
     #info {
         margin-left: 10px;
         margin-right: 10px;
     }
-
+    
     .textarea {
         width: 100%;
         min-height: 40px;
@@ -146,7 +146,7 @@
                 <div id="middle">
                     <span id="title">新增病历</span>
                 </div>
-                <a id="right" tapmode="" onclick="saveHis();">
+                <a id="right" tapmode="" onclick="savePatient();">
                     <span>保存</span>
                 </a>
             </nav>
@@ -158,11 +158,15 @@
             </div>
             <div class="field">
                 <div class="field_name">会诊科室:</div>
-                <div><input type="text" id="consultation_department" /></div>
+                <div>
+                    <input type="text" id="consultation_department" />
+                </div>
             </div>
             <div class="field">
                 <div class="field_name">主诉:</div>
-                <div><input type="text" id="chief_complaint" /></div>
+                <div>
+                    <input type="text" id="chief_complaint" />
+                </div>
             </div>
             <div class="field">
                 <div class="field_name">体检</div>
@@ -174,11 +178,15 @@
             </div>
             <div class="field">
                 <div class="field_name">诊断:</div>
-                <div><input type="text" id="diagnosis" /></div>
+                <div>
+                    <input type="text" id="diagnosis" />
+                </div>
             </div>
             <div class="field">
                 <div class="field_name">治疗:</div>
-                <div><input type="text" id="treatment" /></div>
+                <div>
+                    <input type="text" id="treatment" />
+                </div>
             </div>
             <div class="field">
                 <div class="field_name">随访</div>
@@ -217,22 +225,50 @@ apiready = function() {
 
 }
 
-function saveHis() {
-    var name = $api.byId('name');
-    var sex = $api.byId('sex');
-    var age = $api.byId('age');
-    // var info = $api.byId('ta_info');
-    var info = $api.byId('ta_info').innerHTML;
-
-    if (name.value == '') {
-        alert("请输入姓名!");
+function savePatient() {
+    if (patient_pointer.name == '') {
+        alert("未输入患者姓名");
         return;
     }
+    var model = api.require('model');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    model.insert({
+            class: 'patient',
+            value: {
+                name: patient_pointer.name,
+                gender: patient_pointer.gender,
+                birthday: patient_pointer.birthday,
+                age: patient_pointer.value,
+                admission_number: patient_pointer.admission_number,
+                outpatient_number: patient_pointer.outpatient_number,
+                phone: patient_pointer.phone,
+                address: patient_pointer.address,
+                job: patient_pointer.job
+            }
+        },
+        function(ret, err) {
+            if (ret) {
+                alert("新增患者成功！");
+                patient_pointer.id = ret.id;
+                saveHistory();
+                return true;
+            } else {
+                alert("新增患者失败！");
+                return false;
+            }
+        }
+    );
+}
 
-    if ($api.trim(info) == '') {
-        alert("请输入病情!");
-        return;
-    }
+function saveHistory() {
+    var consultation_department = $api.byId('consultation_department');
+    var chief_complaint = $api.byId('chief_complaint');
+    var diagnosis = $api.byId('diagnosis');
+    var treatment = $api.byId('treatment');
 
     var model = api.require('model');
     model.config({
@@ -241,14 +277,16 @@ function saveHis() {
         host: 'https://d.apicloud.com'
     });
     model.insert({
-            class: 'history',
+            class: 'caseHistory',
             value: {
-                name: name.value,
-                sex: sex.value,
-                age: age.value,
-                info: info,
-                disease: info,
-                comeDate: getDate()
+                patient_id: patient_pointer.id,
+                record_date: getDate(),
+                consultation_department: consultation_department.value,
+                chief_complaint: chief_complaint.value,
+                diagnosis: diagnosis.value,
+                treatment: treatment.value,
+                record_doctor: "me",
+                patient_pointer: patient_pointer.id
             }
         },
         function(ret, err) {

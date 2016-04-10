@@ -9,7 +9,6 @@ function getDate() {
 }
 
 function setPatient(data) {
-    alert("setPatient");
     $api.byId('name').value = data.name;
     $api.byId('gender').value = data.gender ? "男" : "女";
     $api.byId('birthday').value = data.birthday.substring(0, 10);
