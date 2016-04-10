@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
-    <title>新增患者</title>
+    <title>患者信息</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <script type="text/javascript" src="../script/api.js"></script>
@@ -189,14 +189,24 @@ apiready = function() {
     // var header = document.querySelector('#header');
     // $api.fixIos7Bar(header);
     window.closeWin = function(winName) {
-        returnPatient();
+        // returnPatient();
         api.closeWin();
     }
+
+    $api.attr($api.byId('name'), 'readonly', 'true');
+    $api.attr($api.byId('gender'), 'readonly', 'true');
+    $api.attr($api.byId('birthday'), 'readonly', 'true');
+    $api.attr($api.byId('age'), 'readonly', 'true');
+    $api.attr($api.byId('admission_number'), 'readonly', 'true');
+    $api.attr($api.byId('outpatient_number'), 'readonly', 'true');
+    $api.attr($api.byId('phone'), 'readonly', 'true');
+    $api.attr($api.byId('address'), 'readonly', 'true');
+    $api.attr($api.byId('job'), 'readonly', 'true');
 
     if (api.pageParam.data.length != 0) {
         data = api.pageParam.data;
         $api.byId('name').value = data.name;
-        $api.byId('gender').value = data.gender;
+        $api.byId('gender').value = data.gender?"男":"女";
         $api.byId('birthday').value = data.birthday;
         $api.byId('age').value = data.age;
         $api.byId('admission_number').value = data.admission_number;
@@ -208,22 +218,22 @@ apiready = function() {
 
 }
 
-function returnPatient() {
-    api.sendEvent({
-        name: 'returnPatient',
-        extra: {
-            name: $api.byId('name').value,
-            gender: $api.byId('gender').value,
-            birthday: $api.byId('birthday').value,
-            age: $api.byId('age').value,
-            admission_number: $api.byId('admission_number').value,
-            outpatient_number: $api.byId('outpatient_number').value,
-            phone: $api.byId('phone').value,
-            address: $api.byId('address').value,
-            job: $api.byId('job').value
-        }
-    });
-}
+// function returnPatient() {
+//     api.sendEvent({
+//         name: 'returnPatient',
+//         extra: {
+//             name: $api.byId('name').value,
+//             gender: $api.byId('gender').value,
+//             birthday: $api.byId('birthday').value,
+//             age: $api.byId('age').value,
+//             admission_number: $api.byId('admission_number').value,
+//             outpatient_number: $api.byId('outpatient_number').value,
+//             phone: $api.byId('phone').value,
+//             address: $api.byId('address').value,
+//             job: $api.byId('job').value
+//         }
+//     });
+// }
 
 // function saveHis() {
 //     var name = $api.byId('name');

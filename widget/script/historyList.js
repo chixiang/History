@@ -90,7 +90,7 @@ var apiready = function() {
             historyList.getDataByIndex({
                 index: ret.index
             }, function(ret, err) {
-                displayHis(ret.data);
+                viewHistory(ret.data);
             });
         }
         if (ret.eventType == "clickRightBtn" && ret.btnIndex == "0") {
@@ -185,7 +185,8 @@ function loadList(type) {
                                 treatment: ret[idx].treatment,
                                 follow_up_id: ret[idx].follow_up_id,
                                 record_doctor: ret[idx].record_doctor,
-                                patient_pointer: ret[idx].patient_pointer.id,
+                                patient_pointer: ret[idx].patient_pointer,
+                                patient_pointer_id: ret[idx].patient_pointer.id,
                                 name: ret[idx].patient_pointer.name,
                                 gender: ret[idx].patient_pointer.gender,
                                 birthday: ret[idx].patient_pointer.birthday,
@@ -276,10 +277,10 @@ function openWin(type) {
  * @param  {[type]} data [description]
  * @return {[type]}      [description]
  */
-function displayHis(data) {
+function viewHistory(data) {
     api.openWin({
         name: "history",
-        url: './html/history.html',
+        url: './html/viewHistory.html',
         pageParam: data,
         reload: true,
         bounces: false
