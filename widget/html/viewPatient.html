@@ -205,15 +205,7 @@ apiready = function() {
 
     if (api.pageParam.data.length != 0) {
         data = api.pageParam.data;
-        $api.byId('name').value = data.name;
-        $api.byId('gender').value = data.gender?"男":"女";
-        $api.byId('birthday').value = data.birthday;
-        $api.byId('age').value = data.age;
-        $api.byId('admission_number').value = data.admission_number;
-        $api.byId('outpatient_number').value = data.outpatient_number;
-        $api.byId('phone').value = data.phone;
-        $api.byId('address').value = data.address;
-        $api.byId('job').value = data.job;
+        setPatient(data);
     }
 
 }
