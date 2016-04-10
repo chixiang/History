@@ -19,7 +19,7 @@ var apiready = function() {
         subTitle: '',
         remark: ''
     }];
-    per_page_num = 5;
+    per_page_num = 10;
 
     // 设置初始为0，打开页面时判断如果为0则进行第一次加载
     v_loaded_recors = 0;
