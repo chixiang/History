@@ -28,7 +28,8 @@
             </nav>
         </header>
         <div id="main">
-            <div class="field" onclick="openWin('addPatient')">
+            <!-- <div class="field" onclick="openWin('addPatient')"> -->
+            <div class="field" onclick="openFrame('addPatient')">
                 <div class="field_name">患者信息</div>
                 <div class="more"><span>&gt;</span></div>
             </div>
@@ -232,6 +233,29 @@ function saveHistory() {
             }
         });
     }
+}
+
+function openFrame(page) {
+    api.openFrame({
+        name: page,
+        url: './' + page + '.html',
+        pageParam: {
+            data: patient_pointer
+        },
+        reload: false,
+        bounces: true,
+        rect: {
+            marginLeft: 15, //相对父window左外边距的距离
+            marginTop: 15, //相对父window上外边距的距离
+            marginBottom: 15, //相对父window下外边距的距离
+            marginRight: 15 //相对父window右外边距的距离
+        },
+        animation: {
+            type: "movein",
+            subType: "from_right",
+            duration: 500
+        }
+    })
 }
 
 /**

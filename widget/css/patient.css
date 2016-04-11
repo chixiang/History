@@ -1,0 +1,124 @@
+header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: #655A55;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #F7F3EA), color-stop(1, #F7F3EA));
+    background-image: -webkit-linear-gradient(top, #F7F3EA 0%, #F7F3EA 100%);
+    background-image: linear-gradient(to bottom, #F7F3EA 0%, #F7F3EA 100%);
+    height: 50px;
+    line-height: 50px;
+}
+
+html body {
+    background-color: #655A55;
+    color: #F7F3EA;
+}
+
+a,
+a:visited {
+    text-decoration: none;
+}
+
+#nav {
+    display: -webkit-box;
+    height: 50px;
+    line-height: 50px;
+}
+
+#left {
+    width: 50px;
+}
+
+#left>span {
+    margin-left: 18px;
+    font-size: 16px;
+}
+
+#middle {
+    -webkit-box-flex: 1;
+    width: 100%;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+}
+
+#title {
+    font-size: 18px;
+    text-align: center;
+}
+
+#right {
+    width: 50px;
+}
+
+#right>span {
+    margin-right: 18px;
+    font-size: 16px;
+}
+
+#main {
+    width: 100%;
+    margin-top: 50px;
+    background: #655A55;
+}
+
+.field {
+    height: 50px;
+    font-size: 20px;
+    line-height: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #F7F3EA;
+    border-bottom: 1px;
+    border-style: solid;
+    border-color: #EED6B0;
+}
+
+.no_underline {
+    border-bottom: 0px;
+}
+
+.field_name {
+    float: left;
+}
+
+.more {
+    float: right;
+}
+
+input {
+    margin-left: 10px;
+    width: 200px;
+    overflow-x: visible;
+    overflow-y: visible;
+    color: #F7F3EA;
+}
+
+#info {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.textarea {
+    width: 100%;
+    min-height: 40px;
+    max-height: 4000px;
+    /*_height: 120px;*/
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    /*padding: 3px;*/
+    outline: 0;
+    /*border: 1px solid #a0b3d6;*/
+    font-size: 16px;
+    line-height: 30px;
+    /*padding: 2px;*/
+    word-wrap: break-word;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #F7F3EA;
+    border-bottom: 1px #EED6B0 solid;
+    /*border-color: rgba(82, 168, 236, 0.8);*/
+    /*box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);*/
+}

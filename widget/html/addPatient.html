@@ -7,7 +7,7 @@
     <title>新增患者</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
-    <link rel="stylesheet" type="text/css" href="../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../css/patient.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
 </head>
@@ -16,7 +16,8 @@
     <div id="wrap" class="flex-wrap flex-vertical">
         <header id='header'>
             <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeWin();">
+                <!-- <a id="left" tapmode="" onclick="window.closeWin();"> -->
+                <a id="left" tapmode="" onclick="window.closeFrame();">
                     <span>返回</span>
                 </a>
                 <div id="middle">
@@ -91,9 +92,16 @@ apiready = function() {
     $api.fixIos7Bar($api.dom('header'));
     // var header = document.querySelector('#header');
     // $api.fixIos7Bar(header);
+
+    $api.attr($api.byId('age'), 'readonly', 'true');
     window.closeWin = function(winName) {
         returnPatient();
         api.closeWin();
+    }
+
+    window.closeFrame = function(frameName) {
+        returnPatient();
+        api.closeFrame();
     }
 
     if (api.pageParam.data.length != 0) {

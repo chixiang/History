@@ -7,7 +7,7 @@
     <title>患者信息</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
-    <link rel="stylesheet" type="text/css" href="../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../css/patient.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
 </head>
@@ -16,7 +16,8 @@
     <div id="wrap" class="flex-wrap flex-vertical">
         <header id='header'>
             <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeWin();">
+                <!-- <a id="left" tapmode="" onclick="window.closeWin();"> -->
+                <a id="left" tapmode="" onclick="window.closeFrame();">
                     <span>返回</span>
                 </a>
                 <div id="middle">
@@ -94,6 +95,11 @@ apiready = function() {
     window.closeWin = function(winName) {
         // returnPatient();
         api.closeWin();
+    }
+
+    window.closeFrame = function(frameName) {
+        // returnPatient();
+        api.closeFrame();
     }
 
     $api.attr($api.byId('name'), 'readonly', 'true');
