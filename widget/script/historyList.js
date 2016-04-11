@@ -199,7 +199,7 @@ function loadList(type) {
                                 // 给UIListView展示字段赋值
                                 title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
                                 subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,
-                                remark: (ret[idx].patient_pointer.admission_number!="")?ret[idx].patient_pointer.admission_number+"(住)":ret[idx].patient_pointer.outpatient_number+"(门)"
+                                remark: (ret[idx].patient_pointer.admission_number!="")?(ret[idx].patient_pointer.admission_number+"(住)"):(ret[idx].patient_pointer.outpatient_number+"(门)")
                             };
                             json_objs.push(historyItem);
                             idx = idx + 1;
