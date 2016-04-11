@@ -10,7 +10,7 @@ function getDate() {
 
 function setPatient(data) {
     $api.byId('name').value = data.name;
-    $api.byId('gender').value = data.gender ? "男" : "女";
+    $api.byId('gender').value = data.gender;
     $api.byId('birthday').value = data.birthday.substring(0, 10);
     $api.byId('age').value = data.age;
     $api.byId('admission_number').value = data.admission_number;

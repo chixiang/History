@@ -28,8 +28,8 @@
             </nav>
         </header>
         <div id="main">
-            <div class="field" onclick="openWin('viewPatient')">
-                <div class="field_name">患者信息</div>
+            <div class="field" onclick="openWin('viewPatient');">
+                <div class="field_name"><span id="patient_info"></span></div>
                 <div class="more"><span>&gt;</span></div>
             </div>
             <div class="field">
@@ -88,6 +88,7 @@ apiready = function() {
         api.closeWin();
     }
 
+    $api.attr($api.byId('patient_info'), 'readonly', 'true');
     $api.attr($api.byId('consultation_department'), 'readonly', 'true');
     $api.attr($api.byId('diagnosis'), 'readonly', 'true');
     $api.attr($api.byId('chief_complaint'), 'readonly', 'true');
@@ -100,6 +101,8 @@ apiready = function() {
     $api.byId('treatment').value = data.treatment;
 
     patient_pointer = data.patient_pointer;
+
+    $api.byId('patient_info').innerText = patient_pointer.name + " - " + patient_pointer.gender + " - " + patient_pointer.age + "岁";
 
 }
 

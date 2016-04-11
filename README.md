@@ -8,7 +8,6 @@ Case History
 
 
 ### 待优化功能
-- 患者信息显示姓名+性别+年龄
 - subTitle 颜色加深一点
 - 住院号和门诊号区别显示(是否考虑写在subTitle, remark留空)
 - 考虑子页面使用frame实现
