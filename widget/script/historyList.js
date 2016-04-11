@@ -62,7 +62,7 @@ var apiready = function() {
             borderColor: '#EED6B0',
             item: {
                 bgColor: '#F7F3EA',
-                activeBgColor: '#F5F5F5',
+                activeBgColor: '#EED6B0',
                 height: 80,
                 imgWidth: 40,
                 imgHeight: 40,
