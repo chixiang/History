@@ -28,8 +28,9 @@
             </nav>
         </header>
         <div id="main">
-            <div class="field" onclick="openWin('viewPatient')">
-                <div class="field_name">患者信息</div>
+            <!-- <div class="field" onclick="openWin('viewPatient');"> -->
+            <div class="field" onclick="openFrame('viewPatient');">
+                <div class="field_name"><span id="patient_info"></span></div>
                 <div class="more"><span>&gt;</span></div>
             </div>
             <div class="field">
@@ -88,6 +89,7 @@ apiready = function() {
         api.closeWin();
     }
 
+    $api.attr($api.byId('patient_info'), 'readonly', 'true');
     $api.attr($api.byId('consultation_department'), 'readonly', 'true');
     $api.attr($api.byId('diagnosis'), 'readonly', 'true');
     $api.attr($api.byId('chief_complaint'), 'readonly', 'true');
@@ -101,6 +103,32 @@ apiready = function() {
 
     patient_pointer = data.patient_pointer;
 
+    $api.byId('patient_info').innerText = patient_pointer.name + " - " + patient_pointer.gender + " - " + patient_pointer.age + "岁";
+
+}
+
+function openFrame(page) {
+    api.openFrame({
+        name: page,
+        url: './' + page + '.html',
+        pageParam: {
+            data: patient_pointer,
+            type: "view"
+        },
+        reload: false,
+        bounces: true,
+        rect: {
+            marginLeft: 10, //相对父window左外边距的距离
+            marginTop: 10, //相对父window上外边距的距离
+            marginBottom: 10, //相对父window下外边距的距离
+            marginRight: 10 //相对父window右外边距的距离
+        },
+        animation: {
+            type: "movein",
+            subType: "from_right",
+            duration: 500
+        }
+    })
 }
 
 /**
@@ -123,7 +151,7 @@ function openWin(type) {
             reload = false;
             break;
         case "modiHistory":
-            page = "addHistory";
+            page = "history";
             pageParam = {
                 "data": api.pageParam,
                 "type": "modi"

@@ -198,8 +198,8 @@ function loadList(type) {
                                 job: ret[idx].patient_pointer.job,
                                 // 给UIListView展示字段赋值
                                 title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
-                                subTitle: (ret[idx].patient_pointer.gender?"男":"女") + "   " + ret[idx].patient_pointer.age + "岁   " + ret[idx].consultation_department + "   " + ret[idx].record_date,
-                                remark: (ret[idx].patient_pointer.admission_number!="")?ret[idx].patient_pointer.admission_number:ret[idx].patient_pointer.outpatient_number
+                                subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,
+                                remark: (ret[idx].patient_pointer.admission_number!="")?(ret[idx].patient_pointer.admission_number+"(住)"):(ret[idx].patient_pointer.outpatient_number+"(门)")
                             };
                             json_objs.push(historyItem);
                             idx = idx + 1;
@@ -249,7 +249,7 @@ function appendData(json_objs) {
             if (ret.status) {
                 if (json_objs.length != per_page_num) {
                     api.toast({
-                        msg: '到底了~~~别再拉了~~~'
+                        msg: '别再拉了~~~到底了~~~'
                     });
                 }
                 v_loaded_recors = v_loaded_recors + json_objs.length;
