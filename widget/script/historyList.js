@@ -315,7 +315,7 @@ function modiHistory(data) {
  * @param  {[type]} id [description]
  * @return {[type]}    [description]
  */
-function deleleHis(id) {
+function deleteHistory(id) {
     model.deleteById({
             class: 'caseHistory',
             id: id
