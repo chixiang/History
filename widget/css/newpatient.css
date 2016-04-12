@@ -1,14 +1,12 @@
 header {
     position: fixed;
-    left: 0;
-    top: 5px;
+    left: 0px;
+    top: 20px;
     width: 100%;
     color: #FFF;
     margin-left: 20px;
-    margin-right: 15px;
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
-    background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
-    background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
+    margin-right: 20px;
+    
     height: 50px;
     line-height: 50px;
 }
@@ -34,9 +32,9 @@ html body {
 
 html body {
     background-color: rgba(0, 0, 0, 0);
-    -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, .5);
-    -moz-box-shadow: 0 0 20px rgba(0, 0, 0, .5);
-    box-shadow: 0 0 20px rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+    -moz-box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+    box-shadow: 0 0 30px rgba(0, 0, 0, .5);
 }
 
 a,
@@ -48,6 +46,10 @@ a:visited {
     display: -webkit-box;
     height: 50px;
     line-height: 50px;
+    margin-right: 40px;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
+    background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
+    background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
 }
 
 #left {
@@ -83,7 +85,7 @@ a:visited {
 
 #main {
     width: 100%;
-    margin-top: 35px;
+    margin-top: 50px;
     background: #F7F3EA;
 }
 
