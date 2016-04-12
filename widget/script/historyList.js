@@ -111,7 +111,7 @@ var apiready = function() {
                 historyList.getDataByIndex({
                     index: ret.index
                 }, function(ret, err) {
-                    deleleHistory(ret.data.id);
+                    deleteHistory(ret.data.id);
                     // 删除病历后刷新列表
                     loadList();
                 });
