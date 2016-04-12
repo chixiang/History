@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
-    <title>病历</title>
+    <title>病历维护</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/history.css" />
@@ -20,7 +20,7 @@
                     <span>取消</span>
                 </a>
                 <div id="middle">
-                    <span id="title">病历</span>
+                    <span id="title">病历维护</span>
                 </div>
                 <a id="right" tapmode="" onclick="savePatient();">
                     <span>保存</span>
@@ -28,7 +28,6 @@
             </nav>
         </header>
         <div id="main">
-            <!-- <div class="field" onclick="openWin('addPatient')"> -->
             <div class="field" onclick="openFrame('patient')">
                 <div class="field_name">患者信息</div>
                 <div class="more"><span>&gt;</span></div>
@@ -69,29 +68,25 @@
                 <div class="field_name">随访</div>
                 <div class="more"><span>&gt;</span></div>
             </div>
-            <div class="field no_underline">
-                <span>病情：</span>
-            </div>
-            <div id="info">
-                <div class="textarea" id="ta_info" contenteditable="true">
-                </div>
-            </div>
         </div>
     </div>
 </body>
 <script type="text/javascript">
+/**
+ * [apiready description]
+ * @return {[type]} [description]
+ */
 apiready = function() {
-    // $api.fixStatusBar($api.dom('header'));
     $api.fixIos7Bar($api.dom('header'));
-    // var header = document.querySelector('#header');
-    // $api.fixIos7Bar(header);
     window.closeWin = function(winName) {
-        BacktoReload();
+        // 发送event告诉列表页面刷新
+        refreshHistoryList();
         api.closeWin();
     }
 
     patient_pointer = [];
 
+    // 接收患者信息页面修改的数据
     api.addEventListener({
         name: 'returnPatient'
     }, function(ret, err) {
@@ -100,6 +95,7 @@ apiready = function() {
         }
     });
 
+    // 如果是修改，则取传入的数据赋值到页面
     type = api.pageParam.type;
     if (type == "modi") {
         var data = api.pageParam.data;
@@ -112,6 +108,10 @@ apiready = function() {
     }
 }
 
+/**
+ * [savePatient 保存患者信息，成功后保存病历信息]
+ * @return {[type]} [description]
+ */
 function savePatient() {
     if (patient_pointer.name == '') {
         alert("未输入患者姓名");
@@ -123,7 +123,7 @@ function savePatient() {
         appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
         host: 'https://d.apicloud.com'
     });
-    if (type == "modi") {
+    if (type == "modi") { // 修改
         model.updateById({
             class: 'patient',
             id: api.pageParam.data.patient_pointer.id,
@@ -140,6 +140,7 @@ function savePatient() {
             }
         }, function(ret, err) {
             if (ret) {
+                // 保存病历信息
                 saveHistory();
                 return true;
             } else {
@@ -147,7 +148,7 @@ function savePatient() {
                 return false;
             }
         });
-    } else {
+    } else { // 新增
         model.insert({
             class: 'patient',
             value: {
@@ -163,7 +164,9 @@ function savePatient() {
             }
         }, function(ret, err) {
             if (ret) {
+                // 首次新增需使用patient_pointer的id和病历关联
                 patient_pointer.id = ret.id;
+                // 保存病历信息
                 saveHistory();
                 return true;
             } else {
@@ -174,6 +177,10 @@ function savePatient() {
     }
 }
 
+/**
+ * [saveHistory 保存病历信息]
+ * @return {[type]} [description]
+ */
 function saveHistory() {
     var consultation_department = $api.byId('consultation_department');
     var chief_complaint = $api.byId('chief_complaint');
@@ -203,9 +210,9 @@ function saveHistory() {
         }, function(ret, err) {
             if (ret) {
                 alert("修改病历成功！");
-                BacktoReload();
+                refreshHistoryList();
+                // 修改成功后暂时没有刷新浏览页面，直接返回列表页面
                 returnMain();
-                // window.closeWin();
             } else {
                 alert("修改病历失败！");
             }
@@ -226,7 +233,7 @@ function saveHistory() {
         }, function(ret, err) {
             if (ret) {
                 alert("新增病历成功！");
-                BacktoReload();
+                refreshHistoryList();
                 window.closeWin();
             } else {
                 alert("新增病历失败！");
@@ -235,10 +242,15 @@ function saveHistory() {
     }
 }
 
-function openFrame(page) {
+/**
+ * [openFrame description]
+ * @param  {[type]} page [description]
+ * @return {[type]}      [description]
+ */
+function openFrame(type) {
     api.openFrame({
-        name: page,
-        url: './' + page + '.html',
+        name: type,
+        url: './' + type + '.html',
         pageParam: {
             data: patient_pointer
         },
@@ -259,39 +271,28 @@ function openFrame(page) {
 }
 
 /**
- * [openWin description]
- * @param  {[type]} type [description]
- * @return {[type]}      [description]
+ * [refreshHistoryList 发送event给主页面刷新列表]
+ * @return {[type]} [description]
  */
-function openWin(type) {
-    api.openWin({
-        name: type,
-        url: './' + type + '.html',
-        pageParam: {
-            data: patient_pointer
-        },
-        reload: false,
-        bounces: false
-    });
-}
-
-function BacktoReload() {
+function refreshHistoryList() {
     api.sendEvent({
         name: 'reloadHistory'
     })
 }
 
+/**
+ * [returnMain description]
+ * @return {[type]} [description]
+ */
 function returnMain() {
     api.closeToWin({
-    name: 'root',
-    animation: {
-        type: 'flip',
-        subType: 'from_bottom',
-        duration: 500
-    }
-});
+        name: 'root',
+        animation: {
+            type: 'flip',
+            subType: 'from_bottom',
+            duration: 500
+        }
+    });
 }
-
 </script>
-
 </html>

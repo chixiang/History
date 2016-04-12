@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
-    <title>查看病历</title>
+    <title>病历信息</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/history.css" />
@@ -20,7 +20,7 @@
                     <span>返回</span>
                 </a>
                 <div id="middle">
-                    <span id="title">查看病历</span>
+                    <span id="title">病历信息</span>
                 </div>
                 <a id="right" tapmode="" onclick="openWin('modiHistory');">
                     <span>修改</span>
@@ -28,7 +28,6 @@
             </nav>
         </header>
         <div id="main">
-            <!-- <div class="field" onclick="openWin('viewPatient');"> -->
             <div class="field" onclick="openFrame('viewPatient');">
                 <div class="field_name"><span id="patient_info"></span></div>
                 <div class="more"><span>&gt;</span></div>
@@ -69,51 +68,49 @@
                 <div class="field_name">随访</div>
                 <div class="more"><span>&gt;</span></div>
             </div>
-            <div class="field no_underline">
-                <span>病情：</span>
-            </div>
-            <div id="info">
-                <div class="textarea" id="ta_info" contenteditable="true">
-                </div>
-            </div>
         </div>
     </div>
 </body>
 <script type="text/javascript">
+/**
+ * [apiready description]
+ * @return {[type]} [description]
+ */
 apiready = function() {
-    // $api.fixStatusBar($api.dom('header'));
     $api.fixIos7Bar($api.dom('header'));
-    // var header = document.querySelector('#header');
-    // $api.fixIos7Bar(header);
     window.closeWin = function(winName) {
         api.closeWin();
     }
 
+    // 设置字段为readonly
     $api.attr($api.byId('patient_info'), 'readonly', 'true');
     $api.attr($api.byId('consultation_department'), 'readonly', 'true');
     $api.attr($api.byId('diagnosis'), 'readonly', 'true');
     $api.attr($api.byId('chief_complaint'), 'readonly', 'true');
     $api.attr($api.byId('treatment'), 'readonly', 'true');
 
+    // 设置需要显示的字段值
     var data = api.pageParam;
     $api.byId('consultation_department').value = data.consultation_department;
     $api.byId('diagnosis').value = data.diagnosis;
     $api.byId('chief_complaint').value = data.chief_complaint;
     $api.byId('treatment').value = data.treatment;
-
     patient_pointer = data.patient_pointer;
-
     $api.byId('patient_info').innerText = patient_pointer.name + " - " + patient_pointer.gender + " - " + patient_pointer.age + "岁";
 
 }
 
-function openFrame(page) {
+/**
+ * [openFrame 打开子页面]
+ * @param  {[type]} page [子页面名称]
+ * @return {[type]}      [description]
+ */
+function openFrame(type) {
     api.openFrame({
-        name: page,
-        url: './' + page + '.html',
+        name: type,
+        url: './' + type + '.html',
         pageParam: {
-            data: patient_pointer,
-            type: "view"
+            data: patient_pointer
         },
         reload: false,
         bounces: true,
@@ -132,8 +129,8 @@ function openFrame(page) {
 }
 
 /**
- * [openWin description]
- * @param  {[type]} type [description]
+ * [openWin 打开新窗口]
+ * @param  {[type]} type [窗口类型]
  * @return {[type]}      [description]
  */
 function openWin(type) {
@@ -142,14 +139,6 @@ function openWin(type) {
     var animation = null;
     var page = "";
     switch (type) {
-        case "viewPatient":
-            page = "viewPatient";
-            pageParam = {
-                "data": patient_pointer,
-                "type": "view"
-            };
-            reload = false;
-            break;
         case "modiHistory":
             page = "history";
             pageParam = {
@@ -157,7 +146,7 @@ function openWin(type) {
                 "type": "modi"
             };
             animation = {
-                type: "Cube",
+                type: "fade",
                 duration: 1
             };
             reload = false;
@@ -174,12 +163,5 @@ function openWin(type) {
         bounces: false
     });
 }
-
-function BacktoReload() {
-    api.sendEvent({
-        name: 'reloadHistory'
-    })
-}
 </script>
-
 </html>

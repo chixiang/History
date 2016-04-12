@@ -5,6 +5,7 @@
 var apiready = function() {
     $api.fixIos7Bar($api.dom('header'));
 
+    // 接收刷新列表event
     api.addEventListener({
         name: 'reloadHistory'
     }, function(ret, err) {
@@ -19,10 +20,12 @@ var apiready = function() {
         subTitle: '',
         remark: ''
     }];
-    per_page_num = 10;
 
-    // 设置初始为0，打开页面时判断如果为0则进行第一次加载
+    // 每页数据设置为10条
+    per_page_num = 10;
+    // 已加载的条数，设置初始为0，打开页面时判断如果为0则进行第一次加载
     v_loaded_recors = 0;
+
     model = api.require('model');
     query = api.require('query');
     model.config({
@@ -80,12 +83,11 @@ var apiready = function() {
         fixedOn: api.frameName
     }, function(ret, err) {
         // 发现有时第一次打开不加载，所以设置了v_loaded_recors初始值为0，判断如果为0则进行一次加载
-        if (v_loaded_recors == 0) {
+        if (v_loaded_recors == 0 || ret.eventType == "show") {
             loadList("refresh");
         }
-        if (ret.eventType == "show") {
-            loadList("refresh");
-        }
+
+        // 点击列表事件
         if (ret.eventType == "clickContent") {
             historyList.getDataByIndex({
                 index: ret.index
@@ -93,19 +95,24 @@ var apiready = function() {
                 viewHistory(ret.data);
             });
         }
+
+        // 左划第一个按钮事件，修改病历
         if (ret.eventType == "clickRightBtn" && ret.btnIndex == "0") {
             historyList.getDataByIndex({
                 index: ret.index
             }, function(ret, err) {
-                modiHis(ret.data);
+                modiHistory(ret.data);
             });
         }
+
+        // 左划第二个按钮事件，删除病历
         if (ret.eventType == "clickRightBtn" && ret.btnIndex == "1") {
             if (confirm("确定删除？")) {
                 historyList.getDataByIndex({
                     index: ret.index
                 }, function(ret, err) {
-                    delHis(ret.data.uid);
+                    deleleHistory(ret.data.id);
+                    // 删除病历后刷新列表
                     loadList();
                 });
             }
@@ -113,7 +120,6 @@ var apiready = function() {
     });
     historyList.setRefreshHeader({
             bgColor: "#f5f5f5"
-                // loadingImg: "image/bottombtn0301.png"
         },
         function(ret, err) {
             loadList();
@@ -121,7 +127,6 @@ var apiready = function() {
 
     historyList.setRefreshFooter({
             bgColor: "#f5f5f5"
-                // loadingImg: "image/bottombtn0301.png"
         },
         function(ret, err) {
             loadList("append");
@@ -288,28 +293,31 @@ function viewHistory(data) {
 }
 
 /**
- * [modiHis description]
+ * [modiHistory description]
  * @param  {[type]} data [description]
  * @return {[type]}      [description]
  */
-function modiHis(data) {
+function modiHistory(data) {
     api.openWin({
-        name: "history",
-        url: './html/modihis.html',
-        pageParam: data,
-        reload: true,
+        name: "modiHistory",
+        url: './html/history.html',
+        pageParam: {
+            data: data,
+            type: "modi"
+        }
+        reload: false,
         bounces: false
     });
 }
 
 /**
- * [modiHis description]
- * @param  {[type]} data [description]
- * @return {[type]}      [description]
+ * [deleleHis description]
+ * @param  {[type]} id [description]
+ * @return {[type]}    [description]
  */
-function delHis(id) {
+function deleleHis(id) {
     model.deleteById({
-            class: 'history',
+            class: 'caseHistory',
             id: id
         },
         function(ret, err) {

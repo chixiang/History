@@ -1,5 +1,5 @@
 /**
- * [getDate description]
+ * [getDate 获得当前日期，格式为YYYY-MM-DD]
  * @return {[type]} [description]
  */
 function getDate() {
@@ -8,6 +8,10 @@ function getDate() {
     return formatDate.replace(/\b(\w)\b/g, '0$1');
 }
 
+/**
+ * [setPatient 给患者信息页面字段赋值]
+ * @param {[type]} data [患者信息data]
+ */
 function setPatient(data) {
     $api.byId('name').value = data.name;
     $api.byId('gender').value = data.gender;

@@ -4,9 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
-    <title>新增患者</title>
-<!--     <link rel="stylesheet" type="text/css" href="../css/api.css" />
-    <link rel="stylesheet" type="text/css" href="../css/style.css" /> -->
+    <title>患者维护</title>
     <link rel="stylesheet" type="text/css" href="../css/newpatient.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
@@ -16,12 +14,11 @@
     <div id="wrap" class="flex-wrap flex-vertical">
         <header id='header'>
             <nav id="nav">
-                <!-- <a id="left" tapmode="" onclick="window.closeWin();"> -->
                 <a id="left" tapmode="" onclick="window.closeFrame();">
                     <span>返回</span>
                 </a>
                 <div id="middle">
-                    <span id="title">患者信息</span>
+                    <span id="title">患者维护</span>
                 </div>
                 <a id="right">
                     <span></span>
@@ -87,30 +84,33 @@
     </div>
 </body>
 <script type="text/javascript">
+/**
+ * [apiready description]
+ * @return {[type]} [description]
+ */
 apiready = function() {
-    // $api.fixStatusBar($api.dom('header'));
     $api.fixIos7Bar($api.dom('header'));
-    // var header = document.querySelector('#header');
-    // $api.fixIos7Bar(header);
 
+    // 年龄自动计算，不允许输入
     $api.attr($api.byId('age'), 'readonly', 'true');
-    window.closeWin = function(winName) {
-        returnPatient();
-        api.closeWin();
-    }
 
     window.closeFrame = function(frameName) {
+        // 返回本页的患者信息
         returnPatient();
         api.closeFrame();
     }
 
+    // 从病历主页面传的值，赋给本页面
     if (api.pageParam.data.length != 0) {
         data = api.pageParam.data;
         setPatient(data);
     }
-
 }
 
+/**
+ * [returnPatient 通过event返回本页的数据]
+ * @return {[type]} [description]
+ */
 function returnPatient() {
     api.sendEvent({
         name: 'returnPatient',
@@ -128,6 +128,10 @@ function returnPatient() {
     });
 }
 
+/**
+ * [getAge 计算年龄]
+ * @return {[type]} [description]
+ */
 function getAge() {
     var r = $api.byId('birthday').value.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
     if (r == null) {
@@ -141,5 +145,4 @@ function getAge() {
 }
 
 </script>
-
 </html>
