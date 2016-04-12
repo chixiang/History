@@ -1,23 +1,41 @@
 header {
     position: fixed;
-    left: 0;
-    top: 0;
+    left: 0px;
+    top: 30px;
     width: 100%;
-    color: #655A55;
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #F7F3EA), color-stop(1, #F7F3EA));
-    background-image: -webkit-linear-gradient(top, #F7F3EA 0%, #F7F3EA 100%);
-    background-image: linear-gradient(to bottom, #F7F3EA 0%, #F7F3EA 100%);
+    color: #FFF;
+    margin-left: 20px;
+    margin-right: 20px;
+    
     height: 50px;
     line-height: 50px;
 }
 
-html {
-    box-shadow: #666 0px 0px 10px
+div {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
 }
 
 html body {
-    background-color: #655A55;
-    color: #F7F3EA;
+    height: 100%;
+    margin: 20px;
+    margin-top: 30px;
+    border: 0;
+    padding: 0;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-flex-flow: column;
+    flex-flow: column;
+}
+
+html body {
+    background-color: rgba(0, 0, 0, 0);
+    -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, .7);
+    -moz-box-shadow: 0 0 30px rgba(0, 0, 0, .7);
+    box-shadow: 0 0 30px rgba(0, 0, 0, .7);
 }
 
 a,
@@ -29,6 +47,10 @@ a:visited {
     display: -webkit-box;
     height: 50px;
     line-height: 50px;
+    margin-right: 40px;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
+    background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
+    background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
 }
 
 #left {
@@ -65,16 +87,16 @@ a:visited {
 #main {
     width: 100%;
     margin-top: 50px;
-    background: #655A55;
+    background: #F7F3EA;
 }
 
 .field {
     height: 50px;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 50px;
     padding-left: 10px;
     padding-right: 10px;
-    color: #F7F3EA;
+    color: #655A55;
     border-bottom: 1px;
     border-style: solid;
     border-color: #EED6B0;
@@ -93,36 +115,18 @@ a:visited {
 }
 
 input {
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
     margin-left: 10px;
-    width: 200px;
+    width: 150px;
     overflow-x: visible;
     overflow-y: visible;
-    color: #F7F3EA;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 20px;
 }
 
 #info {
     margin-left: 10px;
     margin-right: 10px;
-}
-
-.textarea {
-    width: 100%;
-    min-height: 40px;
-    max-height: 4000px;
-    /*_height: 120px;*/
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    /*padding: 3px;*/
-    outline: 0;
-    /*border: 1px solid #a0b3d6;*/
-    font-size: 16px;
-    line-height: 30px;
-    /*padding: 2px;*/
-    word-wrap: break-word;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background: #F7F3EA;
-    border-bottom: 1px #EED6B0 solid;
-    /*border-color: rgba(82, 168, 236, 0.8);*/
-    /*box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);*/
 }
