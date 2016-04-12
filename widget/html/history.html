@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../css/button.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
 </head>
@@ -16,14 +17,14 @@
     <div id="wrap" class="flex-wrap flex-vertical">
         <header id='header'>
             <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeWin();">
-                    <span>取消</span>
+                <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
+                    取消
                 </a>
                 <div id="middle">
                     <span id="title">病历维护</span>
                 </div>
-                <a id="right" tapmode="" onclick="savePatient();">
-                    <span>保存</span>
+                <a id="right" tapmode="" onclick="savePatient();" class="button button-raised button-royal">
+                    保存
                 </a>
             </nav>
         </header>
@@ -255,7 +256,7 @@ function openFrame(type) {
             data: patient_pointer
         },
         reload: false,
-        bounces: true,
+        bounces: false,
         rect: {
             marginLeft: 0,
             marginTop: 0,
@@ -263,9 +264,9 @@ function openFrame(type) {
             marginRight: 0
         },
         animation: {
-            type: "fade",
+            type: "movein",
             subType: "from_right",
-            duration: 500
+            duration: 300
         }
     })
 }

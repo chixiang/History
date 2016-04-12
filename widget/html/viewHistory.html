@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../css/button.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
 </head>
@@ -16,14 +17,14 @@
     <div id="wrap" class="flex-wrap flex-vertical">
         <header id='header'>
             <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeWin();">
-                    <span>返回</span>
+                <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
+                    返回
                 </a>
                 <div id="middle">
                     <span id="title">病历信息</span>
                 </div>
-                <a id="right" tapmode="" onclick="openWin('modiHistory');">
-                    <span>修改</span>
+                <a id="right" tapmode="" onclick="openWin('modiHistory');" class="button button-raised button-royal">
+                    修改
                 </a>
             </nav>
         </header>
@@ -106,6 +107,7 @@ apiready = function() {
  * @return {[type]}      [description]
  */
 function openFrame(type) {
+    // setBlur("wrap", true);
     api.openFrame({
         name: type,
         url: './' + type + '.html',
@@ -113,7 +115,7 @@ function openFrame(type) {
             data: patient_pointer
         },
         reload: false,
-        bounces: true,
+        bounces: false,
         rect: {
             marginLeft: 0,
             marginTop: 0,
@@ -121,9 +123,9 @@ function openFrame(type) {
             marginRight: 0
         },
         animation: {
-            type: "fade",
+            type: "movein",
             subType: "from_right",
-            duration: 500
+            duration: 300
         }
     })
 }
@@ -147,7 +149,7 @@ function openWin(type) {
             };
             animation = {
                 type: "movein",
-                duration: 400
+                duration: 300
             };
             reload = false;
             break;

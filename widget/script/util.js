@@ -24,3 +24,15 @@ function setPatient(data) {
     $api.byId('job').value = data.job;
 }
 
+/**
+ * [setBlur description]
+ * @param {[type]}  id     [description]
+ * @param {Boolean} isTrue [description]
+ */
+function setBlur(id, isTrue) {
+    if (isTrue) {
+        $api.byId(id).style.webkitFilter = "blur(5px) contrast(0.4) brightness(1.4)";
+    } else {
+        $api.byId(id).style.webkitFilter = "";
+    }
+}

@@ -6,24 +6,28 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>患者维护</title>
     <link rel="stylesheet" type="text/css" href="../css/patient.css" />
+    <link rel="stylesheet" type="text/css" href="../css/button.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
 </head>
 
 <body>
-    <div id="wrap" class="flex-wrap flex-vertical">
+    <div class="flex-wrap flex-vertical">
         <header id='header'>
             <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeFrame();">
-                    <span>返回</span>
+                <a id="left" tapmode="" onclick="window.closeFrame();" class="button button-raised button-royal">
+                    取消
                 </a>
                 <div id="middle">
                     <span id="title">患者维护</span>
                 </div>
-                <a id="right">
+                <a id="right" tapmode="" onclick="window.saveFrame();" class="button button-raised button-royal">
+                    确认
+                </a>
+                <!--                 <a id="right">
                     <span></span>
                 </a>
-            </nav>
+ --></nav>
         </header>
         <div id="main">
             <div class="field">
@@ -41,7 +45,7 @@
             <div class="field">
                 <div class="field_name">出生日期:</div>
                 <div>
-                    <input type="text" id="birthday" onblur="getAge()"/>
+                    <input type="text" id="birthday" onblur="getAge()" />
                 </div>
             </div>
             <div class="field">
@@ -95,6 +99,14 @@ apiready = function() {
     $api.attr($api.byId('age'), 'readonly', 'true');
 
     window.closeFrame = function(frameName) {
+        if (api.pageParam.data.length != 0) {
+            data = api.pageParam.data;
+            setPatient(data);
+        }
+        api.closeFrame();
+    }
+
+    window.saveFrame = function(frameName) {
         // 返回本页的患者信息
         returnPatient();
         api.closeFrame();
@@ -140,9 +152,9 @@ function getAge() {
     var d = new Date(r[1], r[3] - 1, r[4]);
     if (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4]) {
         var Y = new Date().getFullYear();
-        $api.byId('age').value = (Y-r[1]);
+        $api.byId('age').value = (Y - r[1]);
     }
 }
-
 </script>
+
 </html>
