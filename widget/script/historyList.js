@@ -304,7 +304,7 @@ function modiHistory(data) {
         pageParam: {
             data: data,
             type: "modi"
-        }
+        },
         reload: false,
         bounces: false
     });
