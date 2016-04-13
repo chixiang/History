@@ -142,14 +142,14 @@ function openPicker(type) {
     var UICustomPicker = api.require('UICustomPicker');
     UICustomPicker.open({
         rect: {
-            x: (api.winWidth - 320) / 2,
+            x: (api.winWidth - 160) / 2,
             y: (api.winHeight - 250) / 2,
-            w: 320,
+            w: 160,
             h: 250
         },
         styles: {
             // bg: 'rgba(0,0,0,0)',
-            bg: '#EED6B0',
+            bg: '#EEE',
             normalColor: '#959595',
             selectedColor: '#3685dd',
             selectedSize: 36,
@@ -161,7 +161,7 @@ function openPicker(type) {
             scope: ["男", "女"]
         }],
         rows: 3,
-        autoHide: true,
+        autoHide: false,
         loop: true,
         fixedOn: "patient",
         fixed: true
