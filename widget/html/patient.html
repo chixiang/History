@@ -39,7 +39,7 @@
                     <input type="text" id="gender" />
                 </div>
             </div>
-            <div class="field">
+            <div class="field" onclick="openCalendar();">
                 <div class="field_name">出生日期:</div>
                 <div>
                     <input type="text" id="birthday" onblur="getAge()" />
@@ -95,6 +95,7 @@ apiready = function() {
     // 年龄自动计算，不允许输入
     $api.attr($api.byId('age'), 'readonly', 'true');
     $api.attr($api.byId('gender'), 'readonly', 'true');
+    $api.attr($api.byId('birthday'), 'readonly', 'true');
 
     window.closeFrame = function(frameName) {
         if (api.pageParam.data.length != 0) {
@@ -138,6 +139,10 @@ function returnPatient() {
     });
 }
 
+/**
+ * @param  {[type]}
+ * @return {[type]}
+ */
 function openPicker(type) {
     var UICustomPicker = api.require('UICustomPicker');
     UICustomPicker.open({
@@ -175,6 +180,43 @@ function openPicker(type) {
             }
         } else {
             alert(JSON.stringify(err));
+        }
+    });
+}
+
+function openCalendar() {
+    var obj = api.require('UICalendar');
+    obj.open({
+        rect: {
+            x: (api.winWidth - 320) / 2,
+            y: (api.winHeight - 220) / 2,
+            w: 320,
+            h: 220
+        },
+        styles: {
+            bg: 'rgba(0,0,0,0)',
+            week: {
+                weekdayColor: '#3b3b3b',
+                weekendColor: '#a8d400',
+                size: 12
+            },
+            date: {
+                color: '#3b3b3b',
+                selectedColor: '#fff',
+                selectedBg: '#a8d500',
+                size: 12
+            },
+            today: {
+                color: 'rgb(230,46,37)',
+                bg: ''
+            }
+        },
+        switchMode: 'vertical',
+        fixedOn: 'patient',
+        fixed: true
+    }, function(ret, err) {
+        if (ret) {
+            alert(JSON.stringify(ret));
         }
     });
 }
