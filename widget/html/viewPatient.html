@@ -91,6 +91,7 @@
 apiready = function() {
     $api.fixIos7Bar($api.dom('header'));
     window.closeFrame = function(frameName) {
+        setBlurNone();
         api.closeFrame();
     }
 
@@ -111,6 +112,13 @@ apiready = function() {
         setPatient(data);
     }
 }
+
+function setBlurNone() {
+    api.sendEvent({
+        name: 'setBlurNone'
+    })
+}
+
 </script>
 
 </html>

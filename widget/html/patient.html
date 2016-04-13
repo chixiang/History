@@ -24,10 +24,7 @@
                 <a id="right" tapmode="" onclick="window.saveFrame();" class="button button-raised button-royal">
                     确认
                 </a>
-                <!--                 <a id="right">
-                    <span></span>
-                </a>
- --></nav>
+            </nav>
         </header>
         <div id="main">
             <div class="field">
@@ -36,7 +33,7 @@
                     <input type="text" id="name" />
                 </div>
             </div>
-            <div class="field">
+            <div class="field" onclick="openPicker();">
                 <div class="field_name">性别:</div>
                 <div>
                     <input type="text" id="gender" />
@@ -97,6 +94,7 @@ apiready = function() {
 
     // 年龄自动计算，不允许输入
     $api.attr($api.byId('age'), 'readonly', 'true');
+    $api.attr($api.byId('gender'), 'readonly', 'true');
 
     window.closeFrame = function(frameName) {
         if (api.pageParam.data.length != 0) {
@@ -136,6 +134,47 @@ function returnPatient() {
             phone: $api.byId('phone').value,
             address: $api.byId('address').value,
             job: $api.byId('job').value
+        }
+    });
+}
+
+function openPicker(type) {
+    var UICustomPicker = api.require('UICustomPicker');
+    UICustomPicker.open({
+        rect: {
+            x: (api.winWidth - 320) / 2,
+            y: (api.winHeight - 250) / 2,
+            w: 320,
+            h: 250
+        },
+        styles: {
+            // bg: 'rgba(0,0,0,0)',
+            bg: '#EED6B0',
+            normalColor: '#959595',
+            selectedColor: '#3685dd',
+            selectedSize: 36,
+            tagColor: '#3685dd',
+            tagSize: 10
+        },
+        data: [{
+            // tag: '时',
+            scope: ["男", "女"]
+        }],
+        rows: 3,
+        autoHide: false,
+        loop: false,
+        fixedOn: "patient",
+        fixed: true
+    }, function(ret, err) {
+        if (ret) {
+            if (ret.eventType == "selected") {
+                $api.byId('gender').value = ret.data;
+                UICustomPicker.close({
+                    id: ret.id
+                });
+            }
+        } else {
+            alert(JSON.stringify(err));
         }
     });
 }

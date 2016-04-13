@@ -83,6 +83,13 @@ apiready = function() {
         api.closeWin();
     }
 
+    // 取消毛玻璃效果
+    api.addEventListener({
+        name: 'setBlurNone'
+    }, function(ret, err) {
+        setBlur('wrap', false);
+    });
+
     // 设置字段为readonly
     $api.attr($api.byId('patient_info'), 'readonly', 'true');
     $api.attr($api.byId('consultation_department'), 'readonly', 'true');
@@ -107,7 +114,9 @@ apiready = function() {
  * @return {[type]}      [description]
  */
 function openFrame(type) {
-    // setBlur("wrap", true);
+    // 设置毛玻璃效果
+    setBlur("wrap", true);
+
     api.openFrame({
         name: type,
         url: './' + type + '.html',

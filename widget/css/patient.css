@@ -1,26 +1,6 @@
-header {
-    position: absolute;
-    left: 0px;
-    top: 30px;
-    width: 100%;
-    color: #FFF;
-    margin-left: 10px;
-    margin-right: 10px;
-
-    height: 50px;
-    line-height: 50px;
-}
-
-div {
-    border: 0px;
-    margin: 0px;
-    padding: 0px;
-}
-
 html body {
     height: 100%;
-    margin: 10px;
-    margin-top: 30px;
+    margin: 30px 10px 10px 10px;
     border: 0;
     padding: 0;
     display: -webkit-box;
@@ -36,6 +16,24 @@ html body {
     -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, .7);
     -moz-box-shadow: 0 0 30px rgba(0, 0, 0, .7);
     box-shadow: 0 0 30px rgba(0, 0, 0, .7);
+}
+
+header {
+    position: absolute;
+    left: 0px;
+    top: 30px;
+    width: 100%;
+    color: #FFF;
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 50px;
+    line-height: 50px;
+}
+
+div {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
 }
 
 a,
