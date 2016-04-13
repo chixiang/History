@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>患者维护</title>
-    <link rel="stylesheet" type="text/css" href="../css/patient.css" />
+    <link rel="stylesheet" type="text/css" href="../css/patient_flat.css" />
     <link rel="stylesheet" type="text/css" href="../css/button.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
 </head>
 
 <body>
-    <div class="flex-wrap flex-vertical">
+    <div class="flex-wrap flex-vertical" id='pageone'>
         <header id='header'>
             <nav id="nav">
                 <a id="left" tapmode="" onclick="window.closeFrame();" class="button button-raised button-royal">
@@ -33,16 +33,16 @@
                     <input type="text" id="name" />
                 </div>
             </div>
-            <div class="field" onclick="openPicker();">
+            <div class="field" onclick="openPicker('gender');">
                 <div class="field_name">性别:</div>
                 <div>
                     <input type="text" id="gender" />
                 </div>
             </div>
-            <div class="field" onclick="openCalendar();">
+            <div class="field" onclick="openPicker('birthday');">
                 <div class="field_name">出生日期:</div>
                 <div>
-                    <input type="text" id="birthday" onblur="getAge()" />
+                    <input type="text" id="birthday"/>
                 </div>
             </div>
             <div class="field">
@@ -116,6 +116,23 @@ apiready = function() {
         data = api.pageParam.data;
         setPatient(data);
     }
+
+    api.addEventListener({
+        name: 'returnGender'
+    }, function(ret, err) {
+        if (ret) {
+            $api.byId('gender').value = ret.value.gender;
+        }
+    });
+
+    api.addEventListener({
+        name: 'returnBirthday'
+    }, function(ret, err) {
+        if (ret) {
+            $api.byId('birthday').value = ret.value.birthday;
+            getAge();
+        }
+    });
 }
 
 /**
@@ -144,81 +161,40 @@ function returnPatient() {
  * @return {[type]}
  */
 function openPicker(type) {
-    var UICustomPicker = api.require('UICustomPicker');
-    UICustomPicker.open({
+    var frameName = "";
+    // 选择器的高度：行数*50+50，小于3行算3行
+    var height = 200;
+    switch (type) {
+        case "birthday":
+            frameName = "birthdayPickerFrame";
+            height = 300;
+            break;
+        case "gender":
+            frameName = "genderPickerFrame";
+            height = 200;
+            break;
+        default:
+            break;
+    }
+    api.openFrame({
+        name: frameName,
+        url: './picker/' + frameName + '.html',
+        pageParam: {},
+        reload: false,
+        bounces: false,
         rect: {
-            x: (api.winWidth - 160) / 2,
-            y: (api.winHeight - 250) / 2,
-            w: 160,
-            h: 250
+            marginLeft: 0,
+            marginTop: api.winHeight - height,
+            marginBottom: 0,
+            marginRight: 0
         },
-        styles: {
-            // bg: 'rgba(0,0,0,0)',
-            bg: '#EEE',
-            normalColor: '#959595',
-            selectedColor: '#3685dd',
-            selectedSize: 36,
-            tagColor: '#3685dd',
-            tagSize: 10
-        },
-        data: [{
-            // tag: '时',
-            scope: ["男", "女"]
-        }],
-        rows: 3,
-        autoHide: false,
-        loop: true,
-        fixedOn: "patient",
-        fixed: true
-    }, function(ret, err) {
-        if (ret) {
-            if (ret.eventType == "selected") {
-                $api.byId('gender').value = ret.data;
-                UICustomPicker.close({
-                    id: ret.id
-                });
-            }
-        } else {
-            alert(JSON.stringify(err));
+        animation: {
+            type: "fade",
+            subType: "from_right",
+            duration: 300
         }
-    });
-}
+    })
 
-function openCalendar() {
-    var obj = api.require('UICalendar');
-    obj.open({
-        rect: {
-            x: (api.winWidth - 320) / 2,
-            y: (api.winHeight - 220) / 2,
-            w: 320,
-            h: 220
-        },
-        styles: {
-            bg: 'rgba(0,0,0,0)',
-            week: {
-                weekdayColor: '#3b3b3b',
-                weekendColor: '#a8d400',
-                size: 12
-            },
-            date: {
-                color: '#3b3b3b',
-                selectedColor: '#fff',
-                selectedBg: '#a8d500',
-                size: 12
-            },
-            today: {
-                color: 'rgb(230,46,37)',
-                bg: ''
-            }
-        },
-        switchMode: 'vertical',
-        fixedOn: 'patient',
-        fixed: true
-    }, function(ret, err) {
-        if (ret) {
-            alert(JSON.stringify(ret));
-        }
-    });
 }
 
 /**

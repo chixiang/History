@@ -233,9 +233,9 @@ function loadData(json_objs) {
         "data": json_objs
     }, function(ret, err) {
         if (ret.status) {
-            api.toast({
-                msg: "刷新病历成功"
-            });
+            // api.toast({
+            //     msg: "刷新病历成功"
+            // });
         }
     });
     v_loaded_recors = json_objs.length;
@@ -253,9 +253,9 @@ function appendData(json_objs) {
         function(ret) {
             if (ret.status) {
                 if (json_objs.length != per_page_num) {
-                    api.toast({
-                        msg: '别再拉了~~~到底了~~~'
-                    });
+                    // api.toast({
+                    //     msg: '别再拉了~~~到底了~~~'
+                    // });
                 }
                 v_loaded_recors = v_loaded_recors + json_objs.length;
             }

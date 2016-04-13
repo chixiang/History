@@ -23,7 +23,7 @@
                 <div id="middle">
                     <span id="title">病历维护</span>
                 </div>
-                <a id="right" tapmode="" onclick="savePatient();" class="button button-raised button-royal">
+                <a id="right" tapmode="" onclick="savePatient();api.hideProgress();" class="button button-raised button-royal">
                     保存
                 </a>
             </nav>
@@ -118,6 +118,13 @@ function savePatient() {
         alert("未输入患者姓名");
         return;
     }
+    api.showProgress({
+        style: 'default',
+        animationType: 'fade',
+        title: '云端保存中...',
+        text: '先喝杯茶...',
+        modal: false
+    });
     var model = api.require('model');
     model.config({
         appId: 'A6903478274381',
@@ -210,7 +217,10 @@ function saveHistory() {
             }
         }, function(ret, err) {
             if (ret) {
-                alert("修改病历成功！");
+                // alert("修改病历成功！");
+                api.toast({
+                    msg: "修改病历成功！"
+                });
                 refreshHistoryList();
                 // 修改成功后暂时没有刷新浏览页面，直接返回列表页面
                 returnMain();
@@ -233,7 +243,10 @@ function saveHistory() {
             }
         }, function(ret, err) {
             if (ret) {
-                alert("新增病历成功！");
+                // alert("新增病历成功！");
+                api.toast({
+                    msg: "新增病历成功！"
+                });
                 refreshHistoryList();
                 window.closeWin();
             } else {
@@ -296,4 +309,5 @@ function returnMain() {
     });
 }
 </script>
+
 </html>
