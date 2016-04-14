@@ -101,7 +101,7 @@ apiready = function() {
         name: 'returnCondep'
     }, function(ret, err) {
         if (ret) {
-            $api.byId('consultation_department').value = ret.value.consultationDepartment;
+            $api.byId('consultation_department').value = ret.value.consultation_department;
         }
     });
 
