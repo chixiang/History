@@ -38,14 +38,14 @@
 apiready = function() {
     $api.fixIos7Bar($api.dom('header'));
 
-    gender = "";
+    consultation_department = "";
 
     window.closeFrame = function(frameName) {
         api.closeFrame();
     }
 
     window.saveFrame = function(frameName) {
-        returnGender();
+        returnCondep();
         api.closeFrame();
     }
 
@@ -56,7 +56,7 @@ apiready = function() {
             y: 50,
             w: api.winWidth,
             // 行数*50，小于3行按3行算
-            h: 150
+            h: 250
         },
         styles: {
             bg: 'rgba(0,0,0,0)',
@@ -67,18 +67,17 @@ apiready = function() {
             tagSize: 10
         },
         data: [{
-            // tag: '性别',
-            scope: ["男", "女"]
+            scope: historyConstants.consultation_department
         }],
-        rows: 3,
+        rows: 5,
         autoHide: false,
         loop: true,
-        fixedOn: "genderPickerFrame",
+        fixedOn: "condepPickerFrame",
         fixed: true
     }, function(ret, err) {
         if (ret) {
             if (ret.eventType == "selected") {
-                gender = ret.data;
+                consultation_department = ret.data;
             }
         } else {
             alert(JSON.stringify(err));
@@ -90,11 +89,11 @@ apiready = function() {
  * [returnPatient 通过event返回本页的数据]
  * @return {[type]} [description]
  */
-function returnGender() {
+function returnCondep() {
     api.sendEvent({
-        name: 'returnGender',
+        name: 'returnCondep',
         extra: {
-            gender: gender,
+            consultation_department: consultation_department,
         }
     });
 }

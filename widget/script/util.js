@@ -36,3 +36,47 @@ function setBlur(id, isTrue) {
         $api.byId(id).style.webkitFilter = "";
     }
 }
+
+/**
+ * @param  {[type]}
+ * @return {[type]}
+ */
+function openPicker(type) {
+    var frameName = "";
+    // 选择器的高度：行数*50+50，小于3行算3行
+    var height = 200;
+    switch (type) {
+        case "birthday":
+            frameName = "birthdayPickerFrame";
+            height = 300;
+            break;
+        case "gender":
+            frameName = "genderPickerFrame";
+            height = 200;
+            break;
+        case "consultation_department":
+            frameName = "condepPickerFrame";
+            height = 300;
+        default:
+            break;
+    }
+    api.openFrame({
+        name: frameName,
+        url: './picker/' + frameName + '.html',
+        pageParam: {},
+        reload: false,
+        bounces: false,
+        rect: {
+            marginLeft: 0,
+            marginTop: api.winHeight - height,
+            marginBottom: 0,
+            marginRight: 0
+        },
+        animation: {
+            type: "fade",
+            subType: "from_right",
+            duration: 300
+        }
+    })
+
+}

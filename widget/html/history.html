@@ -33,7 +33,7 @@
                 <div class="field_name">维护患者信息</div>
                 <div class="more"><span>&gt;</span></div>
             </div>
-            <div class="field">
+            <div class="field" onclick="openPicker('consultation_department');">
                 <div class="field_name">会诊科室:</div>
                 <div>
                     <input type="text" id="consultation_department" />
@@ -95,6 +95,18 @@ apiready = function() {
             patient_pointer = ret.value;
         }
     });
+
+    // 回填Picker返回的会诊科室
+    api.addEventListener({
+        name: 'returnCondep'
+    }, function(ret, err) {
+        if (ret) {
+            $api.byId('consultation_department').value = ret.value.consultationDepartment;
+        }
+    });
+
+    // 会诊科室使用选择器
+    $api.attr($api.byId('consultation_department'), 'readonly', 'true');
 
     // 如果是修改，则取传入的数据赋值到页面
     type = api.pageParam.type;
