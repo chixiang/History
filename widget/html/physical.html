@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>体检信息维护</title>
+    <link rel="stylesheet" type="text/css" href="../css/physical.css" />
+    <link rel="stylesheet" type="text/css" href="../css/button.css" />
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/util.js"></script>
+</head>
+
+<body>
+    <div class="flex-wrap flex-vertical" id='pageone'>
+        <header id='header'>
+            <nav id="nav">
+                <a id="left" tapmode="" onclick="window.closeFrame();" class="button button-raised button-royal">
+                    取消
+                </a>
+                <div id="middle">
+                    <span id="title">体检信息维护</span>
+                </div>
+                <a id="right" tapmode="" onclick="window.saveFrame();" class="button button-raised button-royal">
+                    确认
+                </a>
+            </nav>
+        </header>
+        <div id="main">
+            <div class="field">
+                <div class="field_name">视力:</div>
+                    <div class="leftColumn">
+                        <span>Vod:</span>
+                        <input type="text" class="long" id="vod" onclick="openPicker('vod')"/>
+                    </div>
+                    <div class="rightColumn">
+                        <span>Vos:</span>
+                        <input type="text" class="long" id="vos" onclick="openPicker('vos')"/>
+                    </div>
+            </div>
+            <div class="field">
+                <div class="field_name">矫正:</div>
+                    <div class="leftColumn">
+                        <span>Vod:</span>
+                        <input type="text" class="long" id="corrected_vod" onclick="openPicker('corrected_vod')"/>
+                    </div>
+                    <div class="rightColumn">
+                        <span>Vos:</span>
+                        <input type="text" class="long" id="corrected_vos" onclick="openPicker('corrected_vos')"/>
+                    </div>
+            </div>
+            <div class="field">
+                <div class="field_name">眼压:</div>
+                    <div class="leftColumn">
+                        <span>Tod:</span>
+                        <input type="text" class="short" id="tod" />
+                        <span>mmHg</span>
+                    </div>
+                    <div class="rightColumn">
+                        <span>Tos:</span>
+                        <input type="text" class="short" id="tos" />
+                        <span>mmHg</span>
+                    </div>
+            </div>
+            <div class="field">
+                <div class="field_name">外眼:</div>
+                <div>
+                    <input type="text" id="outer_eye" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">结膜:</div>
+                <div>
+                    <input type="text" id="outer_eye" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">角膜:</div>
+                <div>
+                    <input type="text" id="outer_eye" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">前房:</div>
+                <div>
+                    <input type="text" id="outer_eye" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">晶体:</div>
+                <div>
+                    <input type="text" id="outer_eye" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">玻璃体:</div>
+                <div>
+                    <input type="text" id="lens" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="field_name">眼底:</div>
+                <div>
+                    <input type="text" id="outer_eye" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+/**
+ * [apiready description]
+ * @return {[type]} [description]
+ */
+apiready = function() {
+    $api.fixIos7Bar($api.dom('header'));
+
+    // 年龄自动计算，不允许输入
+    $api.attr($api.byId('vod'), 'readonly', 'true');
+    $api.attr($api.byId('vos'), 'readonly', 'true');
+    $api.attr($api.byId('corrected_vod'), 'readonly', 'true');
+    $api.attr($api.byId('corrected_vos'), 'readonly', 'true');
+
+    window.closeFrame = function(frameName) {
+        if (api.pageParam.data.length != 0) {
+            data = api.pageParam.data;
+            setPatient(data);
+        }
+        api.closeFrame();
+    }
+
+    window.saveFrame = function(frameName) {
+        // 返回本页的患者信息
+        returnPatient();
+        api.closeFrame();
+    }
+
+    // 从病历主页面传的值，赋给本页面
+    if (api.pageParam.data.length != 0) {
+        data = api.pageParam.data;
+        setPatient(data);
+    }
+
+    api.addEventListener({
+        name: 'returnVision'
+    }, function(ret, err) {
+        if (ret) {
+            $api.byId(ret.value.visionType).value = ret.value.vision;
+        }
+    });
+
+}
+
+/**
+ * [returnPatient 通过event返回本页的数据]
+ * @return {[type]} [description]
+ */
+function returnPatient() {
+    api.sendEvent({
+        name: 'returnPatient',
+        extra: {
+            name: $api.byId('name').value,
+            gender: $api.byId('gender').value,
+            birthday: $api.byId('birthday').value,
+            age: $api.byId('age').value,
+            admission_number: $api.byId('admission_number').value,
+            outpatient_number: $api.byId('outpatient_number').value,
+            phone: $api.byId('phone').value,
+            address: $api.byId('address').value,
+            job: $api.byId('job').value
+        }
+    });
+}
+
+</script>
+
+</html>

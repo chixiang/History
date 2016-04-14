@@ -80,7 +80,7 @@ a:visited {
 
 .field {
     height: 50px;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 50px;
     padding-left: 10px;
     padding-right: 10px;
@@ -88,6 +88,8 @@ a:visited {
     border-bottom: 1px;
     border-style: solid;
     border-color: #EED6B0;
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
 }
 
 .no_underline {
@@ -95,7 +97,8 @@ a:visited {
 }
 
 .field_name {
-    float: left;
+    -webkit-box-align: center;
+    margin-right: 10px;
 }
 
 .more {
@@ -119,13 +122,17 @@ input {
     margin-right: 10px;
 }
 
-.twoColumns {
-    /*margin-left: 10px;*/
-    float: right;
+.leftColumn {
     -webkit-box-flex: 1;
-    display: -webkit-box;
 }
 
+.rightColumn {
+    -webkit-box-flex: 2;
+}
 .short {
-    width: 50px;
+    width: 20px;
+}
+
+.long {
+    width: 80px;
 }

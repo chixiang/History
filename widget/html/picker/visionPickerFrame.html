@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>请选择</title>
+    <link rel="stylesheet" type="text/css" href="../../css/picker.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/button.css" />
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/util.js"></script>
+    <script type="text/javascript" src="../../script/constants.js"></script>
+</head>
+
+<body>
+    <div class="flex-wrap flex-vertical">
+        <header id='header'>
+            <nav id="nav">
+                <a id="left" tapmode="" onclick="window.closeFrame();" class="button button-raised button-royal">
+                    取消
+                </a>
+                <div id="middle">
+                    <span id="title">请选择</span>
+                </div>
+                <a id="right" tapmode="" onclick="window.saveFrame();" class="button button-raised button-royal">
+                    确定
+                </a>
+            </nav>
+        </header>
+        <div id="main">
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+/**
+ * [apiready description]
+ * @return {[type]} [description]
+ */
+apiready = function() {
+    $api.fixIos7Bar($api.dom('header'));
+
+    visionType = api.pageParam.visionType;
+    vision = "";
+    id = "";
+
+    window.closeFrame = function(frameName) {
+        api.closeFrame();
+    }
+
+    window.saveFrame = function(frameName) {
+        returnVision();
+        UICustomPicker.close({
+            id: id
+        });
+        api.closeFrame();
+    }
+
+    var UICustomPicker = api.require('UICustomPicker');
+    UICustomPicker.open({
+        rect: {
+            x: 0,
+            y: 50,
+            w: api.winWidth,
+            // 行数*50，小于3行按3行算
+            h: 250
+        },
+        styles: {
+            bg: 'rgba(0,0,0,0)',
+            normalColor: '#E1D7CA',
+            selectedColor: '#655A55',
+            selectedSize: 36,
+            tagColor: '#3685dd',
+            tagSize: 10
+        },
+        data: [{
+            scope: historyConstants.vision
+        }],
+        rows: 5,
+        autoHide: false,
+        loop: true,
+        fixedOn: "visionPickerFrame",
+        fixed: true
+    }, function(ret, err) {
+        if (ret) {
+            if (ret.eventType == "selected") {
+                vision = ret.data;
+                id = ret.id;
+            }
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
+}
+
+/**
+ * [returnPatient 通过event返回本页的数据]
+ * @return {[type]} [description]
+ */
+function returnVision() {
+    api.sendEvent({
+        name: 'returnVision',
+        extra: {
+            visionType: visionType,
+            vision: vision
+        }
+    });
+}
+</script>
+
+</html>

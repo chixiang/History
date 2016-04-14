@@ -45,6 +45,8 @@ function openPicker(type) {
     var frameName = "";
     // 选择器的高度：行数*50+50，小于3行算3行
     var height = 200;
+    var reload = false;
+    pageParam = {};
     switch (type) {
         case "birthday":
             frameName = "birthdayPickerFrame";
@@ -57,14 +59,24 @@ function openPicker(type) {
         case "consultation_department":
             frameName = "condepPickerFrame";
             height = 300;
+        case "vod":
+        case "vos":
+        case "corrected_vod":
+        case "corrected_vos":
+            frameName = "visionPickerFrame";
+            height = 300;
+            reload = true;
+            pageParam = {
+                "visionType": type
+            }
         default:
             break;
     }
     api.openFrame({
         name: frameName,
         url: './picker/' + frameName + '.html',
-        pageParam: {},
-        reload: false,
+        pageParam: pageParam,
+        reload: reload,
         bounces: false,
         rect: {
             marginLeft: 0,
