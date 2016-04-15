@@ -80,6 +80,7 @@ function openPicker(type) {
         case "consultation_department":
             frameName = "condepPickerFrame";
             height = 300;
+            break;
         case "vod":
         case "vos":
         case "corrected_vod":
@@ -90,6 +91,7 @@ function openPicker(type) {
             pageParam = {
                 "visionType": type
             }
+            break;
         default:
             break;
     }

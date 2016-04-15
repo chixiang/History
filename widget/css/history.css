@@ -3,7 +3,7 @@ header {
     left: 0;
     top: 0;
     width: 100%;
-    color: #FFF;
+    color: #F7F3EA;
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
     background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
     background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
