@@ -160,10 +160,11 @@ function loadList(type) {
             });
             query.include({
                 qid: ret.qid,
-                column: {
-                    'patient_pointer',
-                    'physical_pointer'
-                }
+                column: 'patient_pointer'
+            });
+            query.include({
+                qid: ret.qid,
+                column: 'physical_pointer'
             });
             query.include({
             });
