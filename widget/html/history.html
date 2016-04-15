@@ -249,17 +249,21 @@ function savePhysical() {
         });
     } else { // 新增
         model.insert({
-            class: 'patient',
+            class: 'physical',
             value: {
-                name: patient_pointer.name,
-                gender: patient_pointer.gender,
-                birthday: patient_pointer.birthday,
-                age: patient_pointer.age,
-                admission_number: patient_pointer.admission_number,
-                outpatient_number: patient_pointer.outpatient_number,
-                phone: patient_pointer.phone,
-                address: patient_pointer.address,
-                job: patient_pointer.job
+                vod: physical_pointer.vod,
+                vos: physical_pointer.vos,
+                corrected_vod: physical_pointer.corrected_vod,
+                corrected_vos: physical_pointer.corrected_vos,
+                tod: physical_pointer.tod,
+                tos: physical_pointer.tos,
+                outer_eye: physical_pointer.outer_eye,
+                conjunctiva: physical_pointer.conjunctiva,
+                cornea: physical_pointer.cornea,
+                anterior_chamber: physical_pointer.anterior_chamber,
+                lens: physical_pointer.lens,
+                vitreous: physical_pointer.vitreous,
+                eyeground: physical_pointer.eyeground
             }
         }, function(ret, err) {
             if (ret) {
@@ -275,6 +279,7 @@ function savePhysical() {
         });
     }
 }
+
 /**
  * [saveHistory 保存病历信息]
  * @return {[type]} [description]
