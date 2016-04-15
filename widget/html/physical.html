@@ -12,16 +12,16 @@
 </head>
 
 <body>
-    <div class="flex-wrap flex-vertical" id='pageone'>
+    <div class="flex-wrap flex-vertical">
         <header id='header'>
             <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeFrame();" class="button button-raised button-royal">
+                <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
                     取消
                 </a>
                 <div id="middle">
                     <span id="title">体检信息维护</span>
                 </div>
-                <a id="right" tapmode="" onclick="window.saveFrame();" class="button button-raised button-royal">
+                <a id="right" tapmode="" onclick="savePhysical();" class="button button-raised button-royal">
                     确认
                 </a>
             </nav>
@@ -115,9 +115,6 @@
 apiready = function() {
     $api.fixIos7Bar($api.dom('header'));
 
-    alert(JSON.stringify(api.pageParam));
-    id = api.pageParam.data;
-
     // 视力通过picker选择，不允许输入
     $api.attr($api.byId('vod'), 'readonly', 'true');
     $api.attr($api.byId('vos'), 'readonly', 'true');
@@ -132,19 +129,16 @@ apiready = function() {
         host: 'https://d.apicloud.com'
     });
 
+    physical_id = api.pageParam.data.id;
+
     // 如果主界面传入了id，代表修改，则从数据库查询已有数据
-    if (id != undefined && id != null id != "") {
+    if (physical_id != undefined && physical_id != null && physical_id != "") {
+        showProgress();
         query.createQuery(function(ret, err) {
             if (ret && ret.qid) {
-                var queryId = ret.qid;
-                query.whereEqual({
-                    qid: queryId,
-                    column: 'id',
-                    value: id
-                });
-                model.findAll({
+                model.findById({
                     class: "physical",
-                    qid: queryId
+                    id: physical_id
                 }, function(ret, err) {
                     if (err) {
                         alert(JSON.stringify(err));
@@ -153,20 +147,14 @@ apiready = function() {
                             setPhysical(ret);
                         }
                     }
+                    api.hideProgress();
                 });
             }
         });
     }
 
-    window.closeFrame = function(frameName) {
-        api.closeFrame();
-    }
-
-    window.saveFrame = function(frameName) {
-        // 保存体检信息
-        savePhysical();
-        api.hideProgress();
-        api.closeFrame();
+    window.closeWin = function(winName) {
+        api.closeWin();
     }
 
     // 设置页面四个视力的值
@@ -188,48 +176,77 @@ function savePhysical() {
 
     showProgress();
 
-    model.updateById({
-        class: 'physical',
-        id: id,
-        value: {
-            vod: $api.byId('vod').value,
-            vos: $api.byId('vos').value,
-            corrected_vod: $api.byId('corrected_vod').value,
-            corrected_vos: $api.byId('corrected_vos').value,
-            tod: $api.byId('tod').value,
-            tos: $api.byId('tos').value,
-            outer_eye: $api.byId('outer_eye').value,
-            conjunctiva: $api.byId('conjunctiva').value,
-            cornea: $api.byId('cornea').value,
-            anterior_chamber: $api.byId('anterior_chamber').value,
-            lens: $api.byId('lens').value,
-            vitreous: $api.byId('vitreous').value,
-            eyeground: $api.byId('eyeground').value
-        }
-    }, function(ret, err) {
-        if (ret) {
-            alert(JSON.stringify(ret));
-            returnPhysicalId(ret.id);
-            return true;
-        } else {
-            alert("保存体检信息失败！");
-            return false;
-        }
-    });
+    if (physical_id != "") {
+        model.updateById({
+            class: 'physical',
+            id: physical_id,
+            value: {
+                vod: $api.byId('vod').value,
+                vos: $api.byId('vos').value,
+                corrected_vod: $api.byId('corrected_vod').value,
+                corrected_vos: $api.byId('corrected_vos').value,
+                tod: $api.byId('tod').value,
+                tos: $api.byId('tos').value,
+                outer_eye: $api.byId('outer_eye').value,
+                conjunctiva: $api.byId('conjunctiva').value,
+                cornea: $api.byId('cornea').value,
+                anterior_chamber: $api.byId('anterior_chamber').value,
+                lens: $api.byId('lens').value,
+                vitreous: $api.byId('vitreous').value,
+                eyeground: $api.byId('eyeground').value
+            }
+        }, function(ret, err) {
+            if (ret) {
+                returnPhysicalId(ret.id);
+                api.hideProgress();
+                api.closeWin();
+            } else {
+                alert("修改体检信息失败！" + JSON.stringify(err));
+            }
+        });
+    } else {
+        model.insert({
+            class: 'physical',
+            value: {
+                vod: $api.byId('vod').value,
+                vos: $api.byId('vos').value,
+                corrected_vod: $api.byId('corrected_vod').value,
+                corrected_vos: $api.byId('corrected_vos').value,
+                tod: $api.byId('tod').value,
+                tos: $api.byId('tos').value,
+                outer_eye: $api.byId('outer_eye').value,
+                conjunctiva: $api.byId('conjunctiva').value,
+                cornea: $api.byId('cornea').value,
+                anterior_chamber: $api.byId('anterior_chamber').value,
+                lens: $api.byId('lens').value,
+                vitreous: $api.byId('vitreous').value,
+                eyeground: $api.byId('eyeground').value
+            }
+        }, function(ret, err) {
+            if (ret) {
+                returnPhysicalId(ret.id);
+                api.hideProgress();
+                api.closeWin();
+            } else {
+                alert("新增体检信息失败！" + JSON.stringify(err));
+            }
+        });
+    }
 }
 
 /**
  * [returnPatient 通过event返回本页的数据]
  * @return {[type]} [description]
  */
-function returnPhysicalId(id) {
+function returnPhysicalId(physical_id) {
     api.sendEvent({
         name: 'returnPhysicalId',
         extra: {
-            physical_pointer_id: id
+            physical_id: physical_id
         }
     });
 }
+
 </script>
 
 </html>

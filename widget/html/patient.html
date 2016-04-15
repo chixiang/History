@@ -15,13 +15,13 @@
     <div class="flex-wrap flex-vertical" id='pageone'>
         <header id='header'>
             <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeFrame();" class="button button-raised button-royal">
+                <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
                     取消
                 </a>
                 <div id="middle">
                     <span id="title">患者维护</span>
                 </div>
-                <a id="right" tapmode="" onclick="window.saveFrame();" class="button button-raised button-royal">
+                <a id="right" tapmode="" onclick="window.saveWin();" class="button button-raised button-royal">
                     确认
                 </a>
             </nav>
@@ -97,19 +97,19 @@ apiready = function() {
     $api.attr($api.byId('gender'), 'readonly', 'true');
     $api.attr($api.byId('birthday'), 'readonly', 'true');
 
-    window.closeFrame = function(frameName) {
+    window.closeWin = function(winName) {
         // 取消修改时使用原值覆盖已修改的值
         if (api.pageParam.data.length != 0) {
             data = api.pageParam.data;
             setPatient(data);
         }
-        api.closeFrame();
+        api.closeWin();
     }
 
-    window.saveFrame = function(frameName) {
+    window.saveWin = function(winName) {
         // 返回本页的患者信息
         returnPatient();
-        api.closeFrame();
+        api.closeWin();
     }
 
     // 从病历主页面传的值，赋给本页面

@@ -162,10 +162,10 @@ function loadList(type) {
                 qid: ret.qid,
                 column: 'patient_pointer'
             });
-            query.include({
-                qid: ret.qid,
-                column: 'physical_pointer'
-            });
+            // query.include({
+            //     qid: ret.qid,
+            //     column: 'physical_pointer'
+            // });
             query.include({
             });
             query.whereEqual({
@@ -197,8 +197,8 @@ function loadList(type) {
                                 record_doctor: ret[idx].record_doctor,
                                 patient_pointer: ret[idx].patient_pointer,
                                 // patient_pointer_id: ret[idx].patient_pointer.id,
-                                // physical_pointer: ret[idx].physical_pointer,
-                                physical_pointer_id: ret[idx].physical_pointer.id,
+                                physical_pointer: ret[idx].physical_pointer,
+                                // physical_pointer_id: ret[idx].physical_pointer.id,
                                 // name: ret[idx].patient_pointer.name,
                                 // gender: ret[idx].patient_pointer.gender,
                                 // birthday: ret[idx].patient_pointer.birthday,
@@ -299,7 +299,7 @@ function viewHistory(data) {
         name: "history",
         url: './html/viewHistory.html',
         pageParam: data,
-        reload: true,
+        reload: false,
         bounces: false
     });
 }
