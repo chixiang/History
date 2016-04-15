@@ -115,3 +115,26 @@ function openPicker(type) {
     })
 
 }
+
+/**
+ * [showProgress description]
+ * @param  {[type]} title [description]
+ * @param  {[type]} text  [description]
+ * @return {[type]}       [description]
+ */
+function showProgress(title, text) {
+    if(title == undefined || title == null || title == "") {
+        title = "处理中...";
+    }
+    if(text == undefined || text == null || text == "") {
+        text = "请耐心等待";
+    }
+
+    api.showProgress({
+        style: 'default',
+        animationType: 'fade',
+        title: title,
+        text: text,
+        modal: false
+    });
+}
