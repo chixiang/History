@@ -25,6 +25,26 @@ function setPatient(data) {
 }
 
 /**
+ * [setPatient 给体检信息页面字段赋值]
+ * @param {[type]} data [体检信息data]
+ */
+function setPhysical(data) {
+    $api.byId('vod').value = data.vod;
+    $api.byId('vos').value = data.vos;
+    $api.byId('corrected_vod').value = data.corrected_vod;
+    $api.byId('corrected_vos').value = data.corrected_vos;
+    $api.byId('tod').value = data.tod;
+    $api.byId('tos').value = data.tos;
+    $api.byId('outer_eye').value = data.outer_eye;
+    $api.byId('conjunctiva').value = data.conjunctiva;
+    $api.byId('cornea').value = data.cornea;
+    $api.byId('anterior_chamber').value = data.anterior_chamber;
+    $api.byId('lens').value = data.lens;
+    $api.byId('vitreous').value = data.vitreous;
+    $api.byId('eyeground').value = data.eyeground;
+}
+
+/**
  * [setBlur description]
  * @param {[type]}  id     [description]
  * @param {Boolean} isTrue [description]
@@ -38,8 +58,9 @@ function setBlur(id, isTrue) {
 }
 
 /**
- * @param  {[type]}
- * @return {[type]}
+ * [openPicker description]
+ * @param  {[type]} type [description]
+ * @return {[type]}      [description]
  */
 function openPicker(type) {
     var frameName = "";

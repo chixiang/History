@@ -98,6 +98,7 @@ apiready = function() {
     $api.attr($api.byId('birthday'), 'readonly', 'true');
 
     window.closeFrame = function(frameName) {
+        // 取消修改时使用原值覆盖已修改的值
         if (api.pageParam.data.length != 0) {
             data = api.pageParam.data;
             setPatient(data);

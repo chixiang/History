@@ -162,6 +162,10 @@ function loadList(type) {
                 qid: ret.qid,
                 column: 'patient_pointer'
             });
+            query.include({
+                qid: ret.qid,
+                column: 'physical_pointer'
+            });
             query.whereEqual({
                 qid: queryId1,
                 column: 'record_doctor',
@@ -201,6 +205,7 @@ function loadList(type) {
                                 phone: ret[idx].patient_pointer.phone,
                                 address: ret[idx].patient_pointer.address,
                                 job: ret[idx].patient_pointer.job,
+                                physical_pointer_id: ret[idx].physical_pointer.id,
                                 // 给UIListView展示字段赋值
                                 title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
                                 subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,

@@ -33,7 +33,7 @@
                 <div class="field_name"><span id="patient_info"></span></div>
                 <div class="more"><span>&gt;&gt;</span></div>
             </div>
-            <div class="field">
+            <div class="field" onclick="openFrame('viewPhysical');">
                 <div class="field_name">体检</div>
                 <div class="more"><span>&gt;&gt;</span></div>
             </div>
@@ -118,14 +118,25 @@ apiready = function() {
 function openFrame(type) {
     // 设置毛玻璃效果
     // setBlur("wrap", true);
+    switch (type) {
+        case "viewPatient":
+            pageParam = {
+                "data": patient_pointer
+            }
+            break;
+        case "viewPhysical":
+            pageParam = {
+                "data": physical_pointer
+            }
+        default:
+            break;
+    }
 
     api.openFrame({
         name: type,
         url: './' + type + '.html',
-        pageParam: {
-            data: patient_pointer
-        },
-        reload: false,
+        pageParam: pageParam,
+        reload: true,
         bounces: false,
         rect: {
             marginLeft: 0,

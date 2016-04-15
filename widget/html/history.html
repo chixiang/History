@@ -99,6 +99,7 @@ apiready = function() {
         }
     });
 
+    // 接受体检信息页面修改的数据
     api.addEventListener({
         name: 'returnPhysical'
     }, function(ret, err) {
@@ -172,8 +173,8 @@ function savePatient() {
             }
         }, function(ret, err) {
             if (ret) {
-                // 保存病历信息
-                saveHistory();
+                // 保存体检信息
+                savePhysical();
                 return true;
             } else {
                 alert("修改患者信息失败，请重试！");
@@ -197,9 +198,9 @@ function savePatient() {
         }, function(ret, err) {
             if (ret) {
                 // 首次新增需使用patient_pointer的id和病历关联
-                patient_pointer.id = ret.id;
-                // 保存病历信息
-                saveHistory();
+                // patient_pointer.id = ret.id;
+                // 保存体检信息
+                savePhysical();
                 return true;
             } else {
                 alert("保存患者信息失败，请重试！");
@@ -209,6 +210,71 @@ function savePatient() {
     }
 }
 
+
+function savePhysical() {
+    var model = api.require('model');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    if (type == "modi") { // 修改
+        model.updateById({
+            class: 'physical',
+            id: api.pageParam.data.physical_pointer.id,
+            value: {
+                vod: physical_pointer.vod,
+                vos: physical_pointer.vos,
+                corrected_vod: physical_pointer.corrected_vod,
+                corrected_vos: physical_pointer.corrected_vos,
+                tod: physical_pointer.tod,
+                tos: physical_pointer.tos,
+                outer_eye: physical_pointer.outer_eye,
+                conjunctiva: physical_pointer.conjunctiva,
+                cornea: physical_pointer.cornea,
+                anterior_chamber: physical_pointer.anterior_chamber,
+                lens: physical_pointer.lens,
+                vitreous: physical_pointer.vitreous,
+                eyeground: physical_pointer.eyeground
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // 保存病历信息
+                saveHistory();
+                return true;
+            } else {
+                alert("修改体检信息失败，请重试！");
+                return false;
+            }
+        });
+    } else { // 新增
+        model.insert({
+            class: 'patient',
+            value: {
+                name: patient_pointer.name,
+                gender: patient_pointer.gender,
+                birthday: patient_pointer.birthday,
+                age: patient_pointer.age,
+                admission_number: patient_pointer.admission_number,
+                outpatient_number: patient_pointer.outpatient_number,
+                phone: patient_pointer.phone,
+                address: patient_pointer.address,
+                job: patient_pointer.job
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // 首次新增需使用patient_pointer的id和病历关联
+                // patient_pointer.id = ret.id;
+                // 保存病历信息
+                saveHistory();
+                return true;
+            } else {
+                alert("保存体检信息失败，请重试！");
+                return false;
+            }
+        });
+    }
+}
 /**
  * [saveHistory 保存病历信息]
  * @return {[type]} [description]
@@ -230,7 +296,7 @@ function saveHistory() {
             class: 'caseHistory',
             id: api.pageParam.data.id,
             value: {
-                patient_id: patient_pointer.id,
+                // patient_id: patient_pointer.id,
                 record_date: getDate(),
                 consultation_department: consultation_department.value,
                 chief_complaint: chief_complaint.value,
@@ -238,6 +304,7 @@ function saveHistory() {
                 treatment: treatment.value,
                 record_doctor: "me",
                 patient_pointer: patient_pointer.id
+                physical_pointer: physical_pointer.id
             }
         }, function(ret, err) {
             if (ret) {
@@ -264,6 +331,7 @@ function saveHistory() {
                 treatment: treatment.value,
                 record_doctor: "me",
                 patient_pointer: patient_pointer.id
+                physical_pointer: physical_pointer.id
             }
         }, function(ret, err) {
             if (ret) {
