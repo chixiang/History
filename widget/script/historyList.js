@@ -5,6 +5,8 @@
 var apiready = function() {
     $api.fixIos7Bar($api.dom('header'));
 
+    userName = $api.getStorage("userName");
+
     // 接收刷新列表event
     api.addEventListener({
         name: 'reloadHistory'
@@ -140,7 +142,7 @@ var apiready = function() {
  * @return {[type]}      [description]
  */
 function loadList(type) {
-    var userName = "me";
+    showProgress("正在加载病历...");
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             var queryId1 = ret.qid;
@@ -166,13 +168,13 @@ function loadList(type) {
             //     qid: ret.qid,
             //     column: 'physical_pointer'
             // });
-            query.include({
-            });
-            query.whereEqual({
-                qid: queryId1,
-                column: 'record_doctor',
-                value: userName
-            });
+            if (userName != "admin") {
+                query.whereEqual({
+                    qid: queryId1,
+                    column: 'record_doctor',
+                    value: userName
+                });
+            }
             var json_objs = [];
             model.findAll({
                 class: "caseHistory",
@@ -211,8 +213,11 @@ function loadList(type) {
                                 // 给UIListView展示字段赋值
                                 title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
                                 subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,
-                                remark: (ret[idx].patient_pointer.admission_number!="")?(ret[idx].patient_pointer.admission_number+"(住)"):(ret[idx].patient_pointer.outpatient_number)
+                                remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
                             };
+                            if (userName == "admin") {
+                                historyItem.subTitle = "记录: " + historyItem.record_doctor + " - " + historyItem.subTitle;
+                            }
                             json_objs.push(historyItem);
                             idx = idx + 1;
                         }
@@ -225,6 +230,7 @@ function loadList(type) {
 
                     }
                 }
+                api.hideProgress();
             });
         }
     });
@@ -388,5 +394,17 @@ function openSearch() {
             duration: 2000,
             location: "top"
         });
+    });
+}
+
+function logout() {
+    $api.setStorage("userName", "");
+    api.closeToWin({
+        name: 'root',
+        animation: {
+            type: 'flip',
+            subType: 'from_bottom',
+            duration: 500
+        }
     });
 }

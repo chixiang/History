@@ -5,59 +5,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>主页</title>
-    <link rel="stylesheet" type="text/css" href="./css/api.css" />
-    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+    <link rel="stylesheet" type="text/css" href="./css/index.css" />
+    <script type="text/javascript" src="script/api.js"></script>
+    <script type="text/javascript" src="script/index.js"></script>
+    <script type="text/javascript" src="script/util.js"></script>
     <style>
-    header {
-        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
-        background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
-        background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
-        position: relative;
-        color: #FFF;
-    }
 
-    .top-button {
-        margin: 0 1em;
-        text-align: center;
-        height: 50px;
-        line-height: 50px;
-        font-size: 16px;
-    }
-
-    a,
-    a:visited {
-        text-decoration: none;
-        color: #FFF;
-    }
-
-    .fl {
-        float: left;
-    }
-
-    .fr {
-        float: right;
-    }
     </style>
 </head>
 
 <body>
     <div id="wrap" class="flex-wrap flex-vertical">
-        <header>
-            <div class='top-button fl'>
-                <a href="" tapmode="presshover" onclick="openWin('option')">设置</a>
-            </div>
-            <div class='top-button fr'>
-                <a href="" tapmode="presshover" onclick="openSearch()">查找</a>
-            </div>
-            <div class='top-button fr'>
-                <a href="" tapmode="presshover" onclick="openWin('newhis')">新增</a>
-            </div>
-        </header>
         <div id="main" class="flex-con">
+            <div class="row">
+                <div class="label"><span>用户名：</span></div>
+                <div>
+                    <input type="text" id="userName">
+                </div>
+            </div>
+            <div class="row">
+                <div class="label">
+                    <span>密码：</span>
+                </div>
+                <div>
+                    <input type="password" id="passWord">
+                </div>
+            </div>
+            <div class="row">
+                <a tapmode="" id="login" onclick="login();">登陆</a>
+                <a tapmode="" id="register" onclick="register();">注册</a>
+            </div>
         </div>
     </div>
 </body>
 
 </html>
-<script type="text/javascript" src="script/api.js"></script>
-<script type="text/javascript" src="script/index.js"></script>

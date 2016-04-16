@@ -87,6 +87,8 @@ apiready = function() {
         api.closeWin();
     }
 
+    userName = $api.getStorage("userName");
+
     patient_pointer = [];
     physical_pointer = "";
 
@@ -277,7 +279,7 @@ function saveHistory() {
                 chief_complaint: chief_complaint.value,
                 diagnosis: diagnosis.value,
                 treatment: treatment.value,
-                record_doctor: "me",
+                record_doctor: userName,
                 patient_pointer: patient_pointer.id,
                 physical_pointer: physical_pointer
             }
