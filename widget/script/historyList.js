@@ -114,8 +114,6 @@ var apiready = function() {
                     index: ret.index
                 }, function(ret, err) {
                     deleteHistory(ret.data.id);
-                    // 删除病历后刷新列表
-                    loadList();
                 });
             }
         }
@@ -133,6 +131,36 @@ var apiready = function() {
         function(ret, err) {
             loadList("append");
         });
+
+    var backSecond = 0;
+    api.addEventListener({
+        name: 'keyback'
+    }, function(ret, err) {
+        var curSecond = new Date().getSeconds();
+        if (Math.abs(curSecond - backSecond) > 2) {
+            backSecond = curSecond;
+            api.toast({
+                msg: '再按一次关闭应用',
+                duration: 2000,
+                location: 'bottom'
+            });
+        } else {
+            // 绑定安卓的后退按钮事件 两秒内后退按钮点击两次 退到后台运行
+            // var rb = api.require('runBackground');
+            // rb.hideActivity();
+            api.closeWidget({
+                id: 'A6903478274381',
+                retData: {
+                    name: 'closeWidget'
+                },
+                animation: {
+                    type: 'flip',
+                    subType: 'from_bottom',
+                    duration: 300
+                }
+            });
+        }
+    });
 
 }
 
@@ -340,7 +368,9 @@ function deleteHistory(id) {
         },
         function(ret, err) {
             if (ret) {
+                // 删除病历后刷新列表
                 alert("删除病历成功！");
+                loadList();
             } else {
                 alert("删除病历失败！");
             }
