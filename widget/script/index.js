@@ -24,16 +24,19 @@ var apiready = function() {
 }
 
 function login() {
-    showProgress();
+    // showProgress();
     userName = $api.byId('userName').value;
     passWord = $api.byId('passWord').value;
     user.login({
         username: userName,
         password: passWord
     }, function(ret, err) {
-        api.hideProgress();
+        // api.hideProgress();
         if (ret) {
-            alert("登录成功！");
+            // alert("登录成功！");
+            api.toast({
+                msg: "登陆成功"
+            });
             $api.setStorage('userName', userName);
             $api.setStorage('id', ret.id);
             $api.byId('passWord').value = "";
@@ -45,14 +48,18 @@ function login() {
 }
 
 function register() {
-    showProgress();
+    // showProgress();
     userName = $api.byId('userName').value;
     passWord = $api.byId('passWord').value;
+    if (userName == "" || passWord == "") {
+        alert("请输入用户名和密码后点击【注册】");
+        return;
+    }
     user.register({
         username: userName,
         password: passWord
     }, function(ret, err) {
-        api.hideProgress();
+        // api.hideProgress();
         if (ret.error) {
             switch (ret.error.statusCode) {
                 case 202:

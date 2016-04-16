@@ -8,7 +8,7 @@
         池翔
     </author>
     <!-- <content src="historyList.html" /> -->
-    <content src="index.html" />
+    <content src="login.html" />
 	<preference name="appBackground" value="rgba(0,0,0,0)"/>
 	<preference name="windowBackground" value="rgba(0,0,0,0)"/>
 	<preference name="frameBackgroundColor" value="rgba(0,0,0,0)"/>
