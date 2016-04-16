@@ -29,17 +29,17 @@
             </nav>
         </header>
         <div id="main">
-            <div class="field" onclick="openFrame('viewPatient');">
+            <div class="field" onclick="openWin('viewPatient');">
                 <div class="field_name"><span id="patient_info"></span></div>
-                <div class="more"><span>&gt;&gt;</span></div>
+                <div class="more"><span>&gt;</span></div>
             </div>
-            <div class="field" onclick="openFrame('viewPhysical');">
+            <div class="field" onclick="openWin('viewPhysical');">
                 <div class="field_name">体检</div>
-                <div class="more"><span>&gt;&gt;</span></div>
+                <div class="more"><span>&gt;</span></div>
             </div>
             <div class="field">
                 <div class="field_name">辅助检查</div>
-                <div class="more"><span>&gt;&gt;</span></div>
+                <div class="more"><span>&gt;</span></div>
             </div>
             <div class="field">
                 <div class="field_name">会诊科室:</div>
@@ -106,6 +106,7 @@ apiready = function() {
     $api.byId('chief_complaint').value = data.chief_complaint;
     $api.byId('treatment').value = data.treatment;
     patient_pointer = data.patient_pointer;
+    physical_pointer = data.physical_pointer;
     $api.byId('patient_info').innerText = patient_pointer.name + " - " + patient_pointer.gender + " - " + patient_pointer.age + "岁";
 
 }
@@ -126,8 +127,11 @@ function openFrame(type) {
             break;
         case "viewPhysical":
             pageParam = {
-                "data": physical_pointer
+                "data": {
+                    id: patient_pointer
+                }
             }
+            break;
         default:
             break;
     }
@@ -158,7 +162,7 @@ function openFrame(type) {
  * @return {[type]}      [description]
  */
 function openWin(type) {
-    var reload = false;
+    var reload = true;
     var pageParam = {};
     var animation = null;
     var page = "";
@@ -169,11 +173,21 @@ function openWin(type) {
                 "data": api.pageParam,
                 "type": "modi"
             };
-            animation = {
-                type: "movein",
-                duration: 300
-            };
             reload = false;
+            break;
+        case "viewPatient":
+            page = "viewPatient";
+            pageParam = {
+                "data": patient_pointer
+            }
+            break;
+        case "viewPhysical":
+            page = "viewPhysical";
+            pageParam = {
+                "data": {
+                    "id": physical_pointer
+                }
+            }
             break;
         default:
             break;
@@ -182,10 +196,14 @@ function openWin(type) {
         name: type,
         url: './' + page + '.html',
         pageParam: pageParam,
-        animation: animation,
+        animation: {
+            type: "movein",
+            duration: 300
+        },
         reload: reload,
         bounces: false
     });
 }
 </script>
+
 </html>

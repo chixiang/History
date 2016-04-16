@@ -15,7 +15,7 @@
     <div id="wrap" class="flex-wrap flex-vertical">
         <header id='header'>
             <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeFrame();" class="button button-raised button-royal">
+                <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
                     返回
                 </a>
                 <div id="middle">
@@ -90,9 +90,9 @@
  */
 apiready = function() {
     $api.fixIos7Bar($api.dom('header'));
-    window.closeFrame = function(frameName) {
-        setBlurNone();
-        api.closeFrame();
+    window.closeWin = function(winName) {
+        // setBlurNone();
+        api.closeWin();
     }
 
     // 设置页面字段readonly
