@@ -129,6 +129,7 @@ apiready = function() {
         host: 'https://d.apicloud.com'
     });
 
+    history_id = api.pageParam.data.history_id;
     physical_id = api.pageParam.data.id;
 
     // 如果主界面传入了id，代表修改，则从数据库查询已有数据
@@ -198,7 +199,7 @@ function savePhysical() {
         }, function(ret, err) {
             if (ret) {
                 returnPhysicalId(ret.id);
-                refreshViewPhysical();
+                // refreshViewPhysical();
                 api.hideProgress();
                 api.closeWin();
             } else {
@@ -226,9 +227,25 @@ function savePhysical() {
         }, function(ret, err) {
             if (ret) {
                 returnPhysicalId(ret.id);
-                refreshViewPhysical();
-                api.hideProgress();
-                api.closeWin();
+                // refreshViewPhysical(ret.id);
+                // 如果history_id不为空，表示从viewPhysical直接修改，而physical_id为空，则为新增，新增
+                // 之后还要将新生成的physical_id和history_id关联起来
+                if (history_id != "" && history_id != undefined && history_id != null) {
+                    model.updateById({
+                        class: 'caseHistory',
+                        id: history_id,
+                        value: {
+                            physical_pointer: ret.id
+                        }
+                    }, function(ret, err) {
+                        if (ret) {
+                            api.hideProgress();
+                            api.closeWin();
+                        } else {
+                            alert("新增体检信息失败！" + JSON.stringify(err));
+                        }
+                    });
+                }
             } else {
                 alert("新增体检信息失败！" + JSON.stringify(err));
             }
@@ -256,10 +273,12 @@ function returnPhysicalId(physical_id) {
  */
 function refreshViewPhysical() {
     api.sendEvent({
-        name: 'refreshViewPhysical'
+        name: 'refreshViewPhysical',
+        extra: {
+            physical_id: physical_id
+        }
     });
 }
-
 </script>
 
 </html>

@@ -30,7 +30,7 @@
         </header>
         <div id="main">
             <div class="field" onclick="openWin('patient');">
-                <div class="field_name">维护患者信息</div>
+                <div class="field_name"><span id="patient_info">维护患者信息</span></div>
                 <div class="more"><span>&gt;</span></div>
             </div>
             <div class="field" onclick="openWin('physical');">
@@ -96,6 +96,19 @@ apiready = function() {
     }, function(ret, err) {
         if (ret && ret.value) {
             patient_pointer = ret.value;
+            var name = "";
+            var gender = "";
+            var age = "";
+            if (patient_pointer.name != "") {
+                name = patient_pointer.name;
+            }
+            if (patient_pointer.gender != "" && patient_pointer.gender != undefined && patient_pointer.gender != null) {
+                gender = " - " + patient_pointer.gender;
+            }
+            if (patient_pointer.age != "" && patient_pointer.age != undefined && patient_pointer.age != null) {
+                age = " - " + patient_pointer.age + "岁";
+            }
+            $api.byId('patient_info').innerText = name + gender + age;
         }
     });
 

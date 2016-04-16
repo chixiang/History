@@ -105,55 +105,22 @@ apiready = function() {
     $api.byId('diagnosis').value = data.diagnosis;
     $api.byId('chief_complaint').value = data.chief_complaint;
     $api.byId('treatment').value = data.treatment;
+    history_id = data.id;
     patient_pointer = data.patient_pointer;
     physical_pointer = data.physical_pointer;
     $api.byId('patient_info').innerText = patient_pointer.name + " - " + patient_pointer.gender + " - " + patient_pointer.age + "岁";
 
-}
-
-/**
- * [openFrame 打开子页面]
- * @param  {[type]} page [子页面名称]
- * @return {[type]}      [description]
- */
-function openFrame(type) {
-    // 设置毛玻璃效果
-    // setBlur("wrap", true);
-    switch (type) {
-        case "viewPatient":
-            pageParam = {
-                "data": patient_pointer
-            }
-            break;
-        case "viewPhysical":
-            pageParam = {
-                "data": {
-                    id: patient_pointer
-                }
-            }
-            break;
-        default:
-            break;
-    }
-
-    api.openFrame({
-        name: type,
-        url: './' + type + '.html',
-        pageParam: pageParam,
-        reload: true,
-        bounces: false,
-        rect: {
-            marginLeft: 0,
-            marginTop: 0,
-            marginBottom: 0,
-            marginRight: 0
-        },
-        animation: {
-            type: "movein",
-            subType: "from_right",
-            duration: 300
+    api.addEventListener({
+        name: 'returnPhysicalId'
+    }, function(ret, err) {
+        if (ret && ret.value) {
+            physical_pointer = ret.value.physical_id;
+            api.sendEvent({
+                name: 'reloadHistory'
+            })
         }
-    })
+    });
+
 }
 
 /**
@@ -185,7 +152,8 @@ function openWin(type) {
             page = "viewPhysical";
             pageParam = {
                 "data": {
-                    "id": physical_pointer
+                    "id": physical_pointer,
+                    "history_id": history_id
                 }
             }
             break;
