@@ -9,7 +9,7 @@ var apiready = function() {
 
     // 接收刷新列表event
     api.addEventListener({
-        name: 'reloadHistory'
+        name: 'reloadHistoryList'
     }, function(ret, err) {
         if (ret) {
             loadList("refresh");

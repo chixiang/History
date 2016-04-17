@@ -8,6 +8,13 @@ function getDate() {
     return formatDate.replace(/\b(\w)\b/g, '0$1');
 }
 
+function setHistory(data) {
+    $api.byId('consultation_department').value = data.consultation_department;
+    $api.byId('diagnosis').value = data.diagnosis;
+    $api.byId('chief_complaint').value = data.chief_complaint;
+    $api.byId('treatment').value = data.treatment;
+}
+
 /**
  * [setPatient 给患者信息页面字段赋值]
  * @param {[type]} data [患者信息data]

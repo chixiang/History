@@ -252,22 +252,22 @@ function saveHistory() {
             id: api.pageParam.data.id,
             value: {
                 // patient_id: patient_pointer.id,
-                record_date: getDate(),
+                // record_date: getDate(),
                 consultation_department: consultation_department.value,
                 chief_complaint: chief_complaint.value,
                 diagnosis: diagnosis.value,
                 treatment: treatment.value,
-                record_doctor: "me",
-                patient_pointer: patient_pointer.id,
+                // record_doctor: "me",
+                // patient_pointer: patient_pointer.id,
                 physical_pointer: physical_pointer
             }
         }, function(ret, err) {
             if (ret) {
-                // alert("修改病历成功！");
                 api.toast({
                     msg: "修改病历成功！"
                 });
                 refreshHistoryList();
+                refreshHistory();
                 // 修改成功后暂时没有刷新浏览页面，直接返回列表页面
                 // returnMain();
                 api.closeWin();
@@ -350,6 +350,12 @@ function openWin(type) {
  * @return {[type]} [description]
  */
 function refreshHistoryList() {
+    api.sendEvent({
+        name: 'reloadHistoryList'
+    })
+}
+
+function refreshHistory() {
     api.sendEvent({
         name: 'reloadHistory'
     })
