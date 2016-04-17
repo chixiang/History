@@ -1,0 +1,120 @@
+html body {
+    height: 100%;
+    border: 0;
+    padding: 0;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-flex-flow: column;
+    flex-flow: column;
+    background-color: #F7F3EA;
+}
+
+header {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    color: #FFF;
+    height: 50px;
+    line-height: 50px;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
+    background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
+    background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
+}
+
+div {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
+a,
+a:visited {
+    text-decoration: none;
+}
+
+#nav {
+    display: -webkit-box;
+    height: 50px;
+    line-height: 50px;
+}
+
+#left {
+    width: 60px;
+}
+
+#left>span {
+    margin-left: 18px;
+    font-size: 16px;
+}
+
+#middle {
+    -webkit-box-flex: 1;
+    width: 100%;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+}
+
+#title {
+    font-size: 18px;
+    text-align: center;
+}
+
+#right {
+    width: 60px;
+}
+
+#right>span {
+    margin-right: 18px;
+    font-size: 16px;
+}
+
+#main {
+    width: 100%;
+    margin-top: 50px;
+    background: #F7F3EA;
+}
+
+.field {
+    height: 50px;
+    font-size: 18px;
+    line-height: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #655A55;
+    border-bottom: 1px;
+    border-style: solid;
+    border-color: #EED6B0;
+}
+
+.no_underline {
+    border-bottom: 0px;
+}
+
+.field_name {
+    float: left;
+}
+
+.more {
+    float: right;
+}
+
+input {
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    margin-left: 10px;
+    width: 150px;
+    overflow-x: visible;
+    overflow-y: visible;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 18px;
+}
+
+#info {
+    margin-left: 10px;
+    margin-right: 10px;
+}
