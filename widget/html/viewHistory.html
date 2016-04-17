@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
-    <title>病历信息</title>
+    <title>病历浏览</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/history.css" />
@@ -16,59 +16,66 @@
 <body>
     <div id="wrap" class="flex-wrap flex-vertical">
         <header id='header'>
-            <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
                     返回
                 </a>
-                <div id="middle">
-                    <span id="title">病历信息</span>
-                </div>
-                <a id="right" tapmode="" onclick="openWin('modiHistory');" class="button button-raised button-royal">
+            <div id="middle">
+                <span id="title">病历浏览</span>
+            </div>
+            <a id="right" tapmode="" onclick="openWin('modiHistory');" class="button button-raised button-royal">
                     修改
                 </a>
-            </nav>
         </header>
-        <div id="main">
-            <div class="field" onclick="openWin('viewPatient');">
-                <div class="field_name"><span id="patient_info"></span></div>
-                <div class="more"><span>&gt;</span></div>
-            </div>
-            <div class="field" onclick="openWin('viewPhysical');">
-                <div class="field_name">体检</div>
-                <div class="more"><span>&gt;</span></div>
-            </div>
-            <div class="field">
-                <div class="field_name">辅助检查</div>
-                <div class="more"><span>&gt;</span></div>
-            </div>
-            <div class="field">
-                <div class="field_name">会诊科室:</div>
-                <div>
-                    <input type="text" id="consultation_department" />
+        <div id="main" class="flex-con">
+            <div class="groupName">患者</div>
+            <div class="group">
+                <div class="field bottom" onclick="openWin('viewPatient');">
+                    <div class="key">患者信息</div>
+                    <div class="value more"><span>&gt;</span></div>
                 </div>
             </div>
-            <div class="field">
-                <div class="field_name">主诉:</div>
-                <div>
-                    <input type="text" id="chief_complaint" />
+            <div class="groupName">检查</div>
+            <div class="group">
+                <div class="field" onclick="openWin('viewPhysical');">
+                    <div class="key">体检信息</div>
+                    <div class="value more"><span>&gt;</span></div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">辅助检查</div>
+                    <div class="value more"><span>&gt;</span></div>
                 </div>
             </div>
-            <div class="field textarea">
-                <div class="field_name">诊断:</div>
-                <div>
-                    <textarea id="diagnosis"></textarea>
+            <div class="groupName">诊疗</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">会诊科室</div>
+                    <div class="value">
+                        <input type="text" id="consultation_department" />
+                    </div>
                 </div>
-            </div>
-            <div class="field textarea">
-                <div class="field_name">治疗:</div>
-                <div>
-                    <textarea id="treatment"></textarea>
+                <div class="field">
+                    <div class="key">主诉</div>
+                    <div class="value">
+                        <input type="text" id="chief_complaint" />
+                    </div>
                 </div>
-            </div>
-            <div class="field textarea">
-                <div class="field_name">随访:</div>
-                <div>
-                    <textarea id="follow_up"></textarea>
+                <div class="field textarea_field">
+                    <div class="textarea_key">诊断</div>
+                    <div class="textarea_value">
+                        <textarea id="diagnosis"></textarea>
+                    </div>
+                </div>
+                <div class="field textarea_field">
+                    <div class="textarea_key">治疗</div>
+                    <div class="textarea_value">
+                        <textarea id="treatment"></textarea>
+                    </div>
+                </div>
+                <div class="field textarea_field bottom">
+                    <div class="textarea_key">随访</div>
+                    <div class="textarea_value">
+                        <textarea id="follow_up"></textarea>
+                    </div>
                 </div>
             </div>
         </div>

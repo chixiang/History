@@ -46,31 +46,31 @@
             <div class="groupName">诊疗</div>
             <div class="group">
                 <div class="field" onclick="openPicker('consultation_department');">
-                    <div class="key">会诊科室：</div>
+                    <div class="key">会诊科室</div>
                     <div class="value">
                         <input type="text" id="consultation_department" />
                     </div>
                 </div>
                 <div class="field">
-                    <div class="key">主诉：</div>
+                    <div class="key">主诉</div>
                     <div class="value">
                         <input type="text" id="chief_complaint" />
                     </div>
                 </div>
                 <div class="field textarea_field">
-                    <div class="textarea_key">诊断：</div>
+                    <div class="textarea_key">诊断</div>
                     <div class="textarea_value">
                         <textarea id="diagnosis" placeholder="请输入诊断信息"></textarea>
                     </div>
                 </div>
                 <div class="field textarea_field">
-                    <div class="textarea_key">治疗：</div>
+                    <div class="textarea_key">治疗</div>
                     <div class="textarea_value">
                         <textarea id="treatment" placeholder="请输入治疗信息"></textarea>
                     </div>
                 </div>
                 <div class="field textarea_field bottom">
-                    <div class="textarea_key">随访：</div>
+                    <div class="textarea_key">随访</div>
                     <div class="textarea_value">
                         <textarea id="follow_up" placeholder="请输入随访信息"></textarea>
                     </div>
@@ -269,7 +269,8 @@ function saveHistory() {
                 });
                 refreshHistoryList();
                 // 修改成功后暂时没有刷新浏览页面，直接返回列表页面
-                returnMain();
+                // returnMain();
+                api.closeWin();
             } else {
                 alert("修改病历失败！");
             }
