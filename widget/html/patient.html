@@ -162,7 +162,7 @@ function savePatient() {
 
     showProgress();
 
-    if (patient_id != "") {
+    if (patient_id != "" && patient_id != undefined && patient_id != null) {
         model.updateById({
             class: 'patient',
             id: patient_id,

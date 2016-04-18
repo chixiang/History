@@ -222,7 +222,7 @@ function savePhysical() {
 
     showProgress();
 
-    if (physical_id != "") {
+    if (physical_id != "" && physical_id != undefined && physical_id != null) {
         model.updateById({
             class: 'physical',
             id: physical_id,
