@@ -8,6 +8,63 @@ function getDate() {
     return formatDate.replace(/\b(\w)\b/g, '0$1');
 }
 
+/**
+ * [getAge description]
+ * @param  {[type]} age [description]
+ * @return {[type]}     [description]
+ */
+function getAge(age) {
+    var r = age.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+    if (r == null) {
+        return false;
+    }
+    var d = new Date(r[1], r[3] - 1, r[4]);
+    if (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4]) {
+        var Y = new Date().getFullYear();
+        // $api.byId('age').value = (Y - r[1]);
+        return (Y - r[1]);
+    }
+}
+
+/**
+ * [getHistory description]
+ * @param  {[type]} history_id [description]
+ * @return {[type]}            [description]
+ */
+function getHistory(history_id) {
+    showProgress();
+    model = api.require('model');
+    query = api.require('query');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            model.findById({
+                class: "caseHistory",
+                id: history_id
+            }, function(ret, err) {
+                if (err) {
+                    hideProgress();
+                    alert(JSON.stringify(err));
+                } else {
+                    if (ret) {
+                        hideProgress();
+                        setHistory(ret);
+                        return ret;
+                    }
+                }
+            });
+        }
+    });
+}
+
+/**
+ * [setHistory description]
+ * @param {[type]} data [description]
+ */
 function setHistory(data) {
     $api.byId('consultation_department').value = data.consultation_department;
     $api.byId('diagnosis').value = data.diagnosis;
@@ -62,6 +119,12 @@ function setBlur(id, isTrue) {
     } else {
         $api.byId(id).style.webkitFilter = "";
     }
+}
+
+function setBlurNone() {
+    api.sendEvent({
+        name: 'setBlurNone'
+    })
 }
 
 /**
@@ -130,10 +193,10 @@ function openPicker(type) {
  * @return {[type]}       [description]
  */
 function showProgress(title, text) {
-    if(title == undefined || title == null || title == "") {
+    if (title == undefined || title == null || title == "") {
         title = "处理中...";
     }
-    if(text == undefined || text == null || text == "") {
+    if (text == undefined || text == null || text == "") {
         text = "请耐心等待";
     }
 
@@ -143,5 +206,63 @@ function showProgress(title, text) {
         title: title,
         text: text,
         modal: false
+    });
+}
+
+function hideProgress() {
+    api.hideProgress();
+}
+
+function patientAddEvent(patient_id) {
+    api.sendEvent({
+        name: 'patientAddEvent',
+        extra: {
+            patient_id: patient_id
+        }
+    });
+}
+
+function patientModiEvent(patient_id) {
+    api.sendEvent({
+        name: 'patientModiEvent',
+        extra: {
+            patient_id: patient_id
+        }
+    });
+}
+
+function physicalAddEvent(physical_id) {
+    api.sendEvent({
+        name: 'physicalAddEvent',
+        extra: {
+            physical_id: physical_id
+        }
+    });
+}
+
+function physicalModiEvent(physical_id) {
+    api.sendEvent({
+        name: 'physicalModiEvent',
+        extra: {
+            physical_id: physical_id
+        }
+    });
+}
+
+function historyAddEvent(history_id) {
+    api.sendEvent({
+        name: 'historyAddEvent',
+        extra: {
+            history_id: history_id
+        }
+    });
+}
+
+function historyModiEvent(history_id) {
+    api.sendEvent({
+        name: 'historyModiEvent',
+        extra: {
+            history_id: history_id
+        }
     });
 }

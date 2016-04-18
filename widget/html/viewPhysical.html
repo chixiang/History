@@ -126,8 +126,6 @@
  * @return {[type]} [description]
  */
 apiready = function() {
-    // $api.fixIos7Bar($api.dom('header'));
-
     $api.attr($api.byId('vod'), 'readonly', 'true');
     $api.attr($api.byId('vos'), 'readonly', 'true');
     $api.attr($api.byId('corrected_vod'), 'readonly', 'true');
@@ -153,35 +151,28 @@ apiready = function() {
     history_id = api.pageParam.data.history_id;
     physical_id = api.pageParam.data.id;
 
-    // 如果主界面传入了id，代表修改，则从数据库查询已有数据
     if (physical_id != undefined && physical_id != null && physical_id != "") {
-        showProgress();
         getPhysical();
     }
-    // else {
-    //     alert("无体检信息！");
-    //     api.closeWin();
-    // }
 
     window.closeWin = function(winName) {
         api.closeWin();
     }
 
+    // 如果physical修改或者新增，则需刷新本页面
     api.addEventListener({
-        name: 'refreshViewPhysical'
+        name: 'physicalModiEvent'
     }, function(ret, err) {
         if (ret) {
-            showProgress();
+            physical_id = ret.value.physical_id;
             getPhysical();
         }
     });
-
     api.addEventListener({
-        name: 'returnPhysicalId'
+        name: 'physicalAddEvent'
     }, function(ret, err) {
-        if (ret && ret.value) {
+        if (ret) {
             physical_id = ret.value.physical_id;
-            showProgress();
             getPhysical();
         }
     });
@@ -193,6 +184,7 @@ apiready = function() {
  * @return {[type]} [description]
  */
 function getPhysical() {
+    showProgress();
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             model.findById({
@@ -206,7 +198,7 @@ function getPhysical() {
                         setPhysical(ret);
                     }
                 }
-                api.hideProgress();
+                hideProgress();
             });
         }
     });
@@ -236,14 +228,6 @@ function modiPhysical() {
 
 }
 
-function returnPhysicalId(physical_id) {
-    api.sendEvent({
-        name: 'returnPhysicalId',
-        extra: {
-            physical_id: physical_id
-        }
-    });
-}
 </script>
 
 </html>

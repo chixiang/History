@@ -85,17 +85,9 @@
  * @return {[type]} [description]
  */
 apiready = function() {
-    // $api.fixIos7Bar($api.dom('header'));
     window.closeWin = function(winName) {
         api.closeWin();
     }
-
-    // 取消毛玻璃效果
-    // api.addEventListener({
-    //     name: 'setBlurNone'
-    // }, function(ret, err) {
-    //     setBlur('wrap', false);
-    // });
 
     // 设置字段为readonly
     $api.attr($api.byId('patient_info'), 'readonly', 'true');
@@ -106,66 +98,15 @@ apiready = function() {
 
     // 设置需要显示的字段值
     data = api.pageParam;
-    // $api.byId('consultation_department').value = data.consultation_department;
-    // $api.byId('diagnosis').value = data.diagnosis;
-    // $api.byId('chief_complaint').value = data.chief_complaint;
-    // $api.byId('treatment').value = data.treatment;
-    setHistory(data);
-    history_id = data.id;
-    patient_pointer = data.patient_pointer;
-    physical_pointer = data.physical_pointer;
-    // $api.byId('patient_info').innerText = patient_pointer.name + " - " + patient_pointer.gender + " - " + patient_pointer.age + "岁";
+    data = getHistory(data.history_id);
 
     api.addEventListener({
-        name: 'returnPhysicalId'
-    }, function(ret, err) {
-        if (ret && ret.value) {
-            physical_pointer = ret.value.physical_id;
-            api.sendEvent({
-                name: 'reloadHistoryList'
-            })
-        }
-    });
-
-    api.addEventListener({
-        name: 'reloadHistory'
+        name: 'historyModiEvent'
     }, function(ret, err) {
         if (ret) {
-            getHistory(history_id);
+            getHistory(ret.value.history_id);
         }
     });
-
-}
-
-
-function getHistory(history_id) {
-    showProgress();
-    model = api.require('model');
-    query = api.require('query');
-    model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
-    });
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            model.findById({
-                class: "caseHistory",
-                id: history_id
-            }, function(ret, err) {
-                if (err) {
-                    alert(JSON.stringify(err));
-                } else {
-                    if (ret) {
-                        data = ret;
-                        setHistory(data);
-                    }
-                }
-                api.hideProgress();
-            });
-        }
-    });
-
 }
 
 /**
@@ -182,7 +123,7 @@ function openWin(type) {
         case "modiHistory":
             page = "history";
             pageParam = {
-                "data": data,
+                "history_id": data.history_id,
                 "type": "modi"
             };
             reload = false;
@@ -190,15 +131,18 @@ function openWin(type) {
         case "viewPatient":
             page = "viewPatient";
             pageParam = {
-                "data": patient_pointer
+                "data": {
+                    "id": data.patient_pointer,
+                    "history_id": data.history_id
+                }
             }
             break;
         case "viewPhysical":
             page = "viewPhysical";
             pageParam = {
                 "data": {
-                    "id": physical_pointer,
-                    "history_id": history_id
+                    "id": data.physical_pointer,
+                    "history_id": data.history_id
                 }
             }
             break;

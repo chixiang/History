@@ -20,7 +20,7 @@
             <div id="middle">
                 <span id="title">病历维护</span>
             </div>
-            <a id="right" tapmode="" onclick="savePatient();api.hideProgress();" class="button button-raised button-royal">
+            <a id="right" tapmode="" onclick="saveHistory();" class="button button-raised button-royal">
                     保存
                 </a>
         </header>
@@ -85,49 +85,19 @@
  * @return {[type]} [description]
  */
 apiready = function() {
-    // $api.fixIos7Bar($api.dom('header'));
     window.closeWin = function(winName) {
-        // 发送event告诉列表页面刷新
-        refreshHistoryList();
         api.closeWin();
     }
 
     userName = $api.getStorage("userName");
 
-    patient_pointer = [];
-    physical_pointer = "";
+    history_id = "";
+    patient_id = "";
+    physical_id = "";
+    data = [];
 
-    // 接收患者信息页面修改的数据
-    api.addEventListener({
-        name: 'returnPatient'
-    }, function(ret, err) {
-        if (ret && ret.value) {
-            patient_pointer = ret.value;
-            var name = "";
-            var gender = "";
-            var age = "";
-            if (patient_pointer.name != "") {
-                name = patient_pointer.name;
-            }
-            if (patient_pointer.gender != "" && patient_pointer.gender != undefined && patient_pointer.gender != null) {
-                gender = " - " + patient_pointer.gender;
-            }
-            if (patient_pointer.age != "" && patient_pointer.age != undefined && patient_pointer.age != null) {
-                age = " - " + patient_pointer.age + "岁";
-            }
-            $api.byId('patient_info').innerText = name + gender + age;
-        }
-    });
-
-    // 接受体检信息页面修改的数据
-    api.addEventListener({
-        name: 'returnPhysicalId'
-    }, function(ret, err) {
-        if (ret && ret.value) {
-            physical_pointer = ret.value.physical_id;
-        }
-    });
-
+    // 会诊科室使用选择器
+    $api.attr($api.byId('consultation_department'), 'readonly', 'true');
     // 回填Picker返回的会诊科室
     api.addEventListener({
         name: 'returnCondep'
@@ -137,97 +107,32 @@ apiready = function() {
         }
     });
 
-    // 会诊科室使用选择器
-    $api.attr($api.byId('consultation_department'), 'readonly', 'true');
-
-    // 如果是修改，则取传入的数据赋值到页面
+    // 如果是修改，则先查询
     type = api.pageParam.type;
     if (type == "modi") {
-        var data = api.pageParam.data;
-        $api.byId('consultation_department').value = data.consultation_department;
-        $api.byId('diagnosis').value = data.diagnosis;
-        $api.byId('chief_complaint').value = data.chief_complaint;
-        $api.byId('treatment').value = data.treatment;
-
-        patient_pointer = data.patient_pointer;
-        physical_pointer = data.physical_pointer;
+        history_id = api.pageParam.history_id;
+        data = getHistory(history_id);
+        patient_id = data.patient_pointer;
+        physical_id = data.physical_pointer;
     }
-}
 
-/**
- * [savePatient 保存患者信息，成功后保存病历信息]
- * @return {[type]} [description]
- */
-function savePatient() {
-    if (patient_pointer.name == '') {
-        alert("未输入患者姓名");
-        return;
-    }
-    // api.showProgress({
-    //     style: 'default',
-    //     animationType: 'fade',
-    //     title: '云端保存中...',
-    //     text: '先喝杯茶...',
-    //     modal: false
-    // });
-    showProgress();
-    var model = api.require('model');
-    model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
+    // 新增患者信息，本页面需要知道patient_id
+    api.addEventListener({
+        name: 'patientAddEvent'
+    }, function(ret, err) {
+        if (ret && ret.value) {
+            patient_id = ret.value.patient_id;
+        }
     });
-    if (type == "modi") { // 修改
-        model.updateById({
-            class: 'patient',
-            id: api.pageParam.data.patient_pointer.id,
-            value: {
-                name: patient_pointer.name,
-                gender: patient_pointer.gender,
-                birthday: patient_pointer.birthday,
-                age: patient_pointer.age,
-                admission_number: patient_pointer.admission_number,
-                outpatient_number: patient_pointer.outpatient_number,
-                phone: patient_pointer.phone,
-                address: patient_pointer.address,
-                job: patient_pointer.job
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // 保存体检信息
-                saveHistory();
-                return true;
-            } else {
-                alert("修改患者信息失败，请重试！");
-                return false;
-            }
-        });
-    } else { // 新增
-        model.insert({
-            class: 'patient',
-            value: {
-                name: patient_pointer.name,
-                gender: patient_pointer.gender,
-                birthday: patient_pointer.birthday,
-                age: patient_pointer.age,
-                admission_number: patient_pointer.admission_number,
-                outpatient_number: patient_pointer.outpatient_number,
-                phone: patient_pointer.phone,
-                address: patient_pointer.address,
-                job: patient_pointer.job
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // 首次新增需使用patient_pointer的id和病历关联
-                patient_pointer.id = ret.id;
-                saveHistory();
-                return true;
-            } else {
-                alert("保存患者信息失败，请重试！");
-                return false;
-            }
-        });
-    }
+
+    // 新增体检信息，本页面需要知道physical_id
+    api.addEventListener({
+        name: 'physicalAddEvent'
+    }, function(ret, err) {
+        if (ret && ret.value) {
+            physical_id = ret.value.physical_id;
+        }
+    });
 }
 
 /**
@@ -235,6 +140,12 @@ function savePatient() {
  * @return {[type]} [description]
  */
 function saveHistory() {
+    showProgress();
+    if (patient_id == undefined || patient_id == null || patient_id == "") {
+        alert("请首先新增患者信息");
+        return;
+    }
+
     var consultation_department = $api.byId('consultation_department');
     var chief_complaint = $api.byId('chief_complaint');
     var diagnosis = $api.byId('diagnosis');
@@ -249,57 +160,50 @@ function saveHistory() {
     if (type == "modi") {
         model.updateById({
             class: 'caseHistory',
-            id: api.pageParam.data.id,
+            id: history_id,
             value: {
-                // patient_id: patient_pointer.id,
-                // record_date: getDate(),
                 consultation_department: consultation_department.value,
                 chief_complaint: chief_complaint.value,
                 diagnosis: diagnosis.value,
                 treatment: treatment.value,
-                // record_doctor: "me",
-                // patient_pointer: patient_pointer.id,
-                physical_pointer: physical_pointer
+                physical_pointer: physical_id
             }
         }, function(ret, err) {
             if (ret) {
                 api.toast({
                     msg: "修改病历成功！"
                 });
-                refreshHistoryList();
-                refreshHistory();
-                // 修改成功后暂时没有刷新浏览页面，直接返回列表页面
-                // returnMain();
+                historyModiEvent(history_id);
                 api.closeWin();
             } else {
                 alert("修改病历失败！");
             }
+            hideProgress();
         });
     } else {
         model.insert({
             class: 'caseHistory',
             value: {
-                // patient_id: patient_pointer.id,
                 record_date: getDate(),
                 consultation_department: consultation_department.value,
                 chief_complaint: chief_complaint.value,
                 diagnosis: diagnosis.value,
                 treatment: treatment.value,
                 record_doctor: userName,
-                patient_pointer: patient_pointer.id,
-                physical_pointer: physical_pointer
+                patient_pointer: patient_id,
+                physical_pointer: physical_id
             }
         }, function(ret, err) {
             if (ret) {
-                // alert("新增病历成功！");
                 api.toast({
                     msg: "新增病历成功！"
                 });
-                refreshHistoryList();
-                window.closeWin();
+                historyAddEvent(ret.id);
+                api.closeWin();
             } else {
                 alert("新增病历失败！");
             }
+            hideProgress();
         });
     }
 }
@@ -313,11 +217,13 @@ function openWin(type) {
     var data = {};
     switch (type) {
         case 'patient':
-            data = patient_pointer;
+            data = {
+                "id": patient_id
+            };
             break;
         case 'physical':
             data = {
-                "id": physical_pointer
+                "id": physical_id
             };
             break;
         default:
@@ -331,12 +237,6 @@ function openWin(type) {
         },
         reload: true,
         bounces: false,
-        // rect: {
-        //     marginLeft: 0,
-        //     marginTop: 0,
-        //     marginBottom: 0,
-        //     marginRight: 0
-        // },
         animation: {
             type: "movein",
             subType: "from_right",
@@ -345,36 +245,6 @@ function openWin(type) {
     })
 }
 
-/**
- * [refreshHistoryList 发送event给主页面刷新列表]
- * @return {[type]} [description]
- */
-function refreshHistoryList() {
-    api.sendEvent({
-        name: 'reloadHistoryList'
-    })
-}
-
-function refreshHistory() {
-    api.sendEvent({
-        name: 'reloadHistory'
-    })
-}
-
-/**
- * [returnMain description]
- * @return {[type]} [description]
- */
-function returnMain() {
-    api.closeToWin({
-        name: 'root',
-        animation: {
-            type: 'flip',
-            subType: 'from_bottom',
-            duration: 500
-        }
-    });
-}
 </script>
 
 </html>

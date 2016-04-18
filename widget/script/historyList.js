@@ -3,13 +3,18 @@
  * @return {[type]} [description]
  */
 var apiready = function() {
-    // $api.fixIos7Bar($api.dom('header'));
-
     userName = $api.getStorage("userName");
 
     // 接收刷新列表event
     api.addEventListener({
-        name: 'reloadHistoryList'
+        name: 'historyAddEvent'
+    }, function(ret, err) {
+        if (ret) {
+            loadList("refresh");
+        }
+    });
+    api.addEventListener({
+        name: 'historyModiEvent'
     }, function(ret, err) {
         if (ret) {
             loadList("refresh");
@@ -94,7 +99,7 @@ var apiready = function() {
             historyList.getDataByIndex({
                 index: ret.index
             }, function(ret, err) {
-                viewHistory(ret.data);
+                viewHistory(ret.data.id);
             });
         }
 
@@ -103,7 +108,7 @@ var apiready = function() {
             historyList.getDataByIndex({
                 index: ret.index
             }, function(ret, err) {
-                modiHistory(ret.data);
+                modiHistory(ret.data.id);
             });
         }
 
@@ -192,10 +197,6 @@ function loadList(type) {
                 qid: ret.qid,
                 column: 'patient_pointer'
             });
-            // query.include({
-            //     qid: ret.qid,
-            //     column: 'physical_pointer'
-            // });
             if (userName != "admin") {
                 query.whereEqual({
                     qid: queryId1,
@@ -226,19 +227,7 @@ function loadList(type) {
                                 follow_up_id: ret[idx].follow_up_id,
                                 record_doctor: ret[idx].record_doctor,
                                 patient_pointer: ret[idx].patient_pointer,
-                                // patient_pointer_id: ret[idx].patient_pointer.id,
                                 physical_pointer: ret[idx].physical_pointer,
-                                // physical_pointer_id: ret[idx].physical_pointer.id,
-                                // name: ret[idx].patient_pointer.name,
-                                // gender: ret[idx].patient_pointer.gender,
-                                // birthday: ret[idx].patient_pointer.birthday,
-                                // age: ret[idx].patient_pointer.age,
-                                // admission_number: ret[idx].patient_pointer.admission_number,
-                                // outpatient_number: ret[idx].patient_pointer.outpatient_number,
-                                // phone: ret[idx].patient_pointer.phone,
-                                // address: ret[idx].patient_pointer.address,
-                                // job: ret[idx].patient_pointer.job,
-                                // 给UIListView展示字段赋值
                                 title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
                                 subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,
                                 remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
@@ -328,11 +317,13 @@ function openWin(type) {
  * @param  {[type]} data [description]
  * @return {[type]}      [description]
  */
-function viewHistory(data) {
+function viewHistory(history_id) {
     api.openWin({
         name: "history",
         url: './html/viewHistory.html',
-        pageParam: data,
+        pageParam: {
+            history_id: history_id
+        },
         reload: false,
         bounces: false
     });
@@ -343,12 +334,12 @@ function viewHistory(data) {
  * @param  {[type]} data [description]
  * @return {[type]}      [description]
  */
-function modiHistory(data) {
+function modiHistory(history_id) {
     api.openWin({
         name: "modiHistory",
         url: './html/history.html',
         pageParam: {
-            data: data,
+            history_id: history_id,
             type: "modi"
         },
         reload: false,

@@ -20,7 +20,7 @@
             <div id="middle">
                 <span id="title">患者信息</span>
             </div>
-            <a id="right" tapmode="" onclick="" class="button button-raised button-royal">
+            <a id="right" tapmode="" onclick="modiPatient();" class="button button-raised button-royal">
                 修改
             </a>
         </header>
@@ -103,6 +103,13 @@ apiready = function() {
         api.closeWin();
     }
 
+    history_id = api.pageParam.data.history_id;
+    patient_id = api.pageParam.data.id;
+
+    if (patient_id != undefined && patient_id != null && patient_id != "") {
+        getPatient();
+    }
+
     // 设置页面字段readonly
     $api.attr($api.byId('name'), 'readonly', 'true');
     $api.attr($api.byId('gender'), 'readonly', 'true');
@@ -114,18 +121,66 @@ apiready = function() {
     $api.attr($api.byId('address'), 'readonly', 'true');
     $api.attr($api.byId('job'), 'readonly', 'true');
 
-    // 从病历主页面传的值，赋给本页面
-    if (api.pageParam.data.length != 0) {
-        data = api.pageParam.data;
-        setPatient(data);
-    }
+    // 如果patient修改（不会从此页面发起patient新增，patient新增只能从history发起），刷新本页面
+    api.addEventListener({
+        name: 'patientModiEvent'
+    }, function(ret, err) {
+        if (ret) {
+            patient_id = ret.value.patient_id;
+            getPatient();
+        }
+    });
 }
 
-function setBlurNone() {
-    api.sendEvent({
-        name: 'setBlurNone'
-    })
+/**
+ * [getPatient description]
+ * @return {[type]} [description]
+ */
+function getPatient() {
+    showProgress();
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            model.findById({
+                class: "patient",
+                id: patient_id
+            }, function(ret, err) {
+                if (err) {
+                    alert(JSON.stringify(err));
+                } else {
+                    if (ret) {
+                        setPatient(ret);
+                    }
+                }
+                api.hideProgress();
+            });
+        }
+    });
 }
+
+/**
+ * [modiPatient description]
+ * @return {[type]} [description]
+ */
+function modiPatient() {
+    api.openWin({
+        name: 'patient',
+        url: './patient.html',
+        pageParam: {
+            data: {
+                id: patient_id,
+                history_id: history_id
+            }
+        },
+        animation: {
+            type: "movein",
+            duration: 300
+        },
+        reload: true,
+        bounces: false
+    });
+
+}
+
 </script>
 
 </html>
