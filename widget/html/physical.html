@@ -291,6 +291,8 @@ function savePhysical() {
                         }
                     });
                 }
+                hideProgress();
+                api.closeWin();
             } else {
                 alert("新增体检信息失败！" + JSON.stringify(err));
                 hideProgress();

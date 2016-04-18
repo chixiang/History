@@ -50,7 +50,7 @@ var apiready = function() {
         },
         data: historyListData,
         rightBtns: [{
-            bgColor: '#EED6B0',
+            bgColor: '#B3A689',
             activeBgColor: '',
             width: 70,
             title: '修改',
@@ -59,7 +59,7 @@ var apiready = function() {
             icon: '',
             iconWidth: 20
         }, {
-            bgColor: '#EED6B0',
+            bgColor: '#B3A689',
             activeBgColor: '',
             width: 70,
             title: '删除',
@@ -69,10 +69,10 @@ var apiready = function() {
             iconWidth: 20
         }],
         styles: {
-            borderColor: '#EED6B0',
+            borderColor: '#B3A689',
             item: {
                 bgColor: '#F7F3EA',
-                activeBgColor: '#EED6B0',
+                activeBgColor: '#B3A689',
                 height: 80,
                 imgWidth: 40,
                 imgHeight: 40,
