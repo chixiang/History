@@ -97,6 +97,14 @@
  * @return {[type]} [description]
  */
 apiready = function() {
+    model = api.require('model');
+    query = api.require('query');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+
     $api.attr($api.byId('age'), 'readonly', 'true');
     $api.attr($api.byId('gender'), 'readonly', 'true');
     $api.attr($api.byId('birthday'), 'readonly', 'true');
@@ -159,46 +167,39 @@ function savePatient() {
             class: 'patient',
             id: patient_id,
             value: {
-                vod: $api.byId('vod').value,
-                vos: $api.byId('vos').value,
-                corrected_vod: $api.byId('corrected_vod').value,
-                corrected_vos: $api.byId('corrected_vos').value,
-                tod: $api.byId('tod').value,
-                tos: $api.byId('tos').value,
-                outer_eye: $api.byId('outer_eye').value,
-                conjunctiva: $api.byId('conjunctiva').value,
-                cornea: $api.byId('cornea').value,
-                anterior_chamber: $api.byId('anterior_chamber').value,
-                lens: $api.byId('lens').value,
-                vitreous: $api.byId('vitreous').value,
-                eyeground: $api.byId('eyeground').value
+                name: $api.byId('name').value,
+                gender: $api.byId('gender').value,
+                birthday: $api.byId('birthday').value,
+                age: $api.byId('age').value,
+                admission_number: $api.byId('admission_number').value,
+                outpatient_number: $api.byId('outpatient_number').value,
+                phone: $api.byId('phone').value,
+                address: $api.byId('address').value,
+                job: $api.byId('job').value,
             }
         }, function(ret, err) {
             if (ret) {
                 patientModiEvent(ret.id)
+                hideProgress();
                 api.closeWin();
             } else {
                 alert("修改患者信息失败！" + JSON.stringify(err));
+                hideProgress();
             }
-            hideProgress();
         });
     } else {
         model.insert({
             class: 'patient',
             value: {
-                vod: $api.byId('vod').value,
-                vos: $api.byId('vos').value,
-                corrected_vod: $api.byId('corrected_vod').value,
-                corrected_vos: $api.byId('corrected_vos').value,
-                tod: $api.byId('tod').value,
-                tos: $api.byId('tos').value,
-                outer_eye: $api.byId('outer_eye').value,
-                conjunctiva: $api.byId('conjunctiva').value,
-                cornea: $api.byId('cornea').value,
-                anterior_chamber: $api.byId('anterior_chamber').value,
-                lens: $api.byId('lens').value,
-                vitreous: $api.byId('vitreous').value,
-                eyeground: $api.byId('eyeground').value
+                name: $api.byId('name').value,
+                gender: $api.byId('gender').value,
+                birthday: $api.byId('birthday').value,
+                age: $api.byId('age').value,
+                admission_number: $api.byId('admission_number').value,
+                outpatient_number: $api.byId('outpatient_number').value,
+                phone: $api.byId('phone').value,
+                address: $api.byId('address').value,
+                job: $api.byId('job').value,
             }
         }, function(ret, err) {
             if (ret) {
@@ -214,20 +215,23 @@ function savePatient() {
                         }
                     }, function(ret, err) {
                         if (ret) {
+                            hideProgress();
                             api.closeWin();
                         } else {
                             alert("新增患者信息失败！" + JSON.stringify(err));
+                            hideProgress();
                         }
                     });
                 }
+                hideProgress();
+                api.closeWin();
             } else {
                 alert("新增患者信息失败！" + JSON.stringify(err));
+                hideProgress();
             }
-            hideProgress();
         });
     }
 }
-
 </script>
 
 </html>

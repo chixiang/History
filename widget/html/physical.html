@@ -244,11 +244,12 @@ function savePhysical() {
         }, function(ret, err) {
             if (ret) {
                 physicalModiEvent(ret.id);
+                hideProgress();
                 api.closeWin();
             } else {
                 alert("修改体检信息失败！" + JSON.stringify(err));
+                hideProgress();
             }
-            hideProgress();
         });
     } else {
         model.insert({
@@ -282,20 +283,21 @@ function savePhysical() {
                         }
                     }, function(ret, err) {
                         if (ret) {
+                            hideProgress();
                             api.closeWin();
                         } else {
                             alert("新增体检信息失败！" + JSON.stringify(err));
+                            hideProgress();
                         }
                     });
                 }
             } else {
                 alert("新增体检信息失败！" + JSON.stringify(err));
+                hideProgress();
             }
-            hideProgress();
         });
     }
 }
-
 </script>
 
 </html>

@@ -97,9 +97,15 @@
  * @return {[type]} [description]
  */
 apiready = function() {
-    // $api.fixIos7Bar($api.dom('header'));
+    model = api.require('model');
+    query = api.require('query');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+
     window.closeWin = function(winName) {
-        // setBlurNone();
         api.closeWin();
     }
 

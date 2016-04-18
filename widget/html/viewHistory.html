@@ -97,8 +97,10 @@ apiready = function() {
     $api.attr($api.byId('treatment'), 'readonly', 'true');
 
     // 设置需要显示的字段值
-    data = api.pageParam;
-    data = getHistory(data.history_id);
+    history_id = api.pageParam.history_id;
+    patient_id = "";
+    physical_id = "";
+    getHistory(history_id);
 
     api.addEventListener({
         name: 'historyModiEvent'
@@ -107,7 +109,52 @@ apiready = function() {
             getHistory(ret.value.history_id);
         }
     });
+
+    api.addEventListener({
+        name: 'physicalAddEvent'
+    }, function(ret, err) {
+        if (ret) {
+            getHistory(history_id);
+        }
+    });
 }
+
+/**
+ * [getHistory description]
+ * @param  {[type]} history_id [description]
+ * @return {[type]}            [description]
+ */
+function getHistory(history_id) {
+    showProgress();
+    model = api.require('model');
+    query = api.require('query');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            model.findById({
+                class: "caseHistory",
+                id: history_id
+            }, function(ret, err) {
+                if (err) {
+                    hideProgress();
+                    alert(JSON.stringify(err));
+                } else {
+                    if (ret) {
+                        hideProgress();
+                        setHistory(ret);
+                        patient_id = ret.patient_pointer;
+                        physical_id = ret.physical_pointer;
+                    }
+                }
+            });
+        }
+    });
+}
+
 
 /**
  * [openWin 打开新窗口]
@@ -123,7 +170,7 @@ function openWin(type) {
         case "modiHistory":
             page = "history";
             pageParam = {
-                "history_id": data.history_id,
+                "history_id": history_id,
                 "type": "modi"
             };
             reload = false;
@@ -132,8 +179,8 @@ function openWin(type) {
             page = "viewPatient";
             pageParam = {
                 "data": {
-                    "id": data.patient_pointer,
-                    "history_id": data.history_id
+                    "id": patient_id,
+                    "history_id": history_id
                 }
             }
             break;
@@ -141,8 +188,8 @@ function openWin(type) {
             page = "viewPhysical";
             pageParam = {
                 "data": {
-                    "id": data.physical_pointer,
-                    "history_id": data.history_id
+                    "id": physical_id,
+                    "history_id": history_id
                 }
             }
             break;

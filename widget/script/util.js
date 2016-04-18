@@ -27,41 +27,6 @@ function getAge(age) {
 }
 
 /**
- * [getHistory description]
- * @param  {[type]} history_id [description]
- * @return {[type]}            [description]
- */
-function getHistory(history_id) {
-    showProgress();
-    model = api.require('model');
-    query = api.require('query');
-    model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
-    });
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            model.findById({
-                class: "caseHistory",
-                id: history_id
-            }, function(ret, err) {
-                if (err) {
-                    hideProgress();
-                    alert(JSON.stringify(err));
-                } else {
-                    if (ret) {
-                        hideProgress();
-                        setHistory(ret);
-                        return ret;
-                    }
-                }
-            });
-        }
-    });
-}
-
-/**
  * [setHistory description]
  * @param {[type]} data [description]
  */

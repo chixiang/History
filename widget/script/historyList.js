@@ -360,7 +360,10 @@ function deleteHistory(id) {
         function(ret, err) {
             if (ret) {
                 // 删除病历后刷新列表
-                alert("删除病历成功！");
+                // alert("删除病历成功！");
+                api.toast({
+                    msg: "删除病历成功"
+                })
                 loadList();
             } else {
                 alert("删除病历失败！");
