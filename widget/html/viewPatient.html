@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>患者信息</title>
-    <link rel="stylesheet" type="text/css" href="../css/patient_flat.css" />
+    <link rel="stylesheet" type="text/css" href="../css/history.css" />
     <link rel="stylesheet" type="text/css" href="../css/button.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
@@ -13,71 +13,79 @@
 
 <body>
     <div id="wrap" class="flex-wrap flex-vertical">
-        <header id='header'>
-            <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
-                    返回
-                </a>
-                <div id="middle">
-                    <span id="title">患者信息</span>
-                </div>
-                <a id="right" tapmode="" onclick="" class="button button-raised button-royal">
-                </a>
-            </nav>
+        <header>
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
+                返回
+            </a>
+            <div id="middle">
+                <span id="title">患者信息</span>
+            </div>
+            <a id="right" tapmode="" onclick="" class="button button-raised button-royal">
+                修改
+            </a>
         </header>
-        <div id="main">
-            <div class="field">
-                <div class="field_name">姓名:</div>
-                <div>
-                    <input type="text" id="name" />
+        <div id="main" class="flex-con">
+            <div class="groupName">基本信息</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">姓名:</div>
+                    <div class="value">
+                        <input type="text" id="name" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">性别:</div>
+                    <div class="value">
+                        <input type="text" id="gender" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">出生日期:</div>
+                    <div class="value">
+                        <input type="text" id="birthday" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">年龄:</div>
+                    <div class="value">
+                        <input type="text" id="age" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">职业:</div>
+                    <div class="value">
+                        <input type="text" id="job" />
+                    </div>
                 </div>
             </div>
-            <div class="field">
-                <div class="field_name">性别:</div>
-                <div>
-                    <input type="text" id="gender" />
+            <div class="groupName">编号</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">住院号:</div>
+                    <div class="value">
+                        <input type="text" id="admission_number" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">门诊号:</div>
+                    <div class="value">
+                        <input type="text" id="outpatient_number" />
+                    </div>
                 </div>
             </div>
-            <div class="field">
-                <div class="field_name">出生日期:</div>
-                <div>
-                    <input type="text" id="birthday" />
+            <div class="groupName">联系方式</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">电话:</div>
+                    <div class="value">
+                        <input type="text" id="phone" />
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <div class="field_name">年龄:</div>
-                <div>
-                    <input type="text" id="age" />
-                </div>
-            </div>
-            <div class="field">
-                <div class="field_name">住院号:</div>
-                <div>
-                    <input type="text" id="admission_number" />
-                </div>
-            </div>
-            <div class="field">
-                <div class="field_name">门诊号:</div>
-                <div>
-                    <input type="text" id="outpatient_number" />
-                </div>
-            </div>
-            <div class="field">
-                <div class="field_name">电话:</div>
-                <div>
-                    <input type="text" id="phone" />
-                </div>
-            </div>
-            <div class="field">
-                <div class="field_name">地址:</div>
-                <div>
-                    <input type="text" id="address" />
-                </div>
-            </div>
-            <div class="field">
-                <div class="field_name">职业:</div>
-                <div>
-                    <input type="text" id="job" />
+                <div class="field textarea_field bottom">
+                    <div class="textarea_key">地址:</div>
+                    <div class="textarea_value">
+                        <textarea id="address"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
@@ -118,7 +126,6 @@ function setBlurNone() {
         name: 'setBlurNone'
     })
 }
-
 </script>
 
 </html>

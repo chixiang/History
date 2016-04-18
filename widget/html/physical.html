@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>体检信息维护</title>
-    <link rel="stylesheet" type="text/css" href="../css/physical.css" />
+    <link rel="stylesheet" type="text/css" href="../css/history.css" />
     <link rel="stylesheet" type="text/css" href="../css/button.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
@@ -13,95 +13,145 @@
 
 <body>
     <div class="flex-wrap flex-vertical">
-        <header id='header'>
-            <nav id="nav">
-                <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
-                    取消
-                </a>
-                <div id="middle">
-                    <span id="title">体检信息维护</span>
-                </div>
-                <a id="right" tapmode="" onclick="savePhysical();" class="button button-raised button-royal">
-                    确认
-                </a>
-            </nav>
+        <header>
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
+                取消
+            </a>
+            <div id="middle">
+                <span id="title">体检信息维护</span>
+            </div>
+            <a id="right" tapmode="" onclick="savePhysical();" class="button button-raised button-royal">
+                确认
+            </a>
         </header>
-        <div id="main">
-            <div class="field">
-                <div class="field_name">视力:</div>
-                <div class="leftColumn">
-                    <span>Vod:</span>
-                    <input type="text" class="long" id="vod" onclick="openPicker('vod')" />
+        <div id="main" class="flex-con">
+            <!--             <div class="groupName">视力</div>
+            <div class="group">
+                <div class="subGroupName">裸眼</div>
+                <div class="group">
+                    <div class="field bottom">
+                        <div class="leftColumn">
+                            <div class="key">Vod</div>
+                            <div class="value">
+                                <input type="text" class="center" id="vod" onclick="openPicker('vod')" />
+                            </div>
+                        </div>
+                        <div class="rightColumn">
+                            <div class="key">Vos</div>
+                            <div class="value">
+                                <input type="text" class="center" id="vos" onclick="openPicker('vos')" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="rightColumn">
-                    <span>Vos:</span>
-                    <input type="text" class="long" id="vos" onclick="openPicker('vos')" />
+                <div class="subGroupName">矫正</div>
+                <div class="group">
+                    <div class="field bottom">
+                        <div class="leftColumn">
+                            <div class="key">Vod</div>
+                            <div class="value">
+                                <input type="text" class="center" id="corrected_vod" onclick="openPicker('corrected_vod')" />
+                            </div>
+                        </div>
+                        <div class="rightColumn">
+                            <div class="key">Vos</div>
+                            <div class="value">
+                                <input type="text" class="center" id="corrected_vos" onclick="openPicker('corrected_vos')" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <div class="field_name">矫正:</div>
-                <div class="leftColumn">
-                    <span>Vod:</span>
-                    <input type="text" class="long" id="corrected_vod" onclick="openPicker('corrected_vod')" />
+            </div> -->
+            <div class="groupName">裸眼视力</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">Vod</div>
+                    <div class="value">
+                        <input type="text" id="vod" onclick="openPicker('vod')" />
+                    </div>
                 </div>
-                <div class="rightColumn">
-                    <span>Vos:</span>
-                    <input type="text" class="long" id="corrected_vos" onclick="openPicker('corrected_vos')" />
-                </div>
-            </div>
-            <div class="field">
-                <div class="field_name">眼压:</div>
-                <div class="leftColumn">
-                    <span>Tod:</span>
-                    <input type="text" class="short" id="tod" />
-                    <span>mmHg</span>
-                </div>
-                <div class="rightColumn">
-                    <span>Tos:</span>
-                    <input type="text" class="short" id="tos" />
-                    <span>mmHg</span>
-                </div>
-            </div>
-            <div class="field">
-                <div class="field_name">外眼:</div>
-                <div>
-                    <input type="text" id="outer_eye" />
-                </div>
-            </div>
-            <div class="field">
-                <div class="field_name">结膜:</div>
-                <div>
-                    <input type="text" id="conjunctiva" />
-                </div>
-            </div>
-            <div class="field">
-                <div class="field_name">角膜:</div>
-                <div>
-                    <input type="text" id="cornea" />
-                </div>
-            </div>
-            <div class="field">
-                <div class="field_name">前房:</div>
-                <div>
-                    <input type="text" id="anterior_chamber" />
+                <div class="field bottom">
+                    <div class="key">Vos</div>
+                    <div class="value">
+                        <input type="text" id="vos" onclick="openPicker('vos')" />
+                    </div>
                 </div>
             </div>
-            <div class="field">
-                <div class="field_name">晶体:</div>
-                <div>
-                    <input type="text" id="lens" />
+            <div class="groupName">矫正视力</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">Vod</div>
+                    <div class="value">
+                        <input type="text" id="corrected_vod" onclick="openPicker('corrected_vod')" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">Vos</div>
+                    <div class="value">
+                        <input type="text" id="corrected_vos" onclick="openPicker('corrected_vos')" />
+                    </div>
                 </div>
             </div>
-            <div class="field">
-                <div class="field_name">玻璃体:</div>
-                <div>
-                    <input type="text" id="vitreous" />
+            <div class="groupName">眼压</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">Tod</div>
+                    <div class="value_with_unit">
+                        <input type="text" id="tod" />
+                    </div>
+                    <div class="unit">mmHg</div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">Tos</div>
+                    <div class="value_with_unit">
+                        <input type="text" id="tos" />
+                    </div>
+                    <div class="unit">mmHg</div>
                 </div>
             </div>
-            <div class="field">
-                <div class="field_name">眼底:</div>
-                <div>
-                    <input type="text" id="eyeground" />
+            <div class="groupName">其他</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">外眼</div>
+                    <div class="value">
+                        <input type="text" id="outer_eye" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">结膜</div>
+                    <div class="value">
+                        <input type="text" id="conjunctiva" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">角膜</div>
+                    <div class="value">
+                        <input type="text" id="cornea" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">前房</div>
+                    <div class="value">
+                        <input type="text" id="anterior_chamber" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">晶体</div>
+                    <div class="value">
+                        <input type="text" id="lens" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">玻璃体</div>
+                    <div class="value">
+                        <input type="text" id="vitreous" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">眼底</div>
+                    <div class="value">
+                        <input type="text" id="eyeground" />
+                    </div>
                 </div>
             </div>
         </div>

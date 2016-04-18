@@ -23,7 +23,7 @@ html {
 }
 
 body {
-    background-color: #F7F3EA;
+    background-color: #C3AD7E;
     color: #655A55;
     margin: 50px 0px 0px 0px;
     font-family: 'Lato', sans-serif;
@@ -63,7 +63,12 @@ a:visited {
 
 .groupName {
     padding: 10px 10px 0px 10px;
-    color: #E1D7CA;
+    color: #F7F3EA;
+}
+
+.subGroupName {
+    padding: 5px 5px 0px 5px;
+    color: #F7F3EA;
 }
 
 .group {
@@ -82,9 +87,26 @@ a:visited {
     padding-left: 10px;
     padding-right: 10px;
     color: #655A55;
-    display: -webkit-box;
     border-bottom: 1px solid #EED6B0;
+    display: -webkit-box;
 }
+
+.leftColumn {
+    width: 50%;
+    display: -webkit-box;
+    margin-right: 4px;
+    border-right: 1px solid #EED6B0;
+}
+
+.rightColumn {
+    width: 50%;
+    display: -webkit-box;
+    margin-left: 5px;
+}
+
+.center {
+    text-align: center;
+} 
 
 .textarea_field {
     height: 150px;
@@ -107,6 +129,15 @@ a:visited {
 
 .value {
     width: 70%;
+}
+
+.value_with_unit {
+    width: 50%;
+}
+
+.unit {
+    padding: 0px 0px 0px 10px;
+    width: 20%;
 }
 
 .textarea_key {
