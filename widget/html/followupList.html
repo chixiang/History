@@ -25,7 +25,6 @@
                 </a>
         </header>
         <div id="main" class="flex-con">
-            
         </div>
     </div>
 </body>
@@ -40,7 +39,21 @@ apiready = function() {
     }
 
     history_id = api.pageParam.history_id;
-    data = api.pageParam.data;
+    follow_up = api.pageParam.follow_up;
+    size = "";
+    if (follow_up != undefined) {
+        size = follow_up.length;
+    }
+    data = [];
+    var idx = 0;
+    while (follow_up[idx] != undefined) {
+        follow_up_item = {
+            "title": follow_up[idx].follow_up_info,
+            "subTitle": follow_up[idx].follow_up_date
+        }
+        data.push(follow_up_item);
+        idx = idx + 1;
+    }
 
     followupList = api.require('UIListView');
     followupList.open({
@@ -48,7 +61,8 @@ apiready = function() {
             x: 0,
             y: $api.dom('header').offsetHeight,
             w: api.winWidth,
-            h: $api.dom('#main').offsetHeight
+            // h: $api.dom('#main').offsetHeight
+            h: api.frameHeight
         },
         data: data,
         rightBtns: [{
@@ -83,7 +97,7 @@ apiready = function() {
                 titleSize: 20,
                 titleColor: '#655A55',
                 subTitleSize: 14.0,
-                subTitleColor: '#E1D7CA',
+                subTitleColor: '#655A55',
                 remarkColor: '#655A55',
                 remarkSize: 14,
                 remarkIconWidth: 30
@@ -91,12 +105,17 @@ apiready = function() {
         },
         fixedOn: api.frameName
     }, function(ret, err) {
+        index = ret.index;
+        if (ret.eventType == "show") {
+            reloadList(data);
+        }
         // 点击列表事件
         if (ret.eventType == "clickContent") {
+            index = ret.index;
             followupList.getDataByIndex({
                 index: ret.index
             }, function(ret, err) {
-                viewFollowUp(ret.data);
+                viewFollowUp(ret.data, index, history_id);
             });
         }
 
@@ -105,7 +124,7 @@ apiready = function() {
             followupList.getDataByIndex({
                 index: ret.index
             }, function(ret, err) {
-                modiFollowUp(ret.data);
+                modiFollowUp(index);
             });
         }
 
@@ -115,19 +134,67 @@ apiready = function() {
                 followupList.getDataByIndex({
                     index: ret.index
                 }, function(ret, err) {
-                    deleteFollowUp(ret.data);
+                    deleteFollowUp(index);
+                    reloadList(data);
                 });
             }
         }
     });
+
+    followupList.setRefreshHeader({
+            bgColor: "#f5f5f5"
+        },
+        function(ret, err) {
+            reloadList(data);
+        });
+
+    followupList.setRefreshFooter({
+            bgColor: "#f5f5f5"
+        },
+        function(ret, err) {
+            reloadList(data);
+        });
+
+    api.addEventListener({
+        name: 'followupAddOrModiEvent'
+    }, function(ret, err) {
+        if (ret) {
+            follow_up = ret.value.follow_up;
+            data = [];
+            var idx = 0;
+            while (follow_up[idx] != undefined) {
+                follow_up_item = {
+                    "title": follow_up[idx].follow_up_info,
+                    "subTitle": follow_up[idx].follow_up_date
+                }
+                data.push(follow_up_item);
+                idx = idx + 1;
+            }
+            reloadList(data);
+        }
+    });
 }
 
-function viewFollowUp(data) {
+function reloadList(data) {
+    followupList.reloadData({
+        "data": data
+    }, function(ret, err) {
+        if (ret.status) {
+            // api.toast({
+            //     msg: "刷新病历成功"
+            // });
+        }
+    });
+}
+
+function viewFollowUp(index) {
     api.openWin({
         name: "followup",
         url: './viweFollowUp.html',
         pageParam: {
-            data: data
+            history_id: history_id,
+            follow_up: follow_up,
+            index: index
         },
         reload: true,
         bounces: false
@@ -138,24 +205,63 @@ function newFollowUp() {
     api.openWin({
         name: "followup",
         url: './followup.html',
-        pageParam: {},
+        pageParam: {
+            history_id: history_id,
+            follow_up: follow_up,
+        },
         reload: false,
         bounces: false
     });
 }
 
-function modiFollowUp(data) {
+function modiFollowUp(index) {
     api.openWin({
         name: "followup",
         url: './followup.html',
         pageParam: {
-            data: data
+            history_id: history_id,
+            follow_up: follow_up,
+            index: index
         },
         reload: true,
         bounces: false
     });
 }
 
+function deleteFollowUp(index) {
+    follow_up.splice(index, 1);
+    data = [];
+    var idx = 0;
+    while (follow_up[idx] != undefined) {
+        follow_up_item = {
+            "title": follow_up[idx].follow_up_info,
+            "subTitle": follow_up[idx].follow_up_date
+        }
+        data.push(follow_up_item);
+        idx = idx + 1;
+    }
+    model = api.require('model');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    model.updateById({
+        class: 'caseHistory',
+        id: history_id,
+        value: {
+            follow_up: follow_up
+        }
+    }, function(ret, err) {
+        if (ret) {
+            followupAddOrModiEvent(follow_up);
+            hideProgress();
+        } else {
+            alert("保存随访信息失败！" + JSON.stringify(err));
+            hideProgress();
+        }
+    });
+}
 </script>
 
 </html>

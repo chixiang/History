@@ -224,7 +224,7 @@ function loadList(type) {
                                 accessory_exam_id: ret[idx].accessory_exam_id,
                                 diagnosis: ret[idx].diagnosis,
                                 treatment: ret[idx].treatment,
-                                follow_up_id: ret[idx].follow_up_id,
+                                follow_up: ret[idx].follow_up,
                                 record_doctor: ret[idx].record_doctor,
                                 patient_pointer: ret[idx].patient_pointer,
                                 physical_pointer: ret[idx].physical_pointer,

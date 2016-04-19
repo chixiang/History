@@ -281,6 +281,14 @@ apiready = function() {
             getFullHistory(history_id);
         }
     });
+
+    api.addEventListener({
+        name: 'followupAddOrModiEvent'
+    }, function(ret, err) {
+        if (ret) {
+            getFullHistory(history_id);
+        }
+    });
 }
 
 /**
@@ -370,11 +378,11 @@ function openWin(type) {
                 }
             }
             break;
-        case: "followupList"
+        case "followupList":
             page = "followupList";
             pageParam = {
                 "history_id": history_id,
-                "data": data.follow_up
+                "follow_up": data.follow_up
             }
             break;
         default:

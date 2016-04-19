@@ -76,7 +76,7 @@ function setPhysical(data) {
 }
 
 function setFullHistory(data) {
-    
+
     $api.byId('consultation_department').value = data.consultation_department;
     $api.byId('diagnosis').value = data.diagnosis;
     $api.byId('chief_complaint').value = data.chief_complaint;
@@ -144,7 +144,7 @@ function openPicker(type) {
     var reload = false;
     pageParam = {};
     switch (type) {
-        case "birthday":
+        case "date":
             frameName = "birthdayPickerFrame";
             height = 300;
             break;
@@ -268,6 +268,15 @@ function historyModiEvent(history_id) {
         name: 'historyModiEvent',
         extra: {
             history_id: history_id
+        }
+    });
+}
+
+function followupAddOrModiEvent(follow_up) {
+    api.sendEvent({
+        name: 'followupAddOrModiEvent',
+        extra: {
+            follow_up: follow_up
         }
     });
 }
