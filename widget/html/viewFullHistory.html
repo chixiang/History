@@ -114,12 +114,6 @@
                         <textarea id="treatment"></textarea>
                     </div>
                 </div>
-                <div class="field textarea_field bottom">
-                    <div class="textarea_key">随访</div>
-                    <div class="textarea_value">
-                        <textarea id="follow_up"></textarea>
-                    </div>
-                </div>
             </div>
             <div class="groupName">裸眼视力</div>
             <div class="group">
@@ -213,6 +207,13 @@
                     </div>
                 </div>
             </div>
+            <div class="groupName">随访</div>
+            <div class="group">
+                <div class="field bottom" onclick="openWin('followupList');">
+                    <div class="key">随访信息</div>
+                    <div class="value more"><span>&gt;</span></div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
@@ -262,6 +263,7 @@ apiready = function() {
     history_id = api.pageParam.history_id;
     patient_id = "";
     physical_id = "";
+    data={};
     getFullHistory(history_id);
 
     api.addEventListener({
@@ -320,8 +322,9 @@ function getFullHistory(history_id) {
                     alert(JSON.stringify(err));
                 } else {
                     if (ret[0]) {
+                        data = ret[0];
                         hideProgress();
-                        setFullHistory(ret);
+                        setFullHistory(data);
                     }
                 }
             });
@@ -365,6 +368,13 @@ function openWin(type) {
                     "id": physical_id,
                     "history_id": history_id
                 }
+            }
+            break;
+        case: "followupList"
+            page = "followupList";
+            pageParam = {
+                "history_id": history_id,
+                "data": data.follow_up
             }
             break;
         default:

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>随访信息</title>
+    <link rel="stylesheet" type="text/css" href="../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../css/button.css" />
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/util.js"></script>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header>
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
+                    返回
+                </a>
+            <div id="middle">
+                <span id="title">随访信息</span>
+            </div>
+            <a id="right" tapmode="" onclick="modiFollowUp();" class="button button-raised button-royal">
+                    修改
+                </a>
+        </header>
+        <div id="main" class="flex-con">
+            <div class="group">
+                <div class="field">
+                    <div class="key">随访日期</div>
+                    <div class="value">
+                        <input type="text" id="follow_up_date"></input>
+                    </div>
+                </div>
+                <div class="field textarea_field">
+                    <div class="textarea_key">随访内容</div>
+                    <div class="textarea_value">
+                        <textarea id="follow_up_info" placeholder="请输入随访内容"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+<script type="text/javascript">
+/**
+ * [apiready description]
+ * @return {[type]} [description]
+ */
+apiready = function() {
+    window.closeWin = function(winName) {
+        api.closeWin();
+    }
+
+    $api.attr($api.byId('follow_up_date'), 'readonly', 'true');
+    $api.attr($api.byId('follow_up_info'), 'readonly', 'true');
+
+}
+
+function modiFollowUp(data) {
+    api.openWin({
+        name: "followup",
+        url: './followup.html',
+        pageParam: {
+            data: data
+        },
+        reload: true,
+        bounces: false
+    });
+}
+</script>
+
+</html>

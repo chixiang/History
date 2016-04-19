@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>随访记录</title>
+    <link rel="stylesheet" type="text/css" href="../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../css/button.css" />
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/util.js"></script>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header>
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
+                    返回
+                </a>
+            <div id="middle">
+                <span id="title">随访记录</span>
+            </div>
+            <a id="right" tapmode="" onclick="newFollowUp();" class="button button-raised button-royal">
+                    新建
+                </a>
+        </header>
+        <div id="main" class="flex-con">
+            
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+/**
+ * [apiready description]
+ * @return {[type]} [description]
+ */
+apiready = function() {
+    window.closeWin = function(winName) {
+        api.closeWin();
+    }
+
+    history_id = api.pageParam.history_id;
+    data = api.pageParam.data;
+
+    followupList = api.require('UIListView');
+    followupList.open({
+        rect: {
+            x: 0,
+            y: $api.dom('header').offsetHeight,
+            w: api.winWidth,
+            h: $api.dom('#main').offsetHeight
+        },
+        data: data,
+        rightBtns: [{
+            bgColor: '#B3A689',
+            activeBgColor: '',
+            width: 70,
+            title: '修改',
+            titleSize: 14,
+            titleColor: '#655A55',
+            icon: '',
+            iconWidth: 20
+        }, {
+            bgColor: '#B3A689',
+            activeBgColor: '',
+            width: 70,
+            title: '删除',
+            titleSize: 14,
+            titleColor: '#655A55',
+            icon: '',
+            iconWidth: 20
+        }],
+        styles: {
+            borderColor: '#B3A689',
+            item: {
+                bgColor: '#F7F3EA',
+                activeBgColor: '#B3A689',
+                height: 80,
+                imgWidth: 40,
+                imgHeight: 40,
+                imgCorner: 4,
+                placeholderImg: '',
+                titleSize: 20,
+                titleColor: '#655A55',
+                subTitleSize: 14.0,
+                subTitleColor: '#E1D7CA',
+                remarkColor: '#655A55',
+                remarkSize: 14,
+                remarkIconWidth: 30
+            }
+        },
+        fixedOn: api.frameName
+    }, function(ret, err) {
+        // 点击列表事件
+        if (ret.eventType == "clickContent") {
+            followupList.getDataByIndex({
+                index: ret.index
+            }, function(ret, err) {
+                viewFollowUp(ret.data);
+            });
+        }
+
+        // 左划第一个按钮事件，修改
+        if (ret.eventType == "clickRightBtn" && ret.btnIndex == "0") {
+            followupList.getDataByIndex({
+                index: ret.index
+            }, function(ret, err) {
+                modiFollowUp(ret.data);
+            });
+        }
+
+        // 左划第二个按钮事件，删除
+        if (ret.eventType == "clickRightBtn" && ret.btnIndex == "1") {
+            if (confirm("确定删除？")) {
+                followupList.getDataByIndex({
+                    index: ret.index
+                }, function(ret, err) {
+                    deleteFollowUp(ret.data);
+                });
+            }
+        }
+    });
+}
+
+function viewFollowUp(data) {
+    api.openWin({
+        name: "followup",
+        url: './viweFollowUp.html',
+        pageParam: {
+            data: data
+        },
+        reload: true,
+        bounces: false
+    });
+}
+
+function newFollowUp() {
+    api.openWin({
+        name: "followup",
+        url: './followup.html',
+        pageParam: {},
+        reload: false,
+        bounces: false
+    });
+}
+
+function modiFollowUp(data) {
+    api.openWin({
+        name: "followup",
+        url: './followup.html',
+        pageParam: {
+            data: data
+        },
+        reload: true,
+        bounces: false
+    });
+}
+
+</script>
+
+</html>

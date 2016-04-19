@@ -76,7 +76,7 @@ function setPhysical(data) {
 }
 
 function setFullHistory(data) {
-    data = data[0];
+    
     $api.byId('consultation_department').value = data.consultation_department;
     $api.byId('diagnosis').value = data.diagnosis;
     $api.byId('chief_complaint').value = data.chief_complaint;

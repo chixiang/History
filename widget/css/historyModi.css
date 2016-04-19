@@ -23,7 +23,7 @@ html {
 }
 
 body {
-    background-color: #B3A689;
+    background-color: #B1A686;
     color: #655A55;
     margin: 50px 0px 0px 0px;
     font-family: 'Lato', sans-serif;
@@ -120,7 +120,8 @@ a:visited {
 
 .key {
     width: 30%;
-    background-color: #FFF
+    background-color: #FFF;
+    font-weight: bold;
 }
 
 .value {
@@ -131,7 +132,7 @@ a:visited {
 .more {
     font-size: 14px;
     text-align: right;
-    background-color: #FFF
+    background-color: #FFF;
 }
 
 .value_with_unit {
@@ -146,6 +147,7 @@ a:visited {
 
 .textarea_key {
     width: 100%;
+    font-weight: bold;
 }
 
 .textarea_value {
