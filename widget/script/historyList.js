@@ -46,7 +46,8 @@ var apiready = function() {
             x: 0,
             y: $api.dom('header').offsetHeight,
             w: api.winWidth,
-            h: $api.dom('#main').offsetHeight
+            //h: $api.dom('#main').offsetHeight
+          h: api.frameHeight
         },
         data: historyListData,
         rightBtns: [{
