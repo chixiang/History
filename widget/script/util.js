@@ -280,3 +280,38 @@ function followupAddOrModiEvent(follow_up) {
         }
     });
 }
+
+function openDB() {
+    var db = api.require('db');
+    db.openDatabase({
+        name: 'test',
+        path: 'fs://user.db'
+    }, function(ret, err) {
+        if (ret.status) {
+            sql = "insert into user values(1, '池翔', '男', '33');";
+            db.executeSql({
+                name: 'test',
+                sql: sql
+            }, function(ret, err) {
+                if (ret.status) {
+                    api.alert({ msg: '执行SQL成功' });
+                    sql = 'SELECT * FROM user';
+                    db.selectSql({
+                        name: 'test',
+                        sql: sql
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            var data = ret.data;
+                            alert(JSON.stringify(data));
+                        } else {
+                            api.alert({ msg: err.msg });
+                        }
+                    });
+                } else {
+                    api.alert({ msg: err.msg });
+                }
+            });
+        }
+    });
+
+}
