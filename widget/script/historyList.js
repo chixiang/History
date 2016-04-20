@@ -4,7 +4,7 @@
  */
 var apiready = function() {
     userName = $api.getStorage("userName");
-    
+
     // 接收刷新列表event
     api.addEventListener({
         name: 'historyAddEvent'
@@ -424,7 +424,6 @@ function openSearch() {
 
 function logout() {
     if (confirm("是否确定退出？")) {
-
         $api.setStorage("userName", "");
         api.closeToWin({
             name: 'root',
@@ -432,7 +431,7 @@ function logout() {
                 type: 'flip',
                 subType: 'from_bottom',
                 duration: 500
-            }
+             }
         });
     }
 }

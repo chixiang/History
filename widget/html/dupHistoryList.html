@@ -104,7 +104,7 @@ var apiready = function() {
  * @param  {[type]} type [refresh: 刷新, append: 追加]
  * @return {[type]}      [description]
  */
-function loadList(type) {
+function loadList() {
     showProgress("正在加载...");
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
@@ -126,22 +126,31 @@ function loadList(type) {
             }
             var i = 0;
             var ids = [];
-            while (patients[i] != undefined) {
+            while (i < patients.length) {
                 ids[i] = patients[i].id;
                 i = i + 1;
             }
-            query.whereContainAll({
-                qid: queryId,
-                column: "patient_pointer",
-                value: ids
-            })
 
+            // 测试发现：如果条件只有一个，不能使用whereContainAll和whereContain，所以判断
+            // 当条件只有一个时，使用whereEqual
+            if (ids.length == 1) {
+                query.whereEqual({
+                    qid: queryId,
+                    column: "patient_pointer",
+                    value: ids[0]
+                })
+            } else {
+                query.whereContainAll({
+                    qid: queryId,
+                    column: "patient_pointer",
+                    value: ids
+                });
+            }
             var json_objs = [];
             model.findAll({
                 class: "caseHistory",
                 qid: queryId
             }, function(ret, err) {
-                alert(JSON.stringify(ret));
                 if (err) {
                     alert(JSON.stringify(err));
                 } else {
