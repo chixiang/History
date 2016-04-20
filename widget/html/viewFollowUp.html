@@ -68,16 +68,6 @@ apiready = function() {
     }, function(ret, err) {
         if (ret) {
             follow_up = ret.value.follow_up;
-            data = [];
-            var idx = 0;
-            while (follow_up[idx] != undefined) {
-                follow_up_item = {
-                    "title": follow_up[idx].follow_up_info,
-                    "subTitle": follow_up[idx].follow_up_date
-                }
-                data.push(follow_up_item);
-                idx = idx + 1;
-            }
             $api.byId('follow_up_date').value = follow_up[index].follow_up_date;
             $api.byId('follow_up_info').value = follow_up[index].follow_up_info;
         }
@@ -85,7 +75,7 @@ apiready = function() {
 
 }
 
-function modiFollowUp(data) {
+function modiFollowUp() {
     api.openWin({
         name: "followup",
         url: './followup.html',
