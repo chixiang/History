@@ -125,7 +125,8 @@ function loadList(type) {
                 });
             }
             var i = 0;
-            while (i < patients.length) {
+          alert(patients.length);
+            while (i < 2) {
                 query.whereEqual({
                     qid: queryId,
                     column: 'patient_pointer',
@@ -143,6 +144,7 @@ function loadList(type) {
                 } else {
                     if (ret) {
                         var idx = 0;
+                      alert(ret.length);
                         while (ret[idx] != undefined) {
                             var historyItem = {
                                 id: ret[idx].id,
