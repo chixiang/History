@@ -40,13 +40,13 @@ apiready = function() {
 
     history_id = api.pageParam.history_id;
     follow_up = api.pageParam.follow_up;
-    size = "";
-    if (follow_up != undefined) {
+    size = 0;
+    if (follow_up != undefined && follow_up != null) {
         size = follow_up.length;
     }
     data = [];
     var idx = 0;
-    while (follow_up[idx] != undefined) {
+    while (idx < size) {
         follow_up_item = {
             "title": follow_up[idx].follow_up_info,
             "subTitle": follow_up[idx].follow_up_date
@@ -85,10 +85,10 @@ apiready = function() {
             iconWidth: 20
         }],
         styles: {
-            borderColor: '#B3A689',
+            borderColor: '#B1A686',
             item: {
-                bgColor: '#F7F3EA',
-                activeBgColor: '#B3A689',
+                bgColor: '#E2D9C6',
+                activeBgColor: '#B1A686',
                 height: 80,
                 imgWidth: 40,
                 imgHeight: 40,
@@ -97,7 +97,7 @@ apiready = function() {
                 titleSize: 20,
                 titleColor: '#655A55',
                 subTitleSize: 14.0,
-                subTitleColor: '#655A55',
+                subTitleColor: '#C5A686',
                 remarkColor: '#655A55',
                 remarkSize: 14,
                 remarkIconWidth: 30

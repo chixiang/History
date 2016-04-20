@@ -105,7 +105,7 @@ var apiready = function() {
  * @return {[type]}      [description]
  */
 function loadList(type) {
-    showProgress("正在加载病历...");
+    showProgress("正在加载...");
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             var queryId = ret.qid;
@@ -130,17 +130,18 @@ function loadList(type) {
                 ids[i] = patients[i].id;
                 i = i + 1;
             }
-          query.whereContainAll({
-            qid: queryId,
-            column: "patient_pointer",
-            value: ids
-          })
-          
+            query.whereContainAll({
+                qid: queryId,
+                column: "patient_pointer",
+                value: ids
+            })
+
             var json_objs = [];
             model.findAll({
                 class: "caseHistory",
                 qid: queryId
             }, function(ret, err) {
+                alert(JSON.stringify(ret));
                 if (err) {
                     alert(JSON.stringify(err));
                 } else {

@@ -109,6 +109,8 @@ apiready = function() {
     $api.attr($api.byId('gender'), 'readonly', 'true');
     $api.attr($api.byId('birthday'), 'readonly', 'true');
 
+    userName = $api.getStorage("userName");
+
     history_id = api.pageParam.data.history_id;
     patient_id = api.pageParam.data.id;
     type = "";
@@ -157,7 +159,12 @@ function checkPatientName() {
                 qid: queryId,
                 column: 'name',
                 value: $api.byId('name').value
-            })
+            });
+            query.whereEqual({
+                qid: queryId,
+                column: 'record_doctor',
+                value: userName
+            });
             var patients = [];
             model.findAll({
                 class: "patient",
@@ -173,7 +180,7 @@ function checkPatientName() {
                             idx = idx + 1;
                         }
                         if (idx > 0) {
-                            if (confirm("存在同名患者！\n【取消】- 继续新增\n【确认】- 查看已有患者信息")) {
+                            if (confirm("存在同名患者！\n\n【取消】- 继续新增\n【确定】- 查看已有患者信息")) {
                                 showDupHistoryList(patients);
                             }
                         }
@@ -226,7 +233,7 @@ function savePatient() {
             class: 'patient',
             id: patient_id,
             value: {
-                name: $api.byId('name').value,
+                // name: $api.byId('name').value,
                 gender: $api.byId('gender').value,
                 birthday: $api.byId('birthday').value,
                 age: $api.byId('age').value,
@@ -234,7 +241,7 @@ function savePatient() {
                 outpatient_number: $api.byId('outpatient_number').value,
                 phone: $api.byId('phone').value,
                 address: $api.byId('address').value,
-                job: $api.byId('job').value,
+                job: $api.byId('job').value
             }
         }, function(ret, err) {
             if (ret) {
@@ -259,6 +266,7 @@ function savePatient() {
                 phone: $api.byId('phone').value,
                 address: $api.byId('address').value,
                 job: $api.byId('job').value,
+                record_doctor: userName
             }
         }, function(ret, err) {
             if (ret) {
