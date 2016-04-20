@@ -18,7 +18,7 @@
                     返回
                 </a>
             <div id="middle">
-                <span id="title">病历列表</span>
+                <span id="title">重名病历</span>
             </div>
             <a id="right" tapmode="" onclick="" class="button button-raised button-royal">
             </a>
@@ -124,11 +124,15 @@ function loadList(type) {
                     value: userName
                 });
             }
-            query.whereEqual({
-                qid: queryId,
-                column: 'patient_pointer',
-                value: patients[0].id
-            });
+            var i = 0;
+            while (i < patients.length) {
+                query.whereEqual({
+                    qid: queryId,
+                    column: 'patient_pointer',
+                    value: patients[i].id
+                });
+                i = i + 1;
+            }
             var json_objs = [];
             model.findAll({
                 class: "caseHistory",
