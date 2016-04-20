@@ -125,15 +125,17 @@ function loadList(type) {
                 });
             }
             var i = 0;
-          alert(patients.length);
-            while (i < 2) {
-                query.whereEqual({
-                    qid: queryId,
-                    column: 'patient_pointer',
-                    value: patients[i].id
-                });
+            var ids = [];
+            while (patients[i] != undefined) {
+                ids[i] = patients[i].id;
                 i = i + 1;
             }
+          query.whereContainAll({
+            qid: queryId,
+            column: "patient_pointer",
+            value: ids
+          })
+          
             var json_objs = [];
             model.findAll({
                 class: "caseHistory",
