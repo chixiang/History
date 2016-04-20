@@ -20,6 +20,9 @@
             <div id="middle">
                 <span id="title">病历浏览</span>
             </div>
+            <a id="right" tapmode="" onclick="openWin('followupList');" class="button button-raised button-royal">
+                    随访
+                </a>
             <a id="right" tapmode="" onclick="openWin('modiHistory');" class="button button-raised button-royal">
                     修改
                 </a>
@@ -207,13 +210,13 @@
                     </div>
                 </div>
             </div>
-            <div class="groupName">随访</div>
+<!--             <div class="groupName">随访</div>
             <div class="group">
                 <div class="field bottom" onclick="openWin('followupList');">
                     <div class="key">随访信息</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </body>
@@ -263,7 +266,7 @@ apiready = function() {
     history_id = api.pageParam.history_id;
     patient_id = "";
     physical_id = "";
-    data={};
+    data = {};
     getFullHistory(history_id);
 
     api.addEventListener({

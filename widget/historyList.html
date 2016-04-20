@@ -5,67 +5,32 @@
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>病历列表</title>
-    <link rel="stylesheet" type="text/css" href="./css/api.css" />
-    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+    <link rel="stylesheet" type="text/css" href="./css/history.css" />
     <link rel="stylesheet" type="text/css" href="./css/button.css" />
-    <style>
-    header {
-        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
-        background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
-        background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
-        position: relative;
-        /*color: #FFF;*/
-    }
-
-    body {
-        background-color: #B1A686;
-    }
-
-    .top-button {
-        /*margin: 0 1em;*/
-        text-align: center;
-        height: 50px;
-        line-height: 50px;
-        font-size: 14px;
-    }
-
-    a,
-    a:visited {
-        text-decoration: none;
-        color: #FFF;
-        padding: 0px 15px 0px 15px;
-    }
-
-    .fl {
-        float: left;
-    }
-
-    .fr {
-        float: right;
-    }
-    </style>
+    <script type="text/javascript" src="./script/api.js"></script>
+    <script type="text/javascript" src="./script/historyList.js"></script>
+    <script type="text/javascript" src="./script/util.js"></script>
 </head>
 
 <body>
     <div id="wrap" class="flex-wrap flex-vertical">
         <header>
-            <div class='top-button fl'>
-                <!-- <a href="" tapmode="presshover" onclick="openWin('option')">设置</a> -->
-                <a href="" tapmode="presshover" onclick="logout()" class="button button-raised button-royal">退出</a>
+            <a id="left" tapmode="" onclick="logout();" class="button button-raised button-royal">
+                    退出
+                </a>
+            <div id="middle">
+                <span id="title">病历列表</span>
             </div>
-            <div class='top-button fr'>
-                <a href="" tapmode="presshover" onclick="openSearch()" class="button button-raised button-royal">查找</a>
-            </div>
-            <div class='top-button fr'>
-                <a href="" tapmode="presshover" onclick="openWin('history')" class="button button-raised button-royal">新增</a>
-            </div>
+            <a id="right" tapmode="" onclick="openSearch();" class="button button-raised button-royal">
+                    查找
+                </a>
+            <a id="right" tapmode="" onclick="openWin('history');" class="button button-raised button-royal">
+                    新建
+                </a>
         </header>
         <div id="main" class="flex-con">
         </div>
     </div>
 </body>
-<script type="text/javascript" src="./script/api.js"></script>
-<script type="text/javascript" src="./script/historyList.js"></script>
-<script type="text/javascript" src="./script/util.js"></script>
 
 </html>
