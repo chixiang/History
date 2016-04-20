@@ -115,6 +115,7 @@ apiready = function() {
 
     if (patient_id != undefined && patient_id != null && patient_id != "") {
         type = "modi";
+        $api.attr($api.byId('name'), 'readonly', 'true');
         getPatient();
     }
 
@@ -172,7 +173,7 @@ function checkPatientName() {
                             idx = idx + 1;
                         }
                         if (idx > 0) {
-                            if (confirm("存在同名患者，【取消】继续新增，【确认】查看患者信息")) {
+                            if (confirm("存在同名患者！\n【取消】- 继续新增\n【确认】- 查看已有患者信息")) {
                                 showDupHistoryList(patients);
                             }
                         }

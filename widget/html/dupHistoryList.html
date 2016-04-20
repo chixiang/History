@@ -147,7 +147,7 @@ function loadList(type) {
                                 remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
                             };
                             if (userName == "admin") {
-                                historyItem.subTitle = "记录: " + historyItem.record_doctor + " - " + historyItem.subTitle;
+                                historyItem.subTitle = "记录: " + ret[idx].record_doctor + " - " + historyItem.subTitle;
                             }
                             json_objs.push(historyItem);
                             idx = idx + 1;
