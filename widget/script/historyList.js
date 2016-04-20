@@ -4,7 +4,7 @@
  */
 var apiready = function() {
     userName = $api.getStorage("userName");
-
+    
     // 接收刷新列表event
     api.addEventListener({
         name: 'historyAddEvent'
@@ -47,7 +47,7 @@ var apiready = function() {
             y: $api.dom('header').offsetHeight,
             w: api.winWidth,
             //h: $api.dom('#main').offsetHeight
-          h: api.frameHeight
+            h: api.frameHeight
         },
         data: historyListData,
         rightBtns: [{
@@ -60,7 +60,7 @@ var apiready = function() {
             icon: '',
             iconWidth: 20
         }, {
-            bgColor: '#B3A689',
+            bgColor: '#B1A686',
             activeBgColor: '',
             width: 70,
             title: '删除',
@@ -70,10 +70,10 @@ var apiready = function() {
             iconWidth: 20
         }],
         styles: {
-            borderColor: '#B3A689',
+            borderColor: '#B1A686',
             item: {
-                bgColor: '#F7F3EA',
-                activeBgColor: '#B3A689',
+                bgColor: '#E2D9C6',
+                activeBgColor: '#B1A686',
                 height: 80,
                 imgWidth: 40,
                 imgHeight: 40,
@@ -82,7 +82,7 @@ var apiready = function() {
                 titleSize: 20,
                 titleColor: '#655A55',
                 subTitleSize: 14.0,
-                subTitleColor: '#E1D7CA',
+                subTitleColor: '#C5A686',
                 remarkColor: '#655A55',
                 remarkSize: 14,
                 remarkIconWidth: 30
@@ -195,7 +195,7 @@ function loadList(type) {
                 column: "updatedAt"
             });
             query.include({
-                qid: ret.qid,
+                qid: queryId1,
                 column: 'patient_pointer'
             });
             if (userName != "admin") {

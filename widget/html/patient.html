@@ -30,7 +30,7 @@
                 <div class="field">
                     <div class="key">姓名:</div>
                     <div class="value">
-                        <input type="text" id="name" />
+                        <input type="text" id="name" onblur="checkPatientName();" />
                     </div>
                 </div>
                 <div class="field" onclick="openPicker('gender');">
@@ -108,6 +108,16 @@ apiready = function() {
     $api.attr($api.byId('age'), 'readonly', 'true');
     $api.attr($api.byId('gender'), 'readonly', 'true');
     $api.attr($api.byId('birthday'), 'readonly', 'true');
+
+    history_id = api.pageParam.data.history_id;
+    patient_id = api.pageParam.data.id;
+    type = "";
+
+    if (patient_id != undefined && patient_id != null && patient_id != "") {
+        type = "modi";
+        getPatient();
+    }
+
     api.addEventListener({
         name: 'returnGender'
     }, function(ret, err) {
@@ -125,16 +135,64 @@ apiready = function() {
         }
     });
 
-    history_id = api.pageParam.data.history_id;
-    patient_id = api.pageParam.data.id;
-
     window.closeWin = function(winName) {
         api.closeWin();
     }
 
-    if (patient_id != undefined && patient_id != null && patient_id != "") {
-        getPatient();
+}
+
+function checkPatientName() {
+    if (type == "modi") {
+        return;
     }
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            var queryId = ret.qid;
+            query.desc({
+                qid: queryId,
+                column: "updatedAt"
+            });
+            query.whereEqual({
+                qid: queryId,
+                column: 'name',
+                value: $api.byId('name').value
+            })
+            var patients = [];
+            model.findAll({
+                class: "patient",
+                qid: queryId
+            }, function(ret, err) {
+                if (err) {
+                    alert(JSON.stringify(err));
+                } else {
+                    if (ret) {
+                        var idx = 0;
+                        while (ret[idx] != undefined) {
+                            patients[idx] = ret[idx];
+                            idx = idx + 1;
+                        }
+                        if (idx > 0) {
+                            if (confirm("存在同名患者，【取消】继续新增，【确认】查看患者信息")) {
+                                showDupHistoryList(patients);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+}
+
+function showDupHistoryList(patients) {
+    api.openWin({
+        name: "dupHistoryList",
+        url: './dupHistoryList.html',
+        pageParam: {
+            patients: patients
+        },
+        reload: false,
+        bounces: false
+    });
 }
 
 function getPatient() {
