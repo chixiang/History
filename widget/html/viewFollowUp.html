@@ -53,8 +53,35 @@ apiready = function() {
         api.closeWin();
     }
 
+    history_id = api.pageParam.history_id;
+    follow_up = api.pageParam.follow_up;
+    index = api.pageParam.index;
+
+    $api.byId('follow_up_date').value = follow_up[index].follow_up_date;
+    $api.byId('follow_up_info').value = follow_up[index].follow_up_info;
+
     $api.attr($api.byId('follow_up_date'), 'readonly', 'true');
     $api.attr($api.byId('follow_up_info'), 'readonly', 'true');
+
+    api.addEventListener({
+        name: 'followupAddOrModiEvent'
+    }, function(ret, err) {
+        if (ret) {
+            follow_up = ret.value.follow_up;
+            data = [];
+            var idx = 0;
+            while (follow_up[idx] != undefined) {
+                follow_up_item = {
+                    "title": follow_up[idx].follow_up_info,
+                    "subTitle": follow_up[idx].follow_up_date
+                }
+                data.push(follow_up_item);
+                idx = idx + 1;
+            }
+            $api.byId('follow_up_date').value = follow_up[index].follow_up_date;
+            $api.byId('follow_up_info').value = follow_up[index].follow_up_info;
+        }
+    });
 
 }
 
@@ -63,7 +90,9 @@ function modiFollowUp(data) {
         name: "followup",
         url: './followup.html',
         pageParam: {
-            data: data
+            history_id: history_id,
+            follow_up: follow_up,
+            index: index
         },
         reload: true,
         bounces: false
