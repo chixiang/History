@@ -3,7 +3,7 @@
  * @return {[type]} [description]
  */
 var apiready = function() {
-    initDBEnv();
+    openDB("history");
     userName = $api.getStorage("userName");
 
     // 接收刷新列表event

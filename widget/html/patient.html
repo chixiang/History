@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="../css/button.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
+    <script type="text/javascript" src="../script/historyDB.js"></script>
+    <script type="text/javascript" src="../script/historySql.js"></script>
 </head>
 
 <body>
@@ -97,6 +99,7 @@
  * @return {[type]} [description]
  */
 apiready = function() {
+    createTable('patient');
     model = api.require('model');
     query = api.require('query');
     model.config({
@@ -256,6 +259,18 @@ function savePatient() {
             }
         });
     } else {
+        DB_insertPatient({
+            name: $api.byId('name').value,
+            gender: $api.byId('gender').value,
+            birthday: $api.byId('birthday').value,
+            age: $api.byId('age').value,
+            admission_number: $api.byId('admission_number').value,
+            outpatient_number: $api.byId('outpatient_number').value,
+            phone: $api.byId('phone').value,
+            address: $api.byId('address').value,
+            job: $api.byId('job').value,
+            record_doctor: userName
+        });
         model.insert({
             class: 'patient',
             value: {

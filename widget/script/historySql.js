@@ -18,11 +18,11 @@ var historySql = {
     					gender text, \
     					birthday text, \
     					age text, \
+                        admission_number text, \
     					outpatient_number text, \
     					phone text, \
     					address text, \
     					job text, \
-    					admission_number text, \
     					record_doctor\
     				);",
     createPhysical: "create table if not exists physical(\
