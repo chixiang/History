@@ -3,6 +3,7 @@
  * @return {[type]} [description]
  */
 var apiready = function() {
+    openDB();
     userName = $api.getStorage("userName");
 
     // 接收刷新列表event
@@ -425,6 +426,7 @@ function openSearch() {
 function logout() {
     if (confirm("是否确定退出？")) {
         $api.setStorage("userName", "");
+        closeDB();
         api.closeToWin({
             name: 'root',
             animation: {
