@@ -1,3 +1,16 @@
+window.onload = function() {
+    // 模拟hover事件
+    var myLinks = document.getElementsByTagName('li');
+    for (var i = 0; i < myLinks.length; i++) {
+        myLinks[i].addEventListener('touchstart', function() {
+            this.className = "hover";
+        }, false);
+        myLinks[i].addEventListener('touchend', function() {
+            this.className = "";
+        }, false);
+    }
+}
+
 /**
  * [getDate 获得当前日期，格式为YYYY-MM-DD]
  * @return {[type]} [description]
