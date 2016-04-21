@@ -20,7 +20,7 @@
             <div id="middle">
                 <span id="title">患者信息维护</span>
             </div>
-            <a id="right" tapmode="" onclick="savePatient();" class="button button-raised button-royal">
+            <a id="right" tapmode="" onclick="savePatient();" class="button button-raised button-blue">
                 保存
             </a>
         </header>
@@ -200,6 +200,7 @@ function showDupHistoryList(patients) {
         pageParam: {
             patients: patients
         },
+        vScrollBarEnabled: false,
         reload: false,
         bounces: false
     });

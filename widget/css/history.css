@@ -34,7 +34,7 @@ header {
     left: 0;
     top: 0;
     width: 100%;
-    color: #E2D9C6;
+    color: #FFF;
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
     background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
     background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
@@ -70,17 +70,22 @@ a:visited {
     display: -webkit-box;
     -webkit-box-pack: center;
     -webkit-box-align: center;
-    font-size: 17px;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .groupName {
     padding: 10px 10px 0px 10px;
-    color: #E2D9C6;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .subGroupName {
     padding: 5px 5px 0px 5px;
-    color: #E2D9C6;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .group {

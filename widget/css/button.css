@@ -17,32 +17,50 @@
 }
 
 .button-raised {
-    border-color: #e1e1e1;
+    border-color: #333;
     border-style: solid;
     border-width: 1px;
     line-height: 30px;
-    -webkit-box-shadow: inset 0px 0px 1px rgba(255, 255, 255, 0.6), 0px 0px 1px rgba(0, 0, 0, 0.05);
-    box-shadow: inset 0px 0px 1px rgba(255, 255, 255, 0.6), 0px 0px 1px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: inset 0px 0px 1px rgba(255, 255, 255, 0.2), 0px 0px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0px 0px 1px rgba(255, 255, 255, 0.2), 0px 0px 1px rgba(0, 0, 0, 0.05);
+}
+
+.button-raised.button-royal {
+    background: -webkit-gradient(linear, left top, left bottom, from(#7A6D67), to(#59504B));
+    background: linear-gradient(#7A6D67, #59504B);
+}
+
+.button-raised.button-blue {
+    background: -webkit-gradient(linear, left top, left bottom, from(#6f96d1), to(#415997));
+    background: linear-gradient(#6f96d1, #415997);
+}
+
+.button-raised.button-red {
+    background: -webkit-gradient(linear, left top, left bottom, from(#d8756d), to(#be4543));
+    background: linear-gradient(#d8756d, #be4543);
 }
 
 .button-raised:active,
 .button-raised.active,
 .button-raised.is-active {
-    /*background: #eeeeee;*/
     -webkit-box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.5), 0px 0px 1px #aaa;
     box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.5), 0px 0px 1px #aaa;
-}
-
-.button-raised.button-royal {
-    border-color: #333;
-/*    background: -webkit-gradient(linear, left top, left bottom, from(#7A6D67), to(#59504B));
-    background: linear-gradient(#7A6D67, #59504B);*/
-    background: rgba(0,0,0,0);
 }
 
 .button-raised.button-royal:active,
 .button-raised.button-royal.active,
 .button-raised.button-royal.is-active {
-    /*border-color: #7A6D67;*/
-    background: #7A6D67;
+    background: #59504B;
+}
+
+.button-raised.button-blue:active,
+.button-raised.button-blue.active,
+.button-raised.button-blue.is-active {
+    background: #415997;
+}
+
+.button-raised.button-red:active,
+.button-raised.button-red.active,
+.button-raised.button-red.is-active {
+    background: #be4543;
 }

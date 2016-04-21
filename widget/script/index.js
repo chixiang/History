@@ -85,6 +85,7 @@ function openHistory() {
             subType: "from_right",
             duration: 300
         },
+        vScrollBarEnabled: false,
         reload: true,
         bounces: false
     });
