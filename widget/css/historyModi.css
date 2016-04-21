@@ -26,7 +26,7 @@ body {
     background-color: #B1A686;
     color: #655A55;
     margin: 50px 0px 0px 0px;
-    font-family: 'Lato', sans-serif;
+    /*font-family: 'Lato', sans-serif;*/
 }
 
 header {
@@ -34,15 +34,21 @@ header {
     left: 0;
     top: 0;
     width: 100%;
-    color: #FFF;
+    color: #E2D9C6;
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #7A6D67), color-stop(1, #59504B));
     background-image: -webkit-linear-gradient(top, #7A6D67 0%, #59504B 100%);
     background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
     display: -webkit-box;
     height: 50px;
     line-height: 50px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    z-index: 5;
+    font-size: 13px;
 }
 
+#main {
+    z-index: 0;
+}
 a,
 a:visited {
     text-decoration: none;
@@ -50,25 +56,29 @@ a:visited {
 
 #left,
 #right {
-    width: 60px;
+    width: 54px;
 }
 
+#rightleft {
+    width: 54px;
+    margin-right: 0px;
+}
 #middle {
     -webkit-box-flex: 1;
     display: -webkit-box;
     -webkit-box-pack: center;
     -webkit-box-align: center;
-    font-size: 18px;
+    font-size: 17px;
 }
 
 .groupName {
     padding: 10px 10px 0px 10px;
-    color: #FFF;
+    color: #E2D9C6;
 }
 
 .subGroupName {
     padding: 5px 5px 0px 5px;
-    color: #FFF;
+    color: #E2D9C6;
 }
 
 .group {
@@ -81,9 +91,9 @@ a:visited {
 }
 
 .field {
-    height: 50px;
-    font-size: 17px;
-    line-height: 50px;
+    height: 40px;
+    font-size: 15px;
+    line-height: 40px;
     padding-left: 10px;
     padding-right: 10px;
     color: #655A55;
@@ -109,8 +119,8 @@ a:visited {
 }
 
 .textarea_field {
-    height: 150px;
-    font-size: 17px;
+    height: 116px;
+    /*font-size: 17px;*/
     -webkit-box-orient: vertical;
 }
 
@@ -156,7 +166,7 @@ a:visited {
 
 input {
     width: 100%;
-    font-size: 17px;
+    /*font-size: 17px;*/
     overflow-x: visible;
     overflow-y: visible;
     background-color: #FFF;
@@ -166,10 +176,71 @@ input {
 
 textarea {
     width: 100%;
-    height: 80px;
+    height: 66px;
     border: none;
     resize: none;
     background-color: #FFF;
-    font-size: 17px;
+    /*font-size: 17px;*/
     padding: 0px;
+}
+
+nav {
+    margin: 0px;
+    text-align: center;
+    width: 64px;
+    margin: 0px 0px 0px 0px;
+}
+
+nav ul ul {
+    display: none;
+}
+
+nav ul li:hover > ul {
+    display: block;
+}
+
+nav ul {
+    padding: 0px;
+    margin: 0px 0px 0px 0px;
+    list-style: none;
+    position: relative;
+    display: inline-table;
+}
+
+nav ul:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+nav ul li {
+    border-radius: 3px;
+}
+
+nav ul li:hover {
+    background: #59504B;
+    box-shadow: inset 0px 0px 20px rgba(0,0,0,.4);
+}
+
+nav ul li ul {
+    box-shadow: 0px 0px 9px rgba(0,0,0,0.5);
+}
+
+nav ul li a {
+    display: block;
+    color: #E2D9C6;
+    text-decoration: none;
+    width: 54px;
+}
+
+nav ul ul {
+    background: #59504B;
+    position: absolute;
+    top: 100%;
+}
+
+nav ul ul ul {
+    position: absolute;
+    right: 100%;
+    top: 0;
 }
