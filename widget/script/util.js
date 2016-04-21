@@ -1,14 +1,15 @@
 window.onload = function() {
     // 模拟hover事件
-    var myLinks = document.getElementsByTagName('li');
-    for (var i = 0; i < myLinks.length; i++) {
-        myLinks[i].addEventListener('touchstart', function() {
-            this.className = "hover";
-        }, false);
-        myLinks[i].addEventListener('touchend', function() {
-            this.className = "";
-        }, false);
-    }
+    // var myLinks = document.getElementsByTagName('li');
+    // for (var i = 0; i < myLinks.length; i++) {
+    //     myLinks[i].addEventListener('touchstart', function() {
+    //         this.className = "hover";
+    //     }, false);
+    //     myLinks[i].addEventListener('touchend', function() {
+    //         this.className = "";
+    //     }, false);
+    // }
+    document.body.addEventListener('touchstart', function(){});
 }
 
 /**

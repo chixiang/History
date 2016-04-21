@@ -26,7 +26,7 @@ body {
     background-color: #B1A686;
     color: #655A55;
     margin: 50px 0px 0px 0px;
-    font-family: 'Lato', sans-serif;
+    /*font-family: 'Lato', sans-serif;*/
 }
 
 header {
@@ -43,6 +43,7 @@ header {
     line-height: 50px;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
     z-index: 5;
+    font-size: 13px;
 }
 
 #main {
@@ -56,7 +57,12 @@ a:visited {
 
 #left,
 #right {
-    width: 60px;
+    width: 54px;
+}
+
+#rightleft {
+    width: 54px;
+    margin-right: 0px;
 }
 
 #middle {
@@ -64,7 +70,7 @@ a:visited {
     display: -webkit-box;
     -webkit-box-pack: center;
     -webkit-box-align: center;
-    font-size: 18px;
+    font-size: 17px;
 }
 
 .groupName {
@@ -87,9 +93,9 @@ a:visited {
 }
 
 .field {
-    height: 50px;
-    font-size: 17px;
-    line-height: 50px;
+    height: 40px;
+    font-size: 15px;
+    line-height: 40px;
     padding-left: 10px;
     padding-right: 10px;
     color: #655A55;
@@ -115,8 +121,8 @@ a:visited {
 }
 
 .textarea_field {
-    height: 150px;
-    font-size: 17px;
+    height: 116px;
+    /*font-size: 17px;*/
     -webkit-box-orient: vertical;
 }
 
@@ -158,7 +164,7 @@ a:visited {
 
 input {
     width: 100%;
-    font-size: 17px;
+    /*font-size: 17px;*/
     overflow-x: visible;
     overflow-y: visible;
     background-color: #E2D9C6;
@@ -168,18 +174,18 @@ input {
 
 textarea {
     width: 100%;
-    height: 80px;
+    height: 66px;
     border: none;
     resize: none;
     background-color: #E2D9C6;
-    font-size: 17px;
+    /*font-size: 17px;*/
     padding: 0px;
 }
 
 nav {
     margin: 0px;
     text-align: center;
-    width: 70px;
+    width: 64px;
     margin: 0px 0px 0px 0px;
 }
 
@@ -222,7 +228,7 @@ nav ul li a {
     display: block;
     color: #E2D9C6;
     text-decoration: none;
-    width: 60px;
+    width: 54px;
 }
 
 nav ul ul {
