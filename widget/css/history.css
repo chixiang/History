@@ -41,6 +41,7 @@ header {
     display: -webkit-box;
     height: 50px;
     line-height: 50px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
 }
 
 a,
@@ -168,4 +169,65 @@ textarea {
     background-color: #E2D9C6;
     font-size: 17px;
     padding: 0px;
+}
+
+nav {
+    margin: 0px;
+    text-align: center;
+    width: 70px;
+    margin: 0px 0px 0px 0px;
+}
+
+nav ul ul {
+    display: none;
+}
+
+nav ul li:hover > ul {
+    display: block;
+}
+
+nav ul {
+    padding: 0px;
+    margin: 0px 0px 0px 0px;
+    list-style: none;
+    position: relative;
+    display: inline-table;
+}
+
+nav ul:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+nav ul li {
+    border-radius: 3px;
+}
+
+nav ul li:hover {
+    background: #59504B;
+    box-shadow: inset 0px 0px 20px rgba(0,0,0,.4);
+}
+
+nav ul li ul {
+    box-shadow: 0px 0px 9px rgba(0,0,0,0.5);
+}
+
+nav ul li a {
+    display: block;
+    color: #E2D9C6;
+    text-decoration: none;
+    width: 60px;
+}
+
+nav ul ul {
+    background: #59504B;
+    position: absolute;
+    top: 100%;
+}
+
+nav ul ul ul {
+    position: absolute;
+    right: 100%;
+    top: 0;
 }

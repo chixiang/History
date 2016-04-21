@@ -20,12 +20,23 @@
             <div id="middle">
                 <span id="title">病历浏览</span>
             </div>
-            <a id="right" tapmode="" onclick="openWin('followupList');" class="button button-raised button-royal">
+<!-- <a id="right" tapmode="" onclick="openWin('followupList');" class="button button-raised button-royal">
                     随访
                 </a>
-            <a id="right" tapmode="" onclick="openWin('modiHistory');" class="button button-raised button-royal">
+<a id="right" tapmode="" onclick="openWin('modiHistory');" class="button button-raised button-royal">
                     修改
                 </a>
+ -->
+            <nav>
+                <ul>
+                    <li><a tapmode="">更多</a>
+                        <ul>
+                            <li><a tapmode="" onclick="openWin('followupList');">随访</a></li>
+                            <li><a tapmode="" onclick="openWin('modiHistory');">修改</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
         </header>
         <div id="main" class="flex-con">
             <div class="groupName">基本信息</div>
@@ -210,13 +221,6 @@
                     </div>
                 </div>
             </div>
-<!--             <div class="groupName">随访</div>
-            <div class="group">
-                <div class="field bottom" onclick="openWin('followupList');">
-                    <div class="key">随访信息</div>
-                    <div class="value more"><span>&gt;</span></div>
-                </div>
-            </div> -->
         </div>
     </div>
 </body>
