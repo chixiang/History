@@ -309,6 +309,7 @@ function openWin(type) {
             subType: "from_right",
             duration: 300
         },
+        vScrollBarEnabled: false,
         reload: false,
         bounces: false
     });
@@ -326,6 +327,7 @@ function viewHistory(history_id) {
         pageParam: {
             history_id: history_id
         },
+        vScrollBarEnabled: false,
         reload: false,
         bounces: false
     });
@@ -344,6 +346,7 @@ function modiHistory(history_id) {
             history_id: history_id,
             type: "modi"
         },
+        vScrollBarEnabled: false,
         reload: false,
         bounces: false
     });

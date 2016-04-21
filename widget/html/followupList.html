@@ -20,7 +20,7 @@
             <div id="middle">
                 <span id="title">随访记录</span>
             </div>
-            <a id="right" tapmode="" onclick="newFollowUp();" class="button button-raised button-royal">
+            <a id="right" tapmode="" onclick="newFollowUp();" class="button button-raised button-blue">
                     新建
                 </a>
         </header>
@@ -196,6 +196,7 @@ function viewFollowUp(index) {
             follow_up: follow_up,
             index: index
         },
+        vScrollBarEnabled: false,
         reload: true,
         bounces: false
     });
@@ -209,6 +210,7 @@ function newFollowUp() {
             history_id: history_id,
             follow_up: follow_up,
         },
+        vScrollBarEnabled: false,
         reload: false,
         bounces: false
     });
@@ -223,6 +225,7 @@ function modiFollowUp(index) {
             follow_up: follow_up,
             index: index
         },
+        vScrollBarEnabled: false,
         reload: true,
         bounces: false
     });
