@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>患者维护</title>
-    <link rel="stylesheet" type="text/css" href="../css/historyModi.css" />
+    <link rel="stylesheet" type="text/css" href="../css/history.css" />
     <link rel="stylesheet" type="text/css" href="../css/button.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
 </head>
 
-<body>
+<body class="body-silver">
     <div class="flex-wrap flex-vertical" id='pageone'>
-        <header>
-            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
-                取消
+        <header class="header-silver">
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-silver">
+                &lt; 取消
             </a>
             <div id="middle">
                 <span id="title">患者信息维护</span>
@@ -28,31 +28,31 @@
             <div class="groupName">基本信息</div>
             <div class="group">
                 <div class="field">
-                    <div class="key">姓名:</div>
+                    <div class="key">姓名</div>
                     <div class="value">
                         <input type="text" id="name" onblur="checkPatientName();" />
                     </div>
                 </div>
                 <div class="field" onclick="openPicker('gender');">
-                    <div class="key">性别:</div>
+                    <div class="key">性别</div>
                     <div class="value">
                         <input type="text" id="gender" />
                     </div>
                 </div>
                 <div class="field" onclick="openPicker('date');">
-                    <div class="key">出生日期:</div>
+                    <div class="key">出生日期</div>
                     <div class="value">
                         <input type="text" id="birthday" />
                     </div>
                 </div>
                 <div class="field">
-                    <div class="key">年龄:</div>
+                    <div class="key">年龄</div>
                     <div class="value">
                         <input type="text" id="age" />
                     </div>
                 </div>
                 <div class="field bottom">
-                    <div class="key">职业:</div>
+                    <div class="key">职业</div>
                     <div class="value">
                         <input type="text" id="job" />
                     </div>
@@ -61,13 +61,13 @@
             <div class="groupName">编号</div>
             <div class="group">
                 <div class="field">
-                    <div class="key">住院号:</div>
+                    <div class="key">住院号</div>
                     <div class="value">
                         <input type="text" id="admission_number" />
                     </div>
                 </div>
                 <div class="field bottom">
-                    <div class="key">门诊号:</div>
+                    <div class="key">门诊号</div>
                     <div class="value">
                         <input type="text" id="outpatient_number" />
                     </div>
@@ -76,13 +76,13 @@
             <div class="groupName">联系方式</div>
             <div class="group">
                 <div class="field">
-                    <div class="key">电话:</div>
+                    <div class="key">电话</div>
                     <div class="value">
                         <input type="text" id="phone" />
                     </div>
                 </div>
                 <div class="field textarea_field bottom">
-                    <div class="textarea_key">地址:</div>
+                    <div class="textarea_key">地址</div>
                     <div class="textarea_value">
                         <textarea id="address" placeholder="请输入联系地址"></textarea>
                     </div>

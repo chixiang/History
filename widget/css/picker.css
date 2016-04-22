@@ -24,6 +24,18 @@ header {
     background-image: linear-gradient(to bottom, #7A6D67 0%, #59504B 100%);
 }
 
+
+.body-silver {
+    background-color: #d5d7dc;
+    color: #000;
+}
+
+.header-silver {
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #73767a), color-stop(1, #484b4e));
+    background-image: -webkit-linear-gradient(top, #73767a 0%, #484b4e 100%);
+    background-image: linear-gradient(to bottom, #73767a 0%, #484b4e 100%);
+}
+
 div {
     border: 0px;
     margin: 0px;
