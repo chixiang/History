@@ -163,18 +163,142 @@
  * @return {[type]} [description]
  */
 apiready = function() {
-    api.openFrame({
-        name: "physical",
-        url: './physicalFrame.html',
-        pageParam: api.pageParam,
-        vScrollBarEnabled: false,
-        reload: false,
-        bounces: false,
-        animation: {
-            type: "fade",
-            duration: 0
-        },
+    // 视力通过picker选择，不允许输入
+    $api.attr($api.byId('vod'), 'readonly', 'true');
+    $api.attr($api.byId('vos'), 'readonly', 'true');
+    $api.attr($api.byId('corrected_vod'), 'readonly', 'true');
+    $api.attr($api.byId('corrected_vos'), 'readonly', 'true');
+    api.addEventListener({
+        name: 'returnVision'
+    }, function(ret, err) {
+        if (ret) {
+            $api.byId(ret.value.visionType).value = ret.value.vision;
+        }
     });
+
+    model = api.require('model');
+    query = api.require('query');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+
+    history_id = api.pageParam.data.history_id;
+    physical_id = api.pageParam.data.id;
+
+    // 如果主界面传入了id，代表修改，则从数据库查询已有数据
+    if (physical_id != undefined && physical_id != null && physical_id != "") {
+        showProgress();
+        query.createQuery(function(ret, err) {
+            if (ret && ret.qid) {
+                model.findById({
+                    class: "physical",
+                    id: physical_id
+                }, function(ret, err) {
+                    if (err) {
+                        alert(JSON.stringify(err));
+                    } else {
+                        if (ret) {
+                            setPhysical(ret);
+                        }
+                    }
+                    api.hideProgress();
+                });
+            }
+        });
+    }
+
+    window.closeWin = function(winName) {
+        api.closeWin();
+    }
+}
+
+/**
+ * [savePhysical description]
+ * @return {[type]} [description]
+ */
+function savePhysical() {
+
+    showProgress();
+
+    if (physical_id != "" && physical_id != undefined && physical_id != null) {
+        model.updateById({
+            class: 'physical',
+            id: physical_id,
+            value: {
+                vod: $api.byId('vod').value,
+                vos: $api.byId('vos').value,
+                corrected_vod: $api.byId('corrected_vod').value,
+                corrected_vos: $api.byId('corrected_vos').value,
+                tod: $api.byId('tod').value,
+                tos: $api.byId('tos').value,
+                outer_eye: $api.byId('outer_eye').value,
+                conjunctiva: $api.byId('conjunctiva').value,
+                cornea: $api.byId('cornea').value,
+                anterior_chamber: $api.byId('anterior_chamber').value,
+                lens: $api.byId('lens').value,
+                vitreous: $api.byId('vitreous').value,
+                eyeground: $api.byId('eyeground').value
+            }
+        }, function(ret, err) {
+            if (ret) {
+                physicalModiEvent(ret.id);
+                hideProgress();
+                api.closeWin();
+            } else {
+                alert("修改体检信息失败！" + JSON.stringify(err));
+                hideProgress();
+            }
+        });
+    } else {
+        model.insert({
+            class: 'physical',
+            value: {
+                vod: $api.byId('vod').value,
+                vos: $api.byId('vos').value,
+                corrected_vod: $api.byId('corrected_vod').value,
+                corrected_vos: $api.byId('corrected_vos').value,
+                tod: $api.byId('tod').value,
+                tos: $api.byId('tos').value,
+                outer_eye: $api.byId('outer_eye').value,
+                conjunctiva: $api.byId('conjunctiva').value,
+                cornea: $api.byId('cornea').value,
+                anterior_chamber: $api.byId('anterior_chamber').value,
+                lens: $api.byId('lens').value,
+                vitreous: $api.byId('vitreous').value,
+                eyeground: $api.byId('eyeground').value
+            }
+        }, function(ret, err) {
+            if (ret) {
+                physicalAddEvent(ret.id);
+                // 如果history_id不为空，表示从viewPhysical直接修改，而physical_id为空，则为新增，新增
+                // 之后还要将新生成的physical_id和history_id关联起来
+                if (history_id != "" && history_id != undefined && history_id != null) {
+                    model.updateById({
+                        class: 'caseHistory',
+                        id: history_id,
+                        value: {
+                            physical_pointer: ret.id
+                        }
+                    }, function(ret, err) {
+                        if (ret) {
+                            hideProgress();
+                            api.closeWin();
+                        } else {
+                            alert("新增体检信息失败！" + JSON.stringify(err));
+                            hideProgress();
+                        }
+                    });
+                }
+                hideProgress();
+                api.closeWin();
+            } else {
+                alert("新增体检信息失败！" + JSON.stringify(err));
+                hideProgress();
+            }
+        });
+    }
 }
 </script>
 
