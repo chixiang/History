@@ -40,6 +40,11 @@
     background: linear-gradient(#d8756d, #be4543);
 }
 
+.button-raised.button-silver {
+    background: -webkit-gradient(linear, left top, left bottom, from(#73767a), to(#484b4e));
+    background: linear-gradient(#73767a, #484b4e);
+}
+
 .button-raised:active,
 .button-raised.active,
 .button-raised.is-active {
@@ -63,4 +68,10 @@
 .button-raised.button-red.active,
 .button-raised.button-red.is-active {
     background: #be4543;
+}
+
+.button-raised.button-silver:active,
+.button-raised.button-silver.active,
+.button-raised.button-silver.is-active {
+    background: #484b4e;
 }

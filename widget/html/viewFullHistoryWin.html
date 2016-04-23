@@ -26,16 +26,6 @@
             <a id="right" tapmode="" onclick="openWin('modiHistory');" class="button button-raised button-silver">
                     修改
                 </a>
-            <!--             <nav>
-                <ul>
-                    <li><a tapmode="">更多</a>
-                        <ul>
-                            <li><a tapmode="" onclick="openWin('followupList');">随访</a></li>
-                            <li><a tapmode="" onclick="openWin('modiHistory');">修改</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav> -->
         </header>
         <div id="main" class="flex-con">
             <div class="groupName">基本信息</div>
@@ -224,187 +214,18 @@
     </div>
 </body>
 <script type="text/javascript">
-/**
- * [apiready description]
- * @return {[type]} [description]
- */
 apiready = function() {
-    window.closeWin = function(winName) {
-        api.closeWin();
-    }
-
-    // 设置字段为readonly
-    $api.attr($api.byId('patient_info'), 'readonly', 'true');
-    $api.attr($api.byId('consultation_department'), 'readonly', 'true');
-    $api.attr($api.byId('diagnosis'), 'readonly', 'true');
-    $api.attr($api.byId('chief_complaint'), 'readonly', 'true');
-    $api.attr($api.byId('treatment'), 'readonly', 'true');
-    $api.attr($api.byId('follow_up'), 'readonly', 'true');
-
-    $api.attr($api.byId('name'), 'readonly', 'true');
-    $api.attr($api.byId('gender'), 'readonly', 'true');
-    $api.attr($api.byId('birthday'), 'readonly', 'true');
-    $api.attr($api.byId('age'), 'readonly', 'true');
-    $api.attr($api.byId('admission_number'), 'readonly', 'true');
-    $api.attr($api.byId('outpatient_number'), 'readonly', 'true');
-    $api.attr($api.byId('phone'), 'readonly', 'true');
-    $api.attr($api.byId('address'), 'readonly', 'true');
-    $api.attr($api.byId('job'), 'readonly', 'true');
-
-    $api.attr($api.byId('vod'), 'readonly', 'true');
-    $api.attr($api.byId('vos'), 'readonly', 'true');
-    $api.attr($api.byId('corrected_vod'), 'readonly', 'true');
-    $api.attr($api.byId('corrected_vos'), 'readonly', 'true');
-    $api.attr($api.byId('tod'), 'readonly', 'true');
-    $api.attr($api.byId('tos'), 'readonly', 'true');
-    $api.attr($api.byId('outer_eye'), 'readonly', 'true');
-    $api.attr($api.byId('conjunctiva'), 'readonly', 'true');
-    $api.attr($api.byId('cornea'), 'readonly', 'true');
-    $api.attr($api.byId('anterior_chamber'), 'readonly', 'true');
-    $api.attr($api.byId('lens'), 'readonly', 'true');
-    $api.attr($api.byId('vitreous'), 'readonly', 'true');
-    $api.attr($api.byId('eyeground'), 'readonly', 'true');
-
-    // 设置需要显示的字段值
-    history_id = api.pageParam.history_id;
-    patient_id = "";
-    physical_id = "";
-    data = {};
-    getFullHistory(history_id);
-
-    api.addEventListener({
-        name: 'historyModiEvent'
-    }, function(ret, err) {
-        if (ret) {
-            getFullHistory(ret.value.history_id);
-        }
-    });
-
-    api.addEventListener({
-        name: 'physicalAddEvent'
-    }, function(ret, err) {
-        if (ret) {
-            getFullHistory(history_id);
-        }
-    });
-
-    api.addEventListener({
-        name: 'followupAddOrModiEvent'
-    }, function(ret, err) {
-        if (ret) {
-            getFullHistory(history_id);
-        }
-    });
-}
-
-/**
- * [getHistory description]
- * @param  {[type]} history_id [description]
- * @return {[type]}            [description]
- */
-function getFullHistory(history_id) {
-    showProgress();
-    model = api.require('model');
-    query = api.require('query');
-    model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
-    });
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            var queryId = ret.qid;
-            query.include({
-                qid: queryId,
-                column: 'patient_pointer'
-            });
-            query.include({
-                qid: queryId,
-                column: 'physical_pointer'
-            });
-            query.whereEqual({
-                qid: queryId,
-                column: "id",
-                value: history_id
-            })
-            model.findAll({
-                class: "caseHistory",
-                qid: queryId
-            }, function(ret, err) {
-                if (err) {
-                    hideProgress();
-                    alert(JSON.stringify(err));
-                } else {
-                    if (ret[0]) {
-                        data = ret[0];
-                        hideProgress();
-                        setFullHistory(data);
-                    }
-                }
-            });
-        }
-    });
-}
-
-
-/**
- * [openWin 打开新窗口]
- * @param  {[type]} type [窗口类型]
- * @return {[type]}      [description]
- */
-function openWin(type) {
-    var reload = true;
-    var pageParam = {};
-    var animation = null;
-    var page = "";
-    switch (type) {
-        case "modiHistory":
-            page = "history";
-            pageParam = {
-                "history_id": history_id,
-                "type": "modi"
-            };
-            reload = false;
-            break;
-        case "viewPatient":
-            page = "viewPatient";
-            pageParam = {
-                "data": {
-                    "id": patient_id,
-                    "history_id": history_id
-                }
-            }
-            break;
-        case "viewPhysical":
-            page = "viewPhysical";
-            pageParam = {
-                "data": {
-                    "id": physical_id,
-                    "history_id": history_id
-                }
-            }
-            break;
-        case "followupList":
-            page = "followupList";
-            pageParam = {
-                "history_id": history_id,
-                "follow_up": data.follow_up
-            }
-            break;
-        default:
-            break;
-    }
-    api.openWin({
-        name: type,
-        url: './' + page + '.html',
-        pageParam: pageParam,
-        animation: {
-            type: "movein",
-            duration: 300
-        },
+    api.openFrame({
+        name: "history",
+        url: './viewFullHistory.html',
+        pageParam: api.pageParam,
         vScrollBarEnabled: false,
-        reload: reload,
-        bounces: false
+        reload: false,
+        bounces: false,
+        animation: {
+            type: "fade",
+            duration: 0
+        },
     });
 }
 </script>

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>患者维护</title>
-    <link rel="stylesheet" type="text/css" href="../css/historyModi.css" />
+    <link rel="stylesheet" type="text/css" href="../css/history.css" />
     <link rel="stylesheet" type="text/css" href="../css/button.css" />
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/util.js"></script>
@@ -13,11 +13,11 @@
     <script type="text/javascript" src="../script/historySql.js"></script>
 </head>
 
-<body>
+<body class="body-silver">
     <div class="flex-wrap flex-vertical" id='pageone'>
-        <header>
-            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
-                取消
+        <header class="header-silver">
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-silver">
+                &lt; 取消
             </a>
             <div id="middle">
                 <span id="title">患者信息维护</span>
@@ -30,31 +30,31 @@
             <div class="groupName">基本信息</div>
             <div class="group">
                 <div class="field">
-                    <div class="key">姓名:</div>
+                    <div class="key">姓名</div>
                     <div class="value">
                         <input type="text" id="name" onblur="checkPatientName();" />
                     </div>
                 </div>
                 <div class="field" onclick="openPicker('gender');">
-                    <div class="key">性别:</div>
+                    <div class="key">性别</div>
                     <div class="value">
                         <input type="text" id="gender" />
                     </div>
                 </div>
                 <div class="field" onclick="openPicker('date');">
-                    <div class="key">出生日期:</div>
+                    <div class="key">出生日期</div>
                     <div class="value">
                         <input type="text" id="birthday" />
                     </div>
                 </div>
                 <div class="field">
-                    <div class="key">年龄:</div>
+                    <div class="key">年龄</div>
                     <div class="value">
                         <input type="text" id="age" />
                     </div>
                 </div>
                 <div class="field bottom">
-                    <div class="key">职业:</div>
+                    <div class="key">职业</div>
                     <div class="value">
                         <input type="text" id="job" />
                     </div>
@@ -63,13 +63,13 @@
             <div class="groupName">编号</div>
             <div class="group">
                 <div class="field">
-                    <div class="key">住院号:</div>
+                    <div class="key">住院号</div>
                     <div class="value">
                         <input type="text" id="admission_number" />
                     </div>
                 </div>
                 <div class="field bottom">
-                    <div class="key">门诊号:</div>
+                    <div class="key">门诊号</div>
                     <div class="value">
                         <input type="text" id="outpatient_number" />
                     </div>
@@ -78,13 +78,13 @@
             <div class="groupName">联系方式</div>
             <div class="group">
                 <div class="field">
-                    <div class="key">电话:</div>
+                    <div class="key">电话</div>
                     <div class="value">
                         <input type="text" id="phone" />
                     </div>
                 </div>
                 <div class="field textarea_field bottom">
-                    <div class="textarea_key">地址:</div>
+                    <div class="textarea_key">地址</div>
                     <div class="textarea_value">
                         <textarea id="address" placeholder="请输入联系地址"></textarea>
                     </div>
@@ -99,223 +99,18 @@
  * @return {[type]} [description]
  */
 apiready = function() {
-    createTable('patient');
-    model = api.require('model');
-    query = api.require('query');
-    model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
-    });
-
-    $api.attr($api.byId('age'), 'readonly', 'true');
-    $api.attr($api.byId('gender'), 'readonly', 'true');
-    $api.attr($api.byId('birthday'), 'readonly', 'true');
-
-    userName = $api.getStorage("userName");
-
-    history_id = api.pageParam.data.history_id;
-    patient_id = api.pageParam.data.id;
-    type = "";
-
-    if (patient_id != undefined && patient_id != null && patient_id != "") {
-        type = "modi";
-        $api.attr($api.byId('name'), 'readonly', 'true');
-        getPatient();
-    }
-
-    api.addEventListener({
-        name: 'returnGender'
-    }, function(ret, err) {
-        if (ret) {
-            $api.byId('gender').value = ret.value.gender;
-        }
-    });
-
-    api.addEventListener({
-        name: 'returnBirthday'
-    }, function(ret, err) {
-        if (ret) {
-            $api.byId('birthday').value = ret.value.birthday;
-            $api.byId('age').value = getAge(ret.value.birthday);
-        }
-    });
-
-    window.closeWin = function(winName) {
-        api.closeWin();
-    }
-
-}
-
-function checkPatientName() {
-    if (type == "modi") {
-        return;
-    }
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            var queryId = ret.qid;
-            query.desc({
-                qid: queryId,
-                column: "updatedAt"
-            });
-            query.whereEqual({
-                qid: queryId,
-                column: 'name',
-                value: $api.byId('name').value
-            });
-            if (userName != "admin") {
-                query.whereEqual({
-                    qid: queryId,
-                    column: 'record_doctor',
-                    value: userName
-                });
-            }
-            var patients = [];
-            model.findAll({
-                class: "patient",
-                qid: queryId
-            }, function(ret, err) {
-                if (err) {
-                    alert(JSON.stringify(err));
-                } else {
-                    if (ret) {
-                        var idx = 0;
-                        while (ret[idx] != undefined) {
-                            patients[idx] = ret[idx];
-                            idx = idx + 1;
-                        }
-                        if (idx > 0) {
-                            if (confirm("已有同名患者！\n\n【取消】- 继续新增\n【确定】- 查看已有患者信息")) {
-                                showDupHistoryList(patients);
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    });
-}
-
-function showDupHistoryList(patients) {
-    api.openWin({
-        name: "dupHistoryList",
-        url: './dupHistoryList.html',
-        pageParam: {
-            patients: patients
-        },
+    api.openFrame({
+        name: "patient",
+        url: './patientFrame.html',
+        pageParam: api.pageParam,
         vScrollBarEnabled: false,
         reload: false,
-        bounces: false
+        bounces: false,
+        animation: {
+            type: "fade",
+            duration: 0
+        },
     });
-}
-
-function getPatient() {
-    showProgress();
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            model.findById({
-                class: "patient",
-                id: patient_id
-            }, function(ret, err) {
-                if (err) {
-                    alert(JSON.stringify(err));
-                } else {
-                    if (ret) {
-                        setPatient(ret);
-                    }
-                }
-                api.hideProgress();
-            });
-        }
-    });
-}
-
-function savePatient() {
-
-    showProgress();
-
-    if (patient_id != "" && patient_id != undefined && patient_id != null) {
-        model.updateById({
-            class: 'patient',
-            id: patient_id,
-            value: {
-                // name: $api.byId('name').value,
-                gender: $api.byId('gender').value,
-                birthday: $api.byId('birthday').value,
-                age: $api.byId('age').value,
-                admission_number: $api.byId('admission_number').value,
-                outpatient_number: $api.byId('outpatient_number').value,
-                phone: $api.byId('phone').value,
-                address: $api.byId('address').value,
-                job: $api.byId('job').value
-            }
-        }, function(ret, err) {
-            if (ret) {
-                patientModiEvent(ret.id)
-                hideProgress();
-                api.closeWin();
-            } else {
-                alert("修改患者信息失败！" + JSON.stringify(err));
-                hideProgress();
-            }
-        });
-    } else {
-        DB_insertPatient({
-            name: $api.byId('name').value,
-            gender: $api.byId('gender').value,
-            birthday: $api.byId('birthday').value,
-            age: $api.byId('age').value,
-            admission_number: $api.byId('admission_number').value,
-            outpatient_number: $api.byId('outpatient_number').value,
-            phone: $api.byId('phone').value,
-            address: $api.byId('address').value,
-            job: $api.byId('job').value,
-            record_doctor: userName
-        });
-        model.insert({
-            class: 'patient',
-            value: {
-                name: $api.byId('name').value,
-                gender: $api.byId('gender').value,
-                birthday: $api.byId('birthday').value,
-                age: $api.byId('age').value,
-                admission_number: $api.byId('admission_number').value,
-                outpatient_number: $api.byId('outpatient_number').value,
-                phone: $api.byId('phone').value,
-                address: $api.byId('address').value,
-                job: $api.byId('job').value,
-                record_doctor: userName
-            }
-        }, function(ret, err) {
-            if (ret) {
-                patientAddEvent(ret.id);
-                // 如果history_id不为空，表示从viewPatient直接修改，而patient_id为空，则为新增，新增
-                // 之后还要将新生成的patient_id和history_id关联起来
-                if (history_id != "" && history_id != undefined && history_id != null) {
-                    model.updateById({
-                        class: 'caseHistory',
-                        id: history_id,
-                        value: {
-                            patient_pointer: ret.id
-                        }
-                    }, function(ret, err) {
-                        if (ret) {
-                            hideProgress();
-                            api.closeWin();
-                        } else {
-                            alert("新增患者信息失败！" + JSON.stringify(err));
-                            hideProgress();
-                        }
-                    });
-                }
-                hideProgress();
-                api.closeWin();
-            } else {
-                alert("新增患者信息失败！" + JSON.stringify(err));
-                hideProgress();
-            }
-        });
-    }
 }
 </script>
 

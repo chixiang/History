@@ -46,6 +46,17 @@ header {
     font-size: 13px;
 }
 
+.body-silver {
+    background-color: #d5d7dc;
+    color: #000;
+}
+
+.header-silver {
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #73767a), color-stop(1, #484b4e));
+    background-image: -webkit-linear-gradient(top, #73767a 0%, #484b4e 100%);
+    background-image: linear-gradient(to bottom, #73767a 0%, #484b4e 100%);
+}
+
 #main {
     z-index: 0;
 }
@@ -76,35 +87,36 @@ a:visited {
 
 .groupName {
     padding: 10px 10px 0px 10px;
-    color: #FFF;
+    color: #93979e;
     font-size: 14px;
     font-weight: bold;
 }
 
 .subGroupName {
     padding: 5px 5px 0px 5px;
-    color: #FFF;
+    color: #93979e;
     font-size: 14px;
     font-weight: bold;
 }
 
 .group {
     margin: 10px;
-    background-color: #E2D9C6;
+    background-color: #FFF;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    border: 1px solid #BFBFBF;
+    /*border: 1px solid #f0f0f0;*/
     border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
 }
 
 .field {
-    height: 40px;
-    font-size: 15px;
-    line-height: 40px;
+    height: 45px;
+    font-size: 16px;
+    line-height: 45px;
     padding-left: 10px;
     padding-right: 10px;
-    color: #655A55;
-    border-bottom: 1px solid #BFBFBF;
+    color: #424758;
+    border-bottom: 1px solid #f0f0f0;
     display: -webkit-box;
 }
 
@@ -112,7 +124,7 @@ a:visited {
     width: 50%;
     display: -webkit-box;
     margin-right: 4px;
-    border-right: 1px solid #BFBFBF;
+    border-right: 1px solid #f0f0f0;
 }
 
 .rightColumn {
@@ -126,7 +138,7 @@ a:visited {
 }
 
 .textarea_field {
-    height: 116px;
+    height: 120px;
     /*font-size: 17px;*/
     -webkit-box-orient: vertical;
 }
@@ -172,17 +184,17 @@ input {
     /*font-size: 17px;*/
     overflow-x: visible;
     overflow-y: visible;
-    background-color: #E2D9C6;
+    background-color: #FFF;
     border: none;
     text-align: right;
 }
 
 textarea {
     width: 100%;
-    height: 66px;
+    height: 60px;
     border: none;
     resize: none;
-    background-color: #E2D9C6;
+    background-color: #FFF;
     /*font-size: 17px;*/
     padding: 0px;
 }

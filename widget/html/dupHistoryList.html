@@ -11,16 +11,16 @@
     <script type="text/javascript" src="../script/util.js"></script>
 </head>
 
-<body>
+<body class="body-silver">
     <div id="wrap" class="flex-wrap flex-vertical">
-        <header>
-            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-royal">
+        <header class="header-silver">
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-silver">
                     &lt; 返回
                 </a>
             <div id="middle">
                 <span id="title">重名病历</span>
             </div>
-            <a id="right" tapmode="" onclick="" class="button button-raised button-royal">
+            <a id="right" tapmode="" onclick="" class="button button-raised button-silver">
             </a>
         </header>
         <div id="main" class="flex-con">
@@ -64,20 +64,20 @@ var apiready = function() {
         },
         data: historyListData,
         styles: {
-            borderColor: '#B1A686',
+            borderColor: '#f0f0f0',
             item: {
-                bgColor: '#E2D9C6',
-                activeBgColor: '#B1A686',
+                bgColor: '#FFF',
+                activeBgColor: '#d5d7dc',
                 height: 80,
                 imgWidth: 40,
                 imgHeight: 40,
                 imgCorner: 4,
                 placeholderImg: '',
-                titleSize: 20,
-                titleColor: '#655A55',
+                titleSize: 18,
+                titleColor: '#424758',
                 subTitleSize: 14.0,
-                subTitleColor: '#C5A686',
-                remarkColor: '#655A55',
+                subTitleColor: '#93979e',
+                remarkColor: '#424758',
                 remarkSize: 14,
                 remarkIconWidth: 30
             }
