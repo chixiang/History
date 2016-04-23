@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>病历浏览</title>
+    <link rel="stylesheet" type="text/css" href="../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../css/button.css" />
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/util.js"></script>
+</head>
+
+<body class="body-silver">
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header id='header' class="header-silver">
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-silver">
+                    &lt; 返回
+                </a>
+            <div id="middle">
+                <span id="title"></span>
+            </div>
+            <a id="rightleft" tapmode="" onclick="openWin('followupList');" class="button button-raised button-silver">
+                    随访
+                </a>
+            <a id="right" tapmode="" onclick="openWin('modiHistory');" class="button button-raised button-silver">
+                    修改
+                </a>
+        </header>
+        <div id="main" class="flex-con">
+            <div class="groupName">基本信息</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">姓名</div>
+                    <div class="value">
+                        <input type="text" id="name" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">性别</div>
+                    <div class="value">
+                        <input type="text" id="gender" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">出生日期</div>
+                    <div class="value">
+                        <input type="text" id="birthday" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">年龄</div>
+                    <div class="value">
+                        <input type="text" id="age" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">职业</div>
+                    <div class="value">
+                        <input type="text" id="job" />
+                    </div>
+                </div>
+            </div>
+            <div class="groupName">编号</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">住院号</div>
+                    <div class="value">
+                        <input type="text" id="admission_number" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">门诊号</div>
+                    <div class="value">
+                        <input type="text" id="outpatient_number" />
+                    </div>
+                </div>
+            </div>
+            <div class="groupName">联系方式</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">电话</div>
+                    <div class="value">
+                        <input type="text" id="phone" />
+                    </div>
+                </div>
+                <div class="field textarea_field bottom">
+                    <div class="textarea_key">地址</div>
+                    <div class="textarea_value">
+                        <textarea id="address"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="groupName">诊疗</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">会诊科室</div>
+                    <div class="value">
+                        <input type="text" id="consultation_department" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">主诉</div>
+                    <div class="value">
+                        <input type="text" id="chief_complaint" />
+                    </div>
+                </div>
+                <div class="field textarea_field">
+                    <div class="textarea_key">诊断</div>
+                    <div class="textarea_value">
+                        <textarea id="diagnosis"></textarea>
+                    </div>
+                </div>
+                <div class="field textarea_field">
+                    <div class="textarea_key">治疗</div>
+                    <div class="textarea_value">
+                        <textarea id="treatment"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="groupName">裸眼视力</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">Vod</div>
+                    <div class="value">
+                        <input type="text" id="vod" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">Vos</div>
+                    <div class="value">
+                        <input type="text" id="vos" />
+                    </div>
+                </div>
+            </div>
+            <div class="groupName">矫正视力</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">Vod</div>
+                    <div class="value">
+                        <input type="text" id="corrected_vod" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">Vos</div>
+                    <div class="value">
+                        <input type="text" id="corrected_vos" />
+                    </div>
+                </div>
+            </div>
+            <div class="groupName">眼压</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">Tod</div>
+                    <div class="value_with_unit">
+                        <input type="text" id="tod" />
+                    </div>
+                    <div class="unit">mmHg</div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">Tos</div>
+                    <div class="value_with_unit">
+                        <input type="text" id="tos" />
+                    </div>
+                    <div class="unit">mmHg</div>
+                </div>
+            </div>
+            <div class="groupName">其他</div>
+            <div class="group">
+                <div class="field">
+                    <div class="key">外眼</div>
+                    <div class="value">
+                        <input type="text" id="outer_eye" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">结膜</div>
+                    <div class="value">
+                        <input type="text" id="conjunctiva" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">角膜</div>
+                    <div class="value">
+                        <input type="text" id="cornea" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">前房</div>
+                    <div class="value">
+                        <input type="text" id="anterior_chamber" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">晶体</div>
+                    <div class="value">
+                        <input type="text" id="lens" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">玻璃体</div>
+                    <div class="value">
+                        <input type="text" id="vitreous" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">眼底</div>
+                    <div class="value">
+                        <input type="text" id="eyeground" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+apiready = function() {
+    api.openFrame({
+        name: "history",
+        url: './viewFullHistory.html',
+        pageParam: api.pageParam,
+        vScrollBarEnabled: false,
+        reload: false,
+        bounces: false,
+        animation: {
+            type: "fade",
+            duration: 0
+        },
+    });
+}
+</script>
+
+</html>

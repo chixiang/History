@@ -324,7 +324,7 @@ function openWin(type) {
 function viewHistory(history_id) {
     api.openWin({
         name: "history",
-        url: './html/viewFullHistory.html',
+        url: './html/viewFullHistoryWin.html',
         pageParam: {
             history_id: history_id
         },
