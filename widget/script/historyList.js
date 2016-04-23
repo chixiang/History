@@ -74,7 +74,7 @@ var apiready = function() {
             borderColor: '#f0f0f0',
             item: {
                 bgColor: '#FFF',
-                activeBgColor: '#d5d7dc',
+                activeBgColor: '#6f96d1',
                 height: 80,
                 imgWidth: 60,
                 imgHeight: 60,
@@ -324,7 +324,7 @@ function openWin(type) {
 function viewHistory(history_id) {
     api.openWin({
         name: "history",
-        url: './html/viewFullHistoryWin.html',
+        url: './html/viewFullHistory.html',
         pageParam: {
             history_id: history_id
         },
@@ -394,27 +394,27 @@ function openSearch() {
         styles: {
             navBar: {
                 bgColor: '#FFFFFF',
-                borderColor: '#ccc'
+                borderColor: '#f0f0f0'
             },
             searchBox: {
                 bgImg: '',
-                color: '#000',
-                height: 44
+                color: '#424758',
+                height: 36
             },
             cancel: {
                 bg: 'rgba(0,0,0,0)',
-                color: '#D2691E',
+                color: '#d8756d',
                 size: 16
             },
             list: {
-                color: '#696969',
+                color: '#93979e',
                 bgColor: '#FFFFFF',
-                borderColor: '#eee',
+                borderColor: '#f0f0f0',
                 size: 16
             },
             clear: {
-                color: '#000000',
-                borderColor: '#ccc',
+                color: '#424758',
+                borderColor: '#f0f0f0',
                 size: 16
             }
         }

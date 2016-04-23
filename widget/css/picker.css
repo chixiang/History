@@ -9,6 +9,8 @@ html body {
     -webkit-flex-flow: column;
     flex-flow: column;
     background-color: #F7F3EA;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;;
 }
 
 header {
