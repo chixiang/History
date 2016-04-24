@@ -1,3 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>病历列表</title>
+    <link rel="stylesheet" type="text/css" href="../../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/button.css" />
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/constants.js"></script>
+    <!-- <script type="text/javascript" src="widget://script/historyList.js"></script> -->
+    <script type="text/javascript" src="../../script/util.js"></script>
+    <!--     <script type="text/javascript" src="./script/historyDB.js"></script>
+    <script type="text/javascript" src="./script/historySql.js"></script> -->
+</head>
+
+<body class="body-silver">
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header class="header-silver">
+            <a id="left" tapmode="" onclick="logout();" class="button button-raised button-red">
+                    退出
+                </a>
+            <div id="middle">
+                <span id="title"></span>
+            </div>
+            <a id="rightleft" tapmode="" onclick="openSearch();" class="button button-raised button-silver">
+                    查找
+                </a>
+            <a id="right" tapmode="" onclick="addHistory();" class="button button-raised button-blue">
+                    新建
+                </a>
+            <!--             <nav>
+                <ul>
+                    <li><a tapmode="">更多</a>
+                        <ul>
+                            <li><a tapmode="" onclick="openWin('history');">新建</a></li>
+                            <li><a tapmode="" onclick="openSearch();">查找</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav> -->
+        </header>
+        <div id="main" class="flex-con">
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
 /**
  * [apiready description]
  * @return {[type]} [description]
@@ -5,7 +53,6 @@
 var apiready = function() {
     // openDB("history");
     userName = $api.getStorage("userName");
-    alert("1");
 
     // 接收刷新列表event
     // api.addEventListener({
@@ -24,11 +71,13 @@ var apiready = function() {
     // });
 
     // 测试发现ios初始列表数组为空的话不加载UIListView，所以初始先一个空列表
-    var historyListData = [{
-        title: '',
-        subTitle: '',
-        remark: ''
-    }];
+    // var historyListData = [{
+    //     title: '',
+    //     subTitle: '',
+    //     remark: ''
+    // }];
+
+    var historyListData = [];
 
     // 每页数据设置为10条
     per_page_num = 10;
@@ -179,29 +228,31 @@ var apiready = function() {
  * @return {[type]}      [description]
  */
 function loadList(userName, per_page_num, type, callback) {
-    alert("2");
-    var ret = getHistoryList(userName, per_page_num, type);
-    var idx = 0;
-    var json_objs = [];
-    while (ret[idx] != undefined) {
-        var historyItem = {
-            history_id: ret[idx].id,
-            title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
-            subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,
-            remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
-        };
-        if (userName == "admin") {
-            historyItem.subTitle = "记录: " + historyItem.record_doctor + " - " + historyItem.subTitle;
-        }
-        json_objs.push(historyItem);
-        idx = idx + 1;
-    }
+    var ret = getHistoryList(userName, per_page_num, type, function() {
+        var idx = 0;
+        var json_objs = [];
+        if (ret != undefined && ret.length > 0) {
+            while (ret[idx] != undefined) {
+                var historyItem = {
+                    history_id: ret[idx].id,
+                    title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
+                    subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,
+                    remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
+                };
+                if (userName == "admin") {
+                    historyItem.subTitle = "记录: " + historyItem.record_doctor + " - " + historyItem.subTitle;
+                }
+                json_objs.push(historyItem);
+                idx = idx + 1;
+            }
 
-    if (type == "append") {
-        appendData(json_objs);
-    } else {
-        loadData(json_objs);
-    }
+            if (type == "append") {
+                appendData(json_objs);
+            } else {
+                loadData(json_objs);
+            }
+        }
+    });
 
 }
 
@@ -379,3 +430,6 @@ function logout() {
         });
     }
 }
+</script>
+
+</html>

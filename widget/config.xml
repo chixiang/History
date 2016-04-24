@@ -18,7 +18,7 @@
 	<preference name="debug" value="false"/>
 	<preference name="statusBarAppearance" value="false"/>
     <preference name="iOS7StatusBarAppearance" value="false"/>
-	<permission name="location"/>
+	<!-- <permission name="location"/> -->
 	<permission name="internet"/>
 	<access origin="*"/>
 </widget>

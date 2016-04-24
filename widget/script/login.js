@@ -14,9 +14,9 @@ var apiready = function() {
     model = api.require('model');
     query = api.require('query');
     model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
     });
 
     user = api.require('user');
@@ -24,21 +24,20 @@ var apiready = function() {
 }
 
 function login() {
-    // showProgress();
+    showProgress();
     userName = $api.byId('userName').value;
     passWord = $api.byId('passWord').value;
     user.login({
         username: userName,
         password: passWord
     }, function(ret, err) {
-        // api.hideProgress();
+        hideProgress();
         if (ret) {
             // alert("登录成功！");
             api.toast({
                 msg: "登陆成功"
             });
             $api.setStorage('userName', userName);
-            $api.setStorage('id', ret.id);
             $api.byId('passWord').value = "";
             openHistory();
         } else {
@@ -48,7 +47,7 @@ function login() {
 }
 
 function register() {
-    // showProgress();
+    showProgress();
     userName = $api.byId('userName').value;
     passWord = $api.byId('passWord').value;
     if (userName == "" || passWord == "") {
@@ -59,7 +58,7 @@ function register() {
         username: userName,
         password: passWord
     }, function(ret, err) {
-        // api.hideProgress();
+        hideProgress();
         if (ret.error) {
             switch (ret.error.statusCode) {
                 case 202:
@@ -78,7 +77,7 @@ function register() {
 function openHistory() {
     api.openWin({
         name: 'historyList',
-        url: './historyList.html',
+        url: 'widget://html/history/historyList.html',
         pageParam: {},
         animation: {
             type: "movein",

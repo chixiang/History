@@ -1,4 +1,14 @@
 var historyConstants = {
+
+    appId: 'A6903478274381',
+    appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+    host: 'https://d.apicloud.com',
+
+    historyTable: "historyTest",
+    patientTable: "patientTest",
+    physicalTable: "physicalTest",
+    followUpTable: "followUpTest",
+
     consultation_department: [
         "急诊",
         "急救中心",
