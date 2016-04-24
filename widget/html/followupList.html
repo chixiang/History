@@ -39,21 +39,12 @@ apiready = function() {
     }
 
     history_id = api.pageParam.history_id;
-    follow_up = api.pageParam.follow_up;
-    size = 0;
-    if (follow_up != undefined && follow_up != null) {
-        size = follow_up.length;
-    }
-    data = [];
-    var idx = 0;
-    while (idx < size) {
-        follow_up_item = {
-            "title": follow_up[idx].follow_up_info,
-            "subTitle": follow_up[idx].follow_up_date
-        }
-        data.push(follow_up_item);
-        idx = idx + 1;
-    }
+
+    data = [{
+        "title": "",
+        "subTitle": "",
+        "remark": ""
+    }]
 
     followupList = api.require('UIListView');
     followupList.open({
@@ -61,7 +52,6 @@ apiready = function() {
             x: 0,
             y: $api.dom('header').offsetHeight,
             w: api.winWidth,
-            // h: $api.dom('#main').offsetHeight
             h: api.frameHeight
         },
         data: data,
@@ -115,7 +105,7 @@ apiready = function() {
             followupList.getDataByIndex({
                 index: ret.index
             }, function(ret, err) {
-                viewFollowUp(index);
+                viewFollowUp(ret.data.follow_up_id);
             });
         }
 
@@ -176,6 +166,55 @@ apiready = function() {
 }
 
 function reloadList(data) {
+    model = api.require('model');
+    query = api.require('query');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            var queryId = ret.qid;
+            query.desc({
+                qid: queryId,
+                column: "updatedAt"
+            });
+            query.whereEqual({
+                qid: queryId,
+                column: "history_id",
+                value: history_id
+            });
+            var json_objs = [];
+            model.findAll({
+                class: "followUp",
+                qid: queryId
+            }, function(ret, err) {
+                if (err) {
+                    alert(JSON.stringify(err));
+                } else {
+                    if (ret) {
+                        var idx = 0;
+                        while (ret[idx] != undefined) {
+                            var follow_up_item = {
+                                follow_up_id: ret[idx].id,
+                                title: ret[idx].date,
+                                subTitle: "",
+                                remark: ""
+                            };
+                            json_objs.push(follow_up_item);
+                            idx = idx + 1;
+                        }
+                        reloadData(json_objs);
+                    }
+                }
+                api.hideProgress();
+            });
+        }
+    });
+}
+
+function reloadData(data) {
     followupList.reloadData({
         "data": data
     }, function(ret, err) {
@@ -187,14 +226,12 @@ function reloadList(data) {
     });
 }
 
-function viewFollowUp(index) {
+function viewFollowUp(follow_up_id) {
     api.openWin({
         name: "followup",
         url: './viewFollowUp.html',
         pageParam: {
-            history_id: history_id,
-            follow_up: follow_up,
-            index: index
+            follow_up_id: follow_up_id
         },
         vScrollBarEnabled: false,
         reload: true,
@@ -207,8 +244,7 @@ function newFollowUp() {
         name: "followup",
         url: './followup.html',
         pageParam: {
-            history_id: history_id,
-            follow_up: follow_up,
+            history_id: history_id
         },
         vScrollBarEnabled: false,
         reload: false,
@@ -221,9 +257,7 @@ function modiFollowUp(index) {
         name: "followup",
         url: './followup.html',
         pageParam: {
-            history_id: history_id,
-            follow_up: follow_up,
-            index: index
+            follow_up_id: follow_up_id
         },
         vScrollBarEnabled: false,
         reload: true,

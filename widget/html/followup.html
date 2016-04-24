@@ -25,18 +25,24 @@
                 </a>
         </header>
         <div id="main" class="flex-con">
+            <div class="groupName">病情</div>
             <div class="group">
-                <div class="field" onclick="openPicker('date');">
-                    <div class="key">随访日期</div>
-                    <div class="value">
-                        <input type="text" id="follow_up_date"></input>
+                <div class="field textarea_field bottom">
+                    <div class="textarea_key">病情</div>
+                    <div class="textarea_value">
+                        <textarea id="condition"></textarea>
                     </div>
                 </div>
-                <div class="field textarea_field bottom">
-                    <div class="textarea_key">随访内容</div>
-                    <div class="textarea_value">
-                        <textarea id="follow_up_info" placeholder="请输入随访内容"></textarea>
-                    </div>
+            </div>
+            <div class="groupName">检查</div>
+            <div class="group">
+                <div class="field" onclick="openWin('physical');">
+                    <div class="key">体检信息</div>
+                    <div class="value more"><span>&gt;</span></div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">辅助检查</div>
+                    <div class="value more"><span>&gt;</span></div>
                 </div>
             </div>
         </div>
@@ -49,77 +55,16 @@
  * @return {[type]} [description]
  */
 apiready = function() {
-    window.closeWin = function(winName) {
-        api.closeWin();
-    }
-
-    history_id = api.pageParam.history_id;
-    follow_up = api.pageParam.follow_up;
-    index = api.pageParam.index;
-    size = api.pageParam.size;
-    type = "";
-    if (index != undefined && index != null) {
-        type = "modi";
-        $api.byId('follow_up_date').value = follow_up[index].follow_up_date;
-        $api.byId('follow_up_info').value = follow_up[index].follow_up_info;
-    }
-
-    $api.attr($api.byId('follow_up_date'), 'readonly', 'true');
-    if (type != "modi") {
-        $api.byId('follow_up_date').value = getDate();
-    }
-
-    api.addEventListener({
-        name: 'returnBirthday'
-    }, function(ret, err) {
-        if (ret) {
-            $api.byId('follow_up_date').value = ret.value.birthday;
-        }
-    });
-}
-
-function saveFollowUp() {
-    if ($api.byId('follow_up_info').value == "") {
-        alert("请输入随访内容");
-        return;
-    }
-    showProgress();
-    follow_up_item = {
-        "follow_up_date": $api.byId('follow_up_date').value,
-        "follow_up_info": $api.byId('follow_up_info').value
-    }
-
-    if (type == "modi") {
-        follow_up[index] = follow_up_item;
-    } else {
-        if (follow_up != undefined) {
-            follow_up.push(follow_up_item);
-        } else {
-            follow_up = [];
-            follow_up[0] = follow_up_item;
-        }
-    }
-
-    model = api.require('model');
-    model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
-    });
-    model.updateById({
-        class: 'caseHistory',
-        id: history_id,
-        value: {
-            follow_up: follow_up
-        }
-    }, function(ret, err) {
-        if (ret) {
-            followupAddOrModiEvent(follow_up);
-            hideProgress();
-            api.closeWin();
-        } else {
-            alert("保存随访信息失败！" + JSON.stringify(err));
-            hideProgress();
+    api.openFrame({
+        name: "followup",
+        url: './followupFrame.html',
+        pageParam: api.pageParam,
+        vScrollBarEnabled: false,
+        reload: false,
+        bounces: false,
+        animation: {
+            type: "fade",
+            duration: 0
         }
     });
 }

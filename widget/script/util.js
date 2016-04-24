@@ -9,7 +9,7 @@ window.onload = function() {
     //         this.className = "";
     //     }, false);
     // }
-    document.body.addEventListener('touchstart', function(){});
+    document.body.addEventListener('touchstart', function() {});
 }
 
 /**
@@ -293,4 +293,38 @@ function followupAddOrModiEvent(follow_up) {
             follow_up: follow_up
         }
     });
+}
+
+function getFollowUp(follow_up_id) {
+    showProgress();
+    model = api.require('model');
+    query = api.require('query');
+    model.config({
+        appId: 'A6903478274381',
+        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
+        host: 'https://d.apicloud.com'
+    });
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            model.findById({
+                class: "followUp",
+                id: follow_up_id
+            }, function(ret, err) {
+                if (err) {
+                    alert(JSON.stringify(err));
+                } else {
+                    if (ret) {
+                        setFollowUp(ret);
+                        api.hideProgress();
+                        return ret;
+                    }
+                }
+                api.hideProgress();
+            });
+        }
+    });
+}
+
+function setFollowUp(data) {
+    $api.byId("condition").value = data.condition;
 }

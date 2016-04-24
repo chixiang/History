@@ -186,6 +186,8 @@ apiready = function() {
 
     history_id = api.pageParam.data.history_id;
     physical_id = api.pageParam.data.id;
+    source = api.pageParam.data.source;
+    follow_up_id = api.pageParam.data.follow_up_id;
 
     // 如果主界面传入了id，代表修改，则从数据库查询已有数据
     if (physical_id != undefined && physical_id != null && physical_id != "") {
@@ -239,7 +241,7 @@ function savePhysical() {
                 anterior_chamber: $api.byId('anterior_chamber').value,
                 lens: $api.byId('lens').value,
                 vitreous: $api.byId('vitreous').value,
-                eyeground: $api.byId('eyeground').value
+                eyeground: $api.byId('eyeground').value,
             }
         }, function(ret, err) {
             if (ret) {
