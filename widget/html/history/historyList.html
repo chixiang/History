@@ -52,7 +52,7 @@
 var apiready = function() {
     // openDB("history");
     userName = $api.getStorage("userName");
-    $api.setStorage("history", "");
+    initLocalHistory();
 
     // 接收刷新列表event
     api.addEventListener({

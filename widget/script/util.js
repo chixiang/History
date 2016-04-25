@@ -40,17 +40,36 @@ function getAge(age) {
     }
 }
 
+function initLocalHistory() {
+    $api.rmStorage("history");
+    var history = {};
+    $api.setStorage("history", history);
+}
 
+function setStorage(key, value) {
+    // $api.rmStorage(key);
+    $api.setStorage(key, value);
+}
+
+function getStorage(key) {
+    return $api.getStorage(key);
+}
+
+function rmStorage(key) {
+    $api.rmStorage(key);
+}
 
 /**
  * [setHistory description]
  * @param {[type]} data [description]
  */
 function setHistory(data) {
-    $api.byId('consultation_department').value = data.consultation_department;
-    $api.byId('diagnosis').value = data.diagnosis;
-    $api.byId('chief_complaint').value = data.chief_complaint;
-    $api.byId('treatment').value = data.treatment;
+    if (data != undefined && data != null) {
+        $api.byId('consultation_department').value = data.consultation_department;
+        $api.byId('diagnosis').value = data.diagnosis;
+        $api.byId('chief_complaint').value = data.chief_complaint;
+        $api.byId('treatment').value = data.treatment;
+    }
 }
 
 /**
@@ -58,17 +77,19 @@ function setHistory(data) {
  * @param {[type]} data [患者信息data]
  */
 function setPatient(data) {
-    $api.byId('name').value = data.name;
-    $api.byId('gender').value = data.gender;
-    if (data.birthday != undefined) {
-        $api.byId('birthday').value = data.birthday.substring(0, 10);
+    if (data != undefined && data != null) {
+        $api.byId('name').value = data.name;
+        $api.byId('gender').value = data.gender;
+        if (data.birthday != undefined) {
+            $api.byId('birthday').value = data.birthday.substring(0, 10);
+        }
+        $api.byId('age').value = data.age;
+        $api.byId('admission_number').value = data.admission_number;
+        $api.byId('outpatient_number').value = data.outpatient_number;
+        $api.byId('phone').value = data.phone;
+        $api.byId('address').value = data.address;
+        $api.byId('job').value = data.job;
     }
-    $api.byId('age').value = data.age;
-    $api.byId('admission_number').value = data.admission_number;
-    $api.byId('outpatient_number').value = data.outpatient_number;
-    $api.byId('phone').value = data.phone;
-    $api.byId('address').value = data.address;
-    $api.byId('job').value = data.job;
 }
 
 /**
@@ -234,12 +255,12 @@ function hideProgress() {
     api.hideProgress();
 }
 
-function patientAddEvent(patient_id) {
+function patientAddEvent() {
     api.sendEvent({
         name: 'patientAddEvent',
-        extra: {
-            patient_id: patient_id
-        }
+        // extra: {
+        //     patient_id: patient_id
+        // }
     });
 }
 

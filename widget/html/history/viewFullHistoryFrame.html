@@ -231,7 +231,7 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
-        $api.setStorage("history", "");
+        initLocalHistory();
         api.closeWin();
     }
 

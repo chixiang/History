@@ -81,6 +81,7 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
+        // initLocalHistory();
         api.closeWin();
     }
 
@@ -93,9 +94,9 @@ apiready = function() {
     });
 
     userName = $api.getStorage("userName");
-    history = $api.getStorage("history");
+    var history = getStorage("history");
 
-    if (history != "") {
+    if (history.id != undefined) {
         setHistory(history);
     }
 
@@ -120,12 +121,12 @@ apiready = function() {
         }
     });
 
-    // // 新增患者信息，本页面需要知道patient_id
+    // 新增患者信息，本页面需要知道patient_id
     // api.addEventListener({
     //     name: 'patientAddEvent'
     // }, function(ret, err) {
-    //     if (ret && ret.value) {
-    //         patient_id = ret.value.patient_id;
+    //     if (ret) {
+    //         alert(JSON.stringify($api.getStorage("history")));
     //     }
     // });
 
@@ -193,19 +194,17 @@ function saveHistory() {
     // history.chief_complaint = $api.byId('chief_complaint').value;
     // history.treatment = $api.byId('treatment').value;
     showProgress();
-    // if (patient_id == undefined || patient_id == null || patient_id == "") {
-    if (history.patient_pointer == undefined || history.patient_pointer == null || history.patient_pointer == "") {
+    var history = getStorage("history");
+    if (history.patient_pointer == undefined || history.patient_pointer.name == "") {
         alert("请首先新增患者信息");
         hideProgress();
         return;
     }
 
-    history.consultation_department = $api.byId('consultation_department');
-    history.chief_complaint = $api.byId('chief_complaint');
-    history.diagnosis = $api.byId('diagnosis');
-    history.treatment = $api.byId('treatment');
-
-    savePatient();
+    history.consultation_department = $api.byId('consultation_department').value;
+    history.chief_complaint = $api.byId('chief_complaint').value;
+    history.diagnosis = $api.byId('diagnosis').value;
+    history.treatment = $api.byId('treatment').value;
 
     model.updateById({
         class: historyConstants.historyTable,
@@ -238,6 +237,8 @@ function saveHistory() {
  * @return {[type]}      [description]
  */
 function openWin(type) {
+    // history = $api.getStorage("history");
+    // alert(JSON.stringify(history));
     var pageParam = {};
     switch (type) {
         case 'patient':
@@ -269,7 +270,7 @@ function openWin(type) {
         //     subType: "from_right",
         //     duration: 300
         // }
-    })
+    });
 }
 </script>
 
