@@ -101,9 +101,9 @@ apiready = function() {
     model = api.require('model');
     query = api.require('query');
     model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
     });
 
     $api.attr($api.byId('age'), 'readonly', 'true');
@@ -112,9 +112,8 @@ apiready = function() {
 
     userName = $api.getStorage("userName");
 
-    history_id = api.pageParam.data.history_id;
-    patient_id = api.pageParam.data.patient_id;
-    alert(history_id);
+    history_id = api.pageParam.history_id;
+    patient_id = api.pageParam.patient_id;
     type = "";
 
     if (patient_id != undefined && patient_id != null && patient_id != "") {
@@ -171,7 +170,7 @@ function checkPatientName() {
             }
             var patients = [];
             model.findAll({
-                class: "patient",
+                class: historyConstants.patientTable,
                 qid: queryId
             }, function(ret, err) {
                 if (err) {
@@ -198,7 +197,7 @@ function checkPatientName() {
 function showDupHistoryList(patients) {
     api.openWin({
         name: "dupHistoryList",
-        url: './dupHistoryList.html',
+        url: '../history/dupHistoryList.html',
         pageParam: {
             patients: patients
         },
@@ -213,9 +212,10 @@ function getPatient() {
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             model.findById({
-                class: "patient",
+                class: historyConstants.patientTable,
                 id: patient_id
             }, function(ret, err) {
+                hideProgress();
                 if (err) {
                     alert(JSON.stringify(err));
                 } else {
@@ -223,7 +223,6 @@ function getPatient() {
                         setPatient(ret);
                     }
                 }
-                api.hideProgress();
             });
         }
     });
@@ -233,9 +232,9 @@ function savePatient() {
 
     showProgress();
 
-    if (patient_id != "" && patient_id != undefined && patient_id != null) {
+    if (type == "modi") {
         model.updateById({
-            class: 'patient',
+            class: historyConstants.patientTable,
             id: patient_id,
             value: {
                 // name: $api.byId('name').value,
@@ -249,18 +248,17 @@ function savePatient() {
                 job: $api.byId('job').value
             }
         }, function(ret, err) {
+            hideProgress();
             if (ret) {
-                patientModiEvent(ret.id)
-                hideProgress();
+                // patientModiEvent(ret.id)
                 api.closeWin();
             } else {
                 alert("修改患者信息失败！" + JSON.stringify(err));
-                hideProgress();
             }
         });
     } else {
         model.insert({
-            class: 'patient',
+            class: historyConstants.patientTable,
             value: {
                 name: $api.byId('name').value,
                 gender: $api.byId('gender').value,
@@ -276,30 +274,23 @@ function savePatient() {
         }, function(ret, err) {
             if (ret) {
                 patientAddEvent(ret.id);
-                // 如果history_id不为空，表示从viewPatient直接修改，而patient_id为空，则为新增，新增
-                // 之后还要将新生成的patient_id和history_id关联起来
-                if (history_id != "" && history_id != undefined && history_id != null) {
-                    model.updateById({
-                        class: 'caseHistory',
-                        id: history_id,
-                        value: {
-                            patient_pointer: ret.id
-                        }
-                    }, function(ret, err) {
-                        if (ret) {
-                            hideProgress();
-                            api.closeWin();
-                        } else {
-                            alert("新增患者信息失败！" + JSON.stringify(err));
-                            hideProgress();
-                        }
-                    });
-                }
-                hideProgress();
-                api.closeWin();
+                model.updateById({
+                    class: historyConstants.historyTable,
+                    id: history_id,
+                    value: {
+                        patient_pointer: ret.id
+                    }
+                }, function(ret, err) {
+                    hideProgress();
+                    if (ret) {
+                        api.closeWin();
+                    } else {
+                        alert("新增患者信息失败！" + JSON.stringify(err));
+                    }
+                });
             } else {
-                alert("新增患者信息失败！" + JSON.stringify(err));
                 hideProgress();
+                alert("新增患者信息失败！" + JSON.stringify(err));
             }
         });
     }

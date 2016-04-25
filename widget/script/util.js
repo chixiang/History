@@ -40,156 +40,7 @@ function getAge(age) {
     }
 }
 
-function getHistoryList(userName, per_page_num, type, callback) {
-    showProgress("查询中...");
-    var model = api.require('model');
-    var query = api.require('query');
-    model.config({
-        appId: historyConstants.appId,
-        appKey: historyConstants.appKey,
-        host: historyConstants.host
-    });
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            var queryId = ret.qid;
-            query.limit({
-                qid: queryId,
-                value: per_page_num
-            });
-            if (type == "append") {
-                query.skip({
-                    qid: queryId,
-                    value: v_loaded_recors
-                });
-            }
-            query.desc({
-                qid: queryId,
-                column: "updatedAt"
-            });
-            query.include({
-                qid: queryId,
-                column: 'patient_pointer'
-            });
-            if (userName != "admin") {
-                query.whereEqual({
-                    qid: queryId,
-                    column: 'record_doctor',
-                    value: userName
-                });
-            }
-            var json_objs = [];
-            model.findAll({
-                class: historyConstants.historyTable,
-                qid: queryId
-            }, function(ret, err) {
-                hideProgress();
-                if (err) {
-                    alert(JSON.stringify(err));
-                } else {
-                    if (ret) {
-                        if (callback) {
-                            callback();
-                        }
-                        return ret;
-                        /*
-                        var idx = 0;
-                        while (ret[idx] != undefined) {
-                            var historyItem = {
-                                id: ret[idx].id,
-                                patient_id: ret[idx].patient_id,
-                                record_date: ret[idx].record_date,
-                                consultation_department: ret[idx].consultation_department,
-                                chief_complaint: ret[idx].chief_complaint,
-                                accessory_exam_id: ret[idx].accessory_exam_id,
-                                diagnosis: ret[idx].diagnosis,
-                                treatment: ret[idx].treatment,
-                                follow_up: ret[idx].follow_up,
-                                record_doctor: ret[idx].record_doctor,
-                                patient_pointer: ret[idx].patient_pointer,
-                                physical_pointer: ret[idx].physical_pointer,
-                                title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
-                                subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,
-                                remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
-                            };
-                            if (userName == "admin") {
-                                historyItem.subTitle = "记录: " + historyItem.record_doctor + " - " + historyItem.subTitle;
-                            }
-                            json_objs.push(historyItem);
-                            idx = idx + 1;
-                        }
 
-                        if (type == "append") {
-                            appendData(json_objs);
-                        } else {
-                            loadData(json_objs);
-                        }
-                        */
-
-                    }
-                }
-            });
-        }
-    });
-}
-
-function newHistory(userName, callback) {
-    showProgress("初始化...");
-    var model = api.require('model');
-    model.config({
-        appId: historyConstants.appId,
-        appKey: historyConstants.appKey,
-        host: historyConstants.host
-    });
-    model.insert({
-            class: historyConstants.historyTable,
-            value: {
-                record_doctor: userName,
-            }
-        }, function(ret, err) {
-            hideProgress();
-            if (ret) {
-                if (callback) {
-                    callback();
-                }
-                return ret.id;
-            } else {
-                alert("初始化病历失败！");
-            }
-        });
-}
-
-function getHistory(history_id) {
-    showProgress();
-
-    var model = api.require('model');
-    var query = api.require('query');
-    model.config({
-        appId: historyConstants.appId,
-        appKey: historyConstants.appKey,
-        host: historyConstants.host
-    });
-
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            model.findById({
-                class: historyConstants.historyTable,
-                id: history_id
-            }, function(ret, err) {
-                hideProgress();
-                if (err) {
-                    alert(JSON.stringify(err));
-                } else {
-                    if (ret) {
-                        return ret;
-                        // setHistory(ret);
-                        // patient_id = ret.patient_pointer;
-                        // physical_id = ret.physical_pointer;
-                    }
-                }
-            });
-        }
-    });
-}
 
 /**
  * [setHistory description]
@@ -392,14 +243,14 @@ function patientAddEvent(patient_id) {
     });
 }
 
-function patientModiEvent(patient_id) {
-    api.sendEvent({
-        name: 'patientModiEvent',
-        extra: {
-            patient_id: patient_id
-        }
-    });
-}
+// function patientModiEvent(patient_id) {
+//     api.sendEvent({
+//         name: 'patientModiEvent',
+//         extra: {
+//             patient_id: patient_id
+//         }
+//     });
+// }
 
 function physicalAddEvent(physical_id) {
     api.sendEvent({

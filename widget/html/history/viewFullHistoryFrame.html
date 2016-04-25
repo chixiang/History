@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>病历浏览</title>
-    <link rel="stylesheet" type="text/css" href="../css/history.css" />
-    <link rel="stylesheet" type="text/css" href="../css/button.css" />
-    <script type="text/javascript" src="../script/api.js"></script>
-    <script type="text/javascript" src="../script/util.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/button.css" />
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/constants.js"></script>
+    <script type="text/javascript" src="../../script/util.js"></script>
 </head>
 
 <body class="body-silver">
@@ -307,9 +308,9 @@ function getFullHistory(history_id) {
     model = api.require('model');
     query = api.require('query');
     model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
     });
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
@@ -326,18 +327,18 @@ function getFullHistory(history_id) {
                 qid: queryId,
                 column: "id",
                 value: history_id
-            })
+            });
             model.findAll({
-                class: "caseHistory",
+                class: historyConstants.historyTable,
                 qid: queryId
             }, function(ret, err) {
+                hideProgress();
                 if (err) {
-                    hideProgress();
                     alert(JSON.stringify(err));
                 } else {
                     if (ret[0]) {
                         data = ret[0];
-                        hideProgress();
+                        $api.setStorage("history", data);
                         setFullHistory(data);
                     }
                 }
@@ -353,41 +354,36 @@ function getFullHistory(history_id) {
  * @return {[type]}      [description]
  */
 function openWin(type) {
-    var reload = true;
+    var reload = false;
     var pageParam = {};
     var animation = null;
     var page = "";
     switch (type) {
         case "modiHistory":
-            page = "history";
+            page = "history/history";
             pageParam = {
-                "history_id": history_id,
-                "type": "modi"
+                "history_id": history_id
             };
             reload = false;
             break;
         case "viewPatient":
-            page = "viewPatient";
+            page = "patient/viewPatient";
             pageParam = {
-                "data": {
-                    "id": patient_id,
-                    "history_id": history_id
-                }
+                "history_id": history_id,
+                "patient_id": patient_id
             }
             break;
         case "viewPhysical":
-            page = "viewPhysical";
+            page = "physical/viewPhysical";
             pageParam = {
-                "data": {
-                    "id": physical_id,
-                    "history_id": history_id
-                }
+                "history_id": history_id,
+                "physical_id": physical_id
             }
             break;
         case "followupList":
-            page = "followupList";
+            page = "followup/followupList";
             pageParam = {
-                "history_id": history_id,
+                "history_id": history_id
             }
             break;
         default:
@@ -395,7 +391,7 @@ function openWin(type) {
     }
     api.openWin({
         name: type,
-        url: './' + page + '.html',
+        url: '../' + page + '.html',
         pageParam: pageParam,
         animation: {
             type: "movein",

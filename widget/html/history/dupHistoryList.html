@@ -5,10 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>病历列表</title>
-    <link rel="stylesheet" type="text/css" href="../css/history.css" />
-    <link rel="stylesheet" type="text/css" href="../css/button.css" />
-    <script type="text/javascript" src="../script/api.js"></script>
-    <script type="text/javascript" src="../script/util.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/button.css" />
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/constants.js"></script>
+    <script type="text/javascript" src="../../script/util.js"></script>
 </head>
 
 <body class="body-silver">
@@ -41,18 +42,19 @@ var apiready = function() {
     }
 
     // 测试发现ios初始列表数组为空的话不加载UIListView，所以初始先一个空列表
-    var historyListData = [{
-        title: '',
-        subTitle: '',
-        remark: ''
-    }];
+    // var historyListData = [{
+    //     title: '',
+    //     subTitle: '',
+    //     remark: ''
+    // }];
+    var historyListData = [];
 
     model = api.require('model');
     query = api.require('query');
     model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
     });
     historyList = api.require('UIListView');
     historyList.open({
@@ -130,7 +132,6 @@ function loadList() {
                 ids[i] = patients[i].id;
                 i = i + 1;
             }
-
             // 测试发现：如果条件只有一个，不能使用whereContainAll和whereContain，所以判断
             // 当条件只有一个时，使用whereEqual
             if (ids.length == 1) {
@@ -148,9 +149,10 @@ function loadList() {
             }
             var json_objs = [];
             model.findAll({
-                class: "caseHistory",
+                class: historyConstants.historyTable,
                 qid: queryId
             }, function(ret, err) {
+                hideProgress();
                 if (err) {
                     alert(JSON.stringify(err));
                 } else {
@@ -158,7 +160,7 @@ function loadList() {
                         var idx = 0;
                         while (ret[idx] != undefined) {
                             var historyItem = {
-                                id: ret[idx].id,
+                                history_id: ret[idx].id,
                                 title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
                                 subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,
                                 remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
@@ -172,7 +174,6 @@ function loadList() {
                         loadData(json_objs);
                     }
                 }
-                api.hideProgress();
             });
         }
     });
