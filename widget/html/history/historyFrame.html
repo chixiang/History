@@ -93,15 +93,21 @@ apiready = function() {
     });
 
     userName = $api.getStorage("userName");
-    history_id = api.pageParam.history_id;
-    patient_id = "";
-    physical_id = "";
-    data = {};
-    if (history_id == undefined || history_id == "") {
-        newHistory(userName);
-    } else {
-        getHistory(history_id);
+    history = $api.getStorage("history");
+
+    if (history != "") {
+        setHistory(history);
     }
+
+    // history_id = api.pageParam.history_id;
+    // patient_id = "";
+    // physical_id = "";
+    // data = {};
+    // if (history_id == undefined || history_id == "") {
+    //     newHistory(userName);
+    // } else {
+    //     getHistory(history_id);
+    // }
 
     // 会诊科室使用选择器
     $api.attr($api.byId('consultation_department'), 'readonly', 'true');
@@ -114,67 +120,67 @@ apiready = function() {
         }
     });
 
-    // 新增患者信息，本页面需要知道patient_id
-    api.addEventListener({
-        name: 'patientAddEvent'
-    }, function(ret, err) {
-        if (ret && ret.value) {
-            patient_id = ret.value.patient_id;
-        }
-    });
+    // // 新增患者信息，本页面需要知道patient_id
+    // api.addEventListener({
+    //     name: 'patientAddEvent'
+    // }, function(ret, err) {
+    //     if (ret && ret.value) {
+    //         patient_id = ret.value.patient_id;
+    //     }
+    // });
 
-    // 新增体检信息，本页面需要知道physical_id
-    api.addEventListener({
-        name: 'physicalAddEvent'
-    }, function(ret, err) {
-        if (ret && ret.value) {
-            physical_id = ret.value.physical_id;
-        }
-    });
+    // // 新增体检信息，本页面需要知道physical_id
+    // api.addEventListener({
+    //     name: 'physicalAddEvent'
+    // }, function(ret, err) {
+    //     if (ret && ret.value) {
+    //         physical_id = ret.value.physical_id;
+    //     }
+    // });
 }
 
-function newHistory(userName) {
-    showProgress("初始化...");
+// function newHistory(userName) {
+//     showProgress("初始化...");
 
-    model.insert({
-        class: historyConstants.historyTable,
-        value: {
-            record_doctor: userName,
-        }
-    }, function(ret, err) {
-        hideProgress();
-        if (ret) {
-            history_id = ret.id;
-        } else {
-            alert("初始化病历失败！");
-        }
-    });
-}
+//     model.insert({
+//         class: historyConstants.historyTable,
+//         value: {
+//             record_doctor: userName,
+//         }
+//     }, function(ret, err) {
+//         hideProgress();
+//         if (ret) {
+//             history_id = ret.id;
+//         } else {
+//             alert("初始化病历失败！");
+//         }
+//     });
+// }
 
-function getHistory(history_id) {
-    showProgress();
+// function getHistory(history_id) {
+//     showProgress();
 
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            model.findById({
-                class: historyConstants.historyTable,
-                id: history_id
-            }, function(ret, err) {
-                hideProgress();
-                if (err) {
-                    alert(JSON.stringify(err));
-                } else {
-                    if (ret) {
-                        data = ret;
-                        setHistory(data);
-                        patient_id = data.patient_pointer;
-                        physical_id = data.physical_pointer;
-                    }
-                }
-            });
-        }
-    });
-}
+//     query.createQuery(function(ret, err) {
+//         if (ret && ret.qid) {
+//             model.findById({
+//                 class: historyConstants.historyTable,
+//                 id: history_id
+//             }, function(ret, err) {
+//                 hideProgress();
+//                 if (err) {
+//                     alert(JSON.stringify(err));
+//                 } else {
+//                     if (ret) {
+//                         data = ret;
+//                         setHistory(data);
+//                         patient_id = data.patient_pointer;
+//                         physical_id = data.physical_pointer;
+//                     }
+//                 }
+//             });
+//         }
+//     });
+// }
 
 
 /**
@@ -182,20 +188,27 @@ function getHistory(history_id) {
  * @return {[type]} [description]
  */
 function saveHistory() {
+    // history.consultation_department = $api.byId('consultation_department').value;
+    // history.diagnosis = $api.byId('diagnosis').value;
+    // history.chief_complaint = $api.byId('chief_complaint').value;
+    // history.treatment = $api.byId('treatment').value;
     showProgress();
-    if (patient_id == undefined || patient_id == null || patient_id == "") {
+    // if (patient_id == undefined || patient_id == null || patient_id == "") {
+    if (history.patient_pointer == undefined || history.patient_pointer == null || history.patient_pointer == "") {
         alert("请首先新增患者信息");
         hideProgress();
         return;
     }
 
-    var consultation_department = $api.byId('consultation_department');
-    var chief_complaint = $api.byId('chief_complaint');
-    var diagnosis = $api.byId('diagnosis');
-    var treatment = $api.byId('treatment');
+    history.consultation_department = $api.byId('consultation_department');
+    history.chief_complaint = $api.byId('chief_complaint');
+    history.diagnosis = $api.byId('diagnosis');
+    history.treatment = $api.byId('treatment');
+
+    savePatient();
 
     model.updateById({
-        class: 'caseHistory',
+        class: historyConstants.historyTable,
         id: history_id,
         value: {
             consultation_department: consultation_department.value,
@@ -226,21 +239,20 @@ function saveHistory() {
  */
 function openWin(type) {
     var pageParam = {};
-    alert(history_id);
     switch (type) {
         case 'patient':
             page = "patient/patient"
-            pageParam = {
-                "history_id": history_id,
-                "patient_id": patient_id
-            };
+            // pageParam = {
+            //     "history_id": history_id,
+            //     "patient_id": patient_id
+            // };
             break;
         case 'physical':
             page = "physical/physical"
-            pageParam = {
-                "history_id": history_id,
-                "physical_id": physical_id
-            };
+            // pageParam = {
+            //     "history_id": history_id,
+            //     "physical_id": physical_id
+            // };
             break;
         default:
             break;

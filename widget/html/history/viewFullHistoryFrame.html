@@ -231,6 +231,7 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
+        $api.setStorage("history", "");
         api.closeWin();
     }
 
@@ -268,8 +269,8 @@ apiready = function() {
 
     // 设置需要显示的字段值
     history_id = api.pageParam.history_id;
-    patient_id = "";
-    physical_id = "";
+    // patient_id = "";
+    // physical_id = "";
     data = {};
     getFullHistory(history_id);
 
@@ -354,37 +355,34 @@ function getFullHistory(history_id) {
  * @return {[type]}      [description]
  */
 function openWin(type) {
-    var reload = false;
     var pageParam = {};
-    var animation = null;
     var page = "";
     switch (type) {
         case "modiHistory":
             page = "history/history";
-            pageParam = {
-                "history_id": history_id
-            };
-            reload = false;
+            // pageParam = {
+            //     "history_id": history_id
+            // };
             break;
         case "viewPatient":
             page = "patient/viewPatient";
-            pageParam = {
-                "history_id": history_id,
-                "patient_id": patient_id
-            }
+            // pageParam = {
+            //     "history_id": history_id,
+            //     "patient_id": patient_id
+            // }
             break;
         case "viewPhysical":
             page = "physical/viewPhysical";
-            pageParam = {
-                "history_id": history_id,
-                "physical_id": physical_id
-            }
+            // pageParam = {
+            //     "history_id": history_id,
+            //     "physical_id": physical_id
+            // }
             break;
         case "followupList":
             page = "followup/followupList";
-            pageParam = {
-                "history_id": history_id
-            }
+            // pageParam = {
+            //     "history_id": history_id
+            // }
             break;
         default:
             break;
@@ -398,7 +396,7 @@ function openWin(type) {
             duration: 300
         },
         vScrollBarEnabled: false,
-        reload: reload,
+        reload: false,
         bounces: false
     });
 }

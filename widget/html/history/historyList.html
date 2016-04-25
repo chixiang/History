@@ -52,6 +52,7 @@
 var apiready = function() {
     // openDB("history");
     userName = $api.getStorage("userName");
+    $api.setStorage("history", "");
 
     // 接收刷新列表event
     api.addEventListener({
@@ -356,7 +357,7 @@ function addHistory() {
 function viewHistory(history_id) {
     api.openWin({
         name: "history",
-        url: 'widget://html/history/history.html',
+        url: 'widget://html/history/viewFullHistory.html',
         pageParam: {
             history_id: history_id
         },
