@@ -97,56 +97,60 @@ function setPatient(data) {
  * @param {[type]} data [体检信息data]
  */
 function setPhysical(data) {
-    $api.byId('vod').value = data.vod;
-    $api.byId('vos').value = data.vos;
-    $api.byId('corrected_vod').value = data.corrected_vod;
-    $api.byId('corrected_vos').value = data.corrected_vos;
-    $api.byId('tod').value = data.tod;
-    $api.byId('tos').value = data.tos;
-    $api.byId('outer_eye').value = data.outer_eye;
-    $api.byId('conjunctiva').value = data.conjunctiva;
-    $api.byId('cornea').value = data.cornea;
-    $api.byId('anterior_chamber').value = data.anterior_chamber;
-    $api.byId('lens').value = data.lens;
-    $api.byId('vitreous').value = data.vitreous;
-    $api.byId('eyeground').value = data.eyeground;
+    if (data != undefined && data != null) {
+        $api.byId('vod').value = data.vod;
+        $api.byId('vos').value = data.vos;
+        $api.byId('corrected_vod').value = data.corrected_vod;
+        $api.byId('corrected_vos').value = data.corrected_vos;
+        $api.byId('tod').value = data.tod;
+        $api.byId('tos').value = data.tos;
+        $api.byId('outer_eye').value = data.outer_eye;
+        $api.byId('conjunctiva').value = data.conjunctiva;
+        $api.byId('cornea').value = data.cornea;
+        $api.byId('anterior_chamber').value = data.anterior_chamber;
+        $api.byId('lens').value = data.lens;
+        $api.byId('vitreous').value = data.vitreous;
+        $api.byId('eyeground').value = data.eyeground;
+    }
 }
 
 function setFullHistory(data) {
+    if (data != undefined) {
 
-    $api.byId('consultation_department').value = data.consultation_department;
-    $api.byId('diagnosis').value = data.diagnosis;
-    $api.byId('chief_complaint').value = data.chief_complaint;
-    $api.byId('treatment').value = data.treatment;
+        $api.byId('consultation_department').value = data.consultation_department;
+        $api.byId('diagnosis').value = data.diagnosis;
+        $api.byId('chief_complaint').value = data.chief_complaint;
+        $api.byId('treatment').value = data.treatment;
 
-    adata = data.patient_pointer;
-    $api.byId('name').value = adata.name;
-    $api.byId('gender').value = adata.gender;
-    if (adata.birthday != undefined) {
-        $api.byId('birthday').value = adata.birthday.substring(0, 10);
-    }
-    $api.byId('age').value = adata.age;
-    $api.byId('admission_number').value = adata.admission_number;
-    $api.byId('outpatient_number').value = adata.outpatient_number;
-    $api.byId('phone').value = adata.phone;
-    $api.byId('address').value = adata.address;
-    $api.byId('job').value = adata.job;
+        adata = data.patient_pointer;
+        $api.byId('name').value = adata.name;
+        $api.byId('gender').value = adata.gender;
+        if (adata.birthday != undefined) {
+            $api.byId('birthday').value = adata.birthday.substring(0, 10);
+        }
+        $api.byId('age').value = adata.age;
+        $api.byId('admission_number').value = adata.admission_number;
+        $api.byId('outpatient_number').value = adata.outpatient_number;
+        $api.byId('phone').value = adata.phone;
+        $api.byId('address').value = adata.address;
+        $api.byId('job').value = adata.job;
 
-    hdata = data.physical_pointer;
-    if (hdata != undefined && hdata != null) {
-        $api.byId('vod').value = hdata.vod;
-        $api.byId('vos').value = hdata.vos;
-        $api.byId('corrected_vod').value = hdata.corrected_vod;
-        $api.byId('corrected_vos').value = hdata.corrected_vos;
-        $api.byId('tod').value = hdata.tod;
-        $api.byId('tos').value = hdata.tos;
-        $api.byId('outer_eye').value = hdata.outer_eye;
-        $api.byId('conjunctiva').value = hdata.conjunctiva;
-        $api.byId('cornea').value = hdata.cornea;
-        $api.byId('anterior_chamber').value = hdata.anterior_chamber;
-        $api.byId('lens').value = hdata.lens;
-        $api.byId('vitreous').value = hdata.vitreous;
-        $api.byId('eyeground').value = hdata.eyeground;
+        hdata = data.physical_pointer;
+        if (hdata != undefined && hdata != null) {
+            $api.byId('vod').value = hdata.vod;
+            $api.byId('vos').value = hdata.vos;
+            $api.byId('corrected_vod').value = hdata.corrected_vod;
+            $api.byId('corrected_vos').value = hdata.corrected_vos;
+            $api.byId('tod').value = hdata.tod;
+            $api.byId('tos').value = hdata.tos;
+            $api.byId('outer_eye').value = hdata.outer_eye;
+            $api.byId('conjunctiva').value = hdata.conjunctiva;
+            $api.byId('cornea').value = hdata.cornea;
+            $api.byId('anterior_chamber').value = hdata.anterior_chamber;
+            $api.byId('lens').value = hdata.lens;
+            $api.byId('vitreous').value = hdata.vitreous;
+            $api.byId('eyeground').value = hdata.eyeground;
+        }
     }
 }
 

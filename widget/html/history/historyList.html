@@ -276,7 +276,7 @@ function loadList(type) {
                                 var historyItem = {
                                     history_id: ret[idx].id,
                                     title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
-                                    subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,
+                                    subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].createdAt,
                                     remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
                                 };
                                 if (userName == "admin") {
@@ -339,6 +339,7 @@ function appendData(json_objs) {
 }
 
 function addHistory() {
+    initLocalHistory();
     api.openWin({
         name: "history",
         url: 'widget://html/history/history.html',
@@ -355,6 +356,7 @@ function addHistory() {
  * @return {[type]}      [description]
  */
 function viewHistory(history_id) {
+    initLocalHistory();
     api.openWin({
         name: "history",
         url: 'widget://html/history/viewFullHistory.html',

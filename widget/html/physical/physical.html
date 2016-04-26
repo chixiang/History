@@ -8,8 +8,8 @@
     <link rel="stylesheet" type="text/css" href="../../css/history.css" />
     <link rel="stylesheet" type="text/css" href="../../css/button.css" />
     <script type="text/javascript" src="../../script/api.js"></script>
-    <script type="text/javascript" src="../../script/constants.js"></script>
-    <script type="text/javascript" src="../../script/util.js"></script>
+<!--     <script type="text/javascript" src="../../script/constants.js"></script>
+    <script type="text/javascript" src="../../script/util.js"></script> -->
 </head>
 
 <body class="body-silver">
@@ -22,7 +22,7 @@
                 <span id="title">体检信息维护</span>
             </div>
             <a id="right" tapmode="" onclick="savePhysical();" class="button button-raised button-blue">
-                保存
+                确认
             </a>
         </header>
         <div id="main" class="flex-con">
@@ -173,7 +173,7 @@ apiready = function() {
         bounces: false,
         animation: {
             type: "fade",
-            duration: 0
+            duration: 100
         },
     });
 }

@@ -22,7 +22,7 @@
                 <span id="title">体检信息维护</span>
             </div>
             <a id="right" tapmode="" onclick="savePhysical();" class="button button-raised button-blue">
-                保存
+                确认
             </a>
         </header>
         <div id="main" class="flex-con">
@@ -180,47 +180,52 @@ apiready = function() {
         }
     });
 
-    model = api.require('model');
-    query = api.require('query');
-    model.config({
-        appId: historyConstants.appId,
-        appKey: historyConstants.appKey,
-        host: historyConstants.host
-    });
+    // model = api.require('model');
+    // query = api.require('query');
+    // model.config({
+    //     appId: historyConstants.appId,
+    //     appKey: historyConstants.appKey,
+    //     host: historyConstants.host
+    // });
 
-    history_id = api.pageParam.history_id;
-    physical_id = api.pageParam.physical_id;
-    follow_up_id = api.pageParam.follow_up_id;
-    type = "modi";
+    // history_id = api.pageParam.history_id;
+    // physical_id = api.pageParam.physical_id;
+    // follow_up_id = api.pageParam.follow_up_id;
+    // type = "modi";
+    var history = getStorage("history");
 
-    if (history_id != undefined && history_id != null && history_id != "") {
-        source = "history";
-    } else {
-        source = "followup";
+    if (history.physical_pointer != undefined) {
+        setPhysical(history.physical_pointer);
     }
+
+    // if (history_id != undefined && history_id != null && history_id != "") {
+    //     source = "history";
+    // } else {
+    //     source = "followup";
+    // }
 
     // 如果主界面传入了id，代表修改，则从数据库查询已有数据
-    if (physical_id != undefined && physical_id != null && physical_id != "") {
-        showProgress();
-        type = "modi";
-        query.createQuery(function(ret, err) {
-            if (ret && ret.qid) {
-                model.findById({
-                    class: historyConstants.physicalTable,
-                    id: physical_id
-                }, function(ret, err) {
-                    hideProgress();
-                    if (err) {
-                        alert(JSON.stringify(err));
-                    } else {
-                        if (ret) {
-                            setPhysical(ret);
-                        }
-                    }
-                });
-            }
-        });
-    }
+    // if (physical_id != undefined && physical_id != null && physical_id != "") {
+    //     showProgress();
+    //     type = "modi";
+    //     query.createQuery(function(ret, err) {
+    //         if (ret && ret.qid) {
+    //             model.findById({
+    //                 class: historyConstants.physicalTable,
+    //                 id: physical_id
+    //             }, function(ret, err) {
+    //                 hideProgress();
+    //                 if (err) {
+    //                     alert(JSON.stringify(err));
+    //                 } else {
+    //                     if (ret) {
+    //                         setPhysical(ret);
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
 
 }
 
@@ -229,87 +234,124 @@ apiready = function() {
  * @return {[type]} [description]
  */
 function savePhysical() {
-    showProgress();
-
-    if (type == "modi") {
-        model.updateById({
-            class: historyConstants.physicalTable,
-            id: physical_id,
-            value: {
-                vod: $api.byId('vod').value,
-                vos: $api.byId('vos').value,
-                corrected_vod: $api.byId('corrected_vod').value,
-                corrected_vos: $api.byId('corrected_vos').value,
-                tod: $api.byId('tod').value,
-                tos: $api.byId('tos').value,
-                outer_eye: $api.byId('outer_eye').value,
-                conjunctiva: $api.byId('conjunctiva').value,
-                cornea: $api.byId('cornea').value,
-                anterior_chamber: $api.byId('anterior_chamber').value,
-                lens: $api.byId('lens').value,
-                vitreous: $api.byId('vitreous').value,
-                eyeground: $api.byId('eyeground').value,
-            }
-        }, function(ret, err) {
-            hideProgress();
-            if (ret) {
-                physicalModiEvent(ret.id);
-                api.closeWin();
-            } else {
-                alert("保存体检信息失败！" + JSON.stringify(err));
-            }
-        });
+    var history = getStorage("history");
+    if (history.physical_pointer != undefined) {
+        history.physical_pointer.vod = $api.byId('vod').value;
+        history.physical_pointer.vos = $api.byId('vos').value;
+        history.physical_pointer.corrected_vod = $api.byId('corrected_vod').value;
+        history.physical_pointer.corrected_vos = $api.byId('corrected_vos').value;
+        history.physical_pointer.tod = $api.byId('tod').value;
+        history.physical_pointer.tos = $api.byId('tos').value;
+        history.physical_pointer.outer_eye = $api.byId('outer_eye').value;
+        history.physical_pointer.conjunctiva = $api.byId('conjunctiva').value;
+        history.physical_pointer.cornea = $api.byId('cornea').value;
+        history.physical_pointer.anterior_chamber = $api.byId('anterior_chamber').value;
+        history.physical_pointer.lens = $api.byId('lens').value;
+        history.physical_pointer.vitreous = $api.byId('vitreous').value;
+        history.physical_pointer.eyeground = $api.byId('eyeground').value;
     } else {
-        model.insert({
-            class: historyConstants.physicalTable,
-            value: {
-                vod: $api.byId('vod').value,
-                vos: $api.byId('vos').value,
-                corrected_vod: $api.byId('corrected_vod').value,
-                corrected_vos: $api.byId('corrected_vos').value,
-                tod: $api.byId('tod').value,
-                tos: $api.byId('tos').value,
-                outer_eye: $api.byId('outer_eye').value,
-                conjunctiva: $api.byId('conjunctiva').value,
-                cornea: $api.byId('cornea').value,
-                anterior_chamber: $api.byId('anterior_chamber').value,
-                lens: $api.byId('lens').value,
-                vitreous: $api.byId('vitreous').value,
-                eyeground: $api.byId('eyeground').value
-            }
-        }, function(ret, err) {
-            if (ret) {
-                physicalAddEvent(ret.id);
-                var db_class = "";
-                var db_id = "";
-                if (source == "history") {
-                    db_class = historyConstants.historyTable;
-                    db_id = history_id;
-                } else {
-                    db_class = historyConstants.followUpTable;
-                    db_id = follow_up_id;
-                }
-                if (history_id != "")
-                    model.updateById({
-                        class: db_class,
-                        id: db_id,
-                        value: {
-                            physical_pointer: ret.id
-                        }
-                    }, function(ret, err) {
-                        hideProgress();
-                        if (ret) {
-                            api.closeWin();
-                        } else {
-                            alert("保存体检信息失败！" + JSON.stringify(err));
-                        }
-                    });
-            } else {
-                hideProgress();
-                alert("保存体检信息失败！" + JSON.stringify(err));
-            }
-        });
+        var physical_pointer = {
+            vod: $api.byId('vod').value,
+            vos: $api.byId('vos').value,
+            corrected_vod: $api.byId('corrected_vod').value,
+            corrected_vos: $api.byId('corrected_vos').value,
+            tod: $api.byId('tod').value,
+            tos: $api.byId('tos').value,
+            outer_eye: $api.byId('outer_eye').value,
+            conjunctiva: $api.byId('conjunctiva').value,
+            cornea: $api.byId('cornea').value,
+            anterior_chamber: $api.byId('anterior_chamber').value,
+            lens: $api.byId('lens').value,
+            vitreous: $api.byId('vitreous').value,
+            eyeground: $api.byId('eyeground').value,
+        }
+        history.physical_pointer = physical_pointer;
     }
+
+    setStorage("history", history);
+    api.closeWin();
+
+    // showProgress();
+
+    // if (type == "modi") {
+    //     model.updateById({
+    //         class: historyConstants.physicalTable,
+    //         id: physical_id,
+    //         value: {
+    //             vod: $api.byId('vod').value,
+    //             vos: $api.byId('vos').value,
+    //             corrected_vod: $api.byId('corrected_vod').value,
+    //             corrected_vos: $api.byId('corrected_vos').value,
+    //             tod: $api.byId('tod').value,
+    //             tos: $api.byId('tos').value,
+    //             outer_eye: $api.byId('outer_eye').value,
+    //             conjunctiva: $api.byId('conjunctiva').value,
+    //             cornea: $api.byId('cornea').value,
+    //             anterior_chamber: $api.byId('anterior_chamber').value,
+    //             lens: $api.byId('lens').value,
+    //             vitreous: $api.byId('vitreous').value,
+    //             eyeground: $api.byId('eyeground').value,
+    //         }
+    //     }, function(ret, err) {
+    //         hideProgress();
+    //         if (ret) {
+    //             physicalModiEvent(ret.id);
+    //             api.closeWin();
+    //         } else {
+    //             alert("保存体检信息失败！" + JSON.stringify(err));
+    //         }
+    //     });
+    // } else {
+    //     model.insert({
+    //         class: historyConstants.physicalTable,
+    //         value: {
+    //             vod: $api.byId('vod').value,
+    //             vos: $api.byId('vos').value,
+    //             corrected_vod: $api.byId('corrected_vod').value,
+    //             corrected_vos: $api.byId('corrected_vos').value,
+    //             tod: $api.byId('tod').value,
+    //             tos: $api.byId('tos').value,
+    //             outer_eye: $api.byId('outer_eye').value,
+    //             conjunctiva: $api.byId('conjunctiva').value,
+    //             cornea: $api.byId('cornea').value,
+    //             anterior_chamber: $api.byId('anterior_chamber').value,
+    //             lens: $api.byId('lens').value,
+    //             vitreous: $api.byId('vitreous').value,
+    //             eyeground: $api.byId('eyeground').value
+    //         }
+    //     }, function(ret, err) {
+    //         if (ret) {
+    //             physicalAddEvent(ret.id);
+    //             var db_class = "";
+    //             var db_id = "";
+    //             if (source == "history") {
+    //                 db_class = historyConstants.historyTable;
+    //                 db_id = history_id;
+    //             } else {
+    //                 db_class = historyConstants.followUpTable;
+    //                 db_id = follow_up_id;
+    //             }
+    //             if (history_id != "")
+    //                 model.updateById({
+    //                     class: db_class,
+    //                     id: db_id,
+    //                     value: {
+    //                         physical_pointer: ret.id
+    //                     }
+    //                 }, function(ret, err) {
+    //                     hideProgress();
+    //                     if (ret) {
+    //                         api.closeWin();
+    //                     } else {
+    //                         alert("保存体检信息失败！" + JSON.stringify(err));
+    //                     }
+    //                 });
+    //         } else {
+    //             hideProgress();
+    //             alert("保存体检信息失败！" + JSON.stringify(err));
+    //         }
+    //     });
+    // }
 }
 </script>
 

@@ -105,6 +105,9 @@ apiready = function() {
     //     appKey: historyConstants.appKey,
     //     host: historyConstants.host
     // });
+    window.closeWin = function(winName) {
+        api.closeWin();
+    }
 
     $api.attr($api.byId('age'), 'readonly', 'true');
     $api.attr($api.byId('gender'), 'readonly', 'true');
@@ -142,15 +145,11 @@ apiready = function() {
             $api.byId('age').value = getAge(ret.value.birthday);
         }
     });
-
-    window.closeWin = function(winName) {
-        api.closeWin();
-    }
-
 }
 
 function checkPatientName() {
-    if (getStorage("history") == undefined || getStorage("history").patient_pointer == undefined || getStorage("history").patient_pointer.id == undefined) {
+    var history = getStorage("history");
+    if (history.patient_pointer == undefined || history.patient_pointer.id == undefined) {
         return;
     }
     var model = api.require('model');
@@ -240,9 +239,7 @@ function showDupHistoryList(patients) {
 // }
 
 function savePatient() {
-
     var history = getStorage("history");
-
     if (history.patient_pointer != undefined) {
         history.patient_pointer.name = $api.byId('name').value;
         history.patient_pointer.gender = $api.byId('gender').value;
@@ -253,7 +250,13 @@ function savePatient() {
         history.patient_pointer.phone = $api.byId('phone').value;
         history.patient_pointer.address = $api.byId('address').value;
         history.patient_pointer.job = $api.byId('job').value;
-        history.patient_pointer.record_doctor = userName;
+        // admin用户走到这个分支有两种情况：
+        // 1. admin自己新增，确认后保存前或者查询到再进来，已不用再赋值
+        // 2. 查看别人创建的病历，不能修改已有的记录医生姓名
+        // 所以此处判断不等于admin用户再赋值userName即可
+        if (userName != "admin") {
+            history.patient_pointer.record_doctor = userName;
+        }
     } else {
         var patient_pointer = {
             name: $api.byId('name').value,
@@ -269,7 +272,6 @@ function savePatient() {
         }
         history.patient_pointer = patient_pointer;
     }
-
 
     setStorage("history", history);
     // patientAddEvent();

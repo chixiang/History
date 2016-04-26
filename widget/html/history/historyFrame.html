@@ -81,23 +81,17 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
-        // initLocalHistory();
+        initLocalHistory();
         api.closeWin();
     }
-
-    model = api.require('model');
-    query = api.require('query');
-    model.config({
-        appId: historyConstants.appId,
-        appKey: historyConstants.appKey,
-        host: historyConstants.host
-    });
 
     userName = $api.getStorage("userName");
     var history = getStorage("history");
 
     if (history.id != undefined) {
         setHistory(history);
+    } else {
+        initHistory();
     }
 
     // history_id = api.pageParam.history_id;
@@ -121,6 +115,12 @@ apiready = function() {
         }
     });
 
+    api.addEventListener({
+        name: 'keyback'
+    }, function(ret, err) {
+        initLocalHistory();
+    });
+
     // 新增患者信息，本页面需要知道patient_id
     // api.addEventListener({
     //     name: 'patientAddEvent'
@@ -140,23 +140,30 @@ apiready = function() {
     // });
 }
 
-// function newHistory(userName) {
-//     showProgress("初始化...");
-
-//     model.insert({
-//         class: historyConstants.historyTable,
-//         value: {
-//             record_doctor: userName,
-//         }
-//     }, function(ret, err) {
-//         hideProgress();
-//         if (ret) {
-//             history_id = ret.id;
-//         } else {
-//             alert("初始化病历失败！");
-//         }
-//     });
-// }
+function initHistory() {
+    showProgress("初始化...");
+    var model = api.require('model');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    model.insert({
+        class: historyConstants.historyTable,
+        value: {
+            record_doctor: userName,
+        }
+    }, function(ret, err) {
+        hideProgress();
+        if (ret) {
+            var history = ret;
+            setStorage("history", history);
+        } else {
+            alert("初始化病历失败！");
+            api.closeWin();
+        }
+    });
+}
 
 // function getHistory(history_id) {
 //     showProgress();
@@ -193,38 +200,123 @@ function saveHistory() {
     // history.diagnosis = $api.byId('diagnosis').value;
     // history.chief_complaint = $api.byId('chief_complaint').value;
     // history.treatment = $api.byId('treatment').value;
-    showProgress();
     var history = getStorage("history");
+
     if (history.patient_pointer == undefined || history.patient_pointer.name == "") {
         alert("请首先新增患者信息");
-        hideProgress();
         return;
     }
+
+    showProgress();
 
     history.consultation_department = $api.byId('consultation_department').value;
     history.chief_complaint = $api.byId('chief_complaint').value;
     history.diagnosis = $api.byId('diagnosis').value;
     history.treatment = $api.byId('treatment').value;
 
-    model.updateById({
-        class: historyConstants.historyTable,
-        id: history_id,
+    var model = api.require('model');
+    var query = api.require('query');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    model.updateById({ // 保存患者信息
+        class: historyConstants.patientTable,
+        id: history.patient_pointer.id,
         value: {
-            consultation_department: consultation_department.value,
-            chief_complaint: chief_complaint.value,
-            diagnosis: diagnosis.value,
-            treatment: treatment.value,
-            patient_pointer: patient_id,
-            physical_pointer: physical_id
+            history_id: history.id,
+            name: history.patient_pointer.name,
+            gender: history.patient_pointer.gender,
+            birthday: history.patient_pointer.birthday,
+            age: history.patient_pointer.age,
+            admission_number: history.patient_pointer.admission_number,
+            outpatient_number: history.patient_pointer.outpatient_number,
+            phone: history.patient_pointer.phone,
+            address: history.patient_pointer.address,
+            job: history.patient_pointer.job,
+            record_doctor: history.patient_pointer.record_doctor
         }
     }, function(ret, err) {
         hideProgress();
         if (ret) {
-            api.toast({
-                msg: "保存病历成功！"
-            });
-            historyModiEvent(history_id);
-            api.closeWin();
+            history.patient_pointer.id = ret.id;
+            if (history.physical_pointer != undefined) {
+                model.updateById({ // 保存体检信息
+                    class: historyConstants.physicalTable,
+                    id: history.physical_pointer.id,
+                    value: {
+                        history_id: history.id,
+                        vod: history.physical_pointer.vod,
+                        vos: history.physical_pointer.vos,
+                        corrected_vod: history.physical_pointer.corrected_vod,
+                        corrected_vos: history.physical_pointer.corrected_vos,
+                        tod: history.physical_pointer.tod,
+                        tos: history.physical_pointer.tos,
+                        outer_eye: history.physical_pointer.outer_eye,
+                        conjunctiva: history.physical_pointer.conjunctiva,
+                        cornea: history.physical_pointer.cornea,
+                        anterior_chamber: history.physical_pointer.anterior_chamber,
+                        lens: history.physical_pointer.lens,
+                        vitreous: history.physical_pointer.vitreous,
+                        eyeground: history.physical_pointer.eyeground
+                    }
+                }, function(ret, err) {
+                    hideProgress();
+                    if (ret) {
+                        history.physical_pointer.id = ret.id;
+                        model.updateById({ // 保存病历信息
+                            class: historyConstants.historyTable,
+                            id: history.id,
+                            value: {
+                                consultation_department: history.consultation_department,
+                                chief_complaint: history.chief_complaint,
+                                diagnosis: history.diagnosis,
+                                treatment: history.treatment,
+                                record_doctor: hisotry.record_doctor,
+                                patient_pointer: history.patient_pointer.id,
+                                physical_pointer: history.physical_pointer.id
+                            }
+                        }, function(ret, err) {
+                            hideProgress();
+                            if (ret) {
+                                api.toast({
+                                    msg: "保存病历成功"
+                                })
+                                api.closeWin();
+                            } else {
+                                alert("保存病历失败！");
+                            }
+                        });
+                    } else {
+                        alert("保存病历失败！");
+                    }
+                });
+            } else {
+                model.updateById({ // 保存病历信息
+                    class: historyConstants.historyTable,
+                    id: history.id,
+                    value: {
+                        consultation_department: history.consultation_department,
+                        chief_complaint: history.chief_complaint,
+                        diagnosis: history.diagnosis,
+                        treatment: history.treatment,
+                        record_doctor: hisotry.record_doctor,
+                        patient_pointer: history.patient_pointer.id,
+                        physical_pointer: history.physical_pointer.id
+                    }
+                }, function(ret, err) {
+                    hideProgress();
+                    if (ret) {
+                        api.toast({
+                            msg: "保存病历成功"
+                        })
+                        api.closeWin();
+                    } else {
+                        alert("保存病历失败！");
+                    }
+                });
+            }
         } else {
             alert("保存病历失败！");
         }
@@ -243,17 +335,17 @@ function openWin(type) {
     switch (type) {
         case 'patient':
             page = "patient/patient"
-            // pageParam = {
-            //     "history_id": history_id,
-            //     "patient_id": patient_id
-            // };
+                // pageParam = {
+                //     "history_id": history_id,
+                //     "patient_id": patient_id
+                // };
             break;
         case 'physical':
             page = "physical/physical"
-            // pageParam = {
-            //     "history_id": history_id,
-            //     "physical_id": physical_id
-            // };
+                // pageParam = {
+                //     "history_id": history_id,
+                //     "physical_id": physical_id
+                // };
             break;
         default:
             break;
