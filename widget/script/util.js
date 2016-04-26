@@ -47,7 +47,6 @@ function initLocalHistory() {
 }
 
 function setStorage(key, value) {
-    // $api.rmStorage(key);
     $api.setStorage(key, value);
 }
 
@@ -57,6 +56,35 @@ function getStorage(key) {
 
 function rmStorage(key) {
     $api.rmStorage(key);
+}
+
+function clearNullHistory() {
+    var model = api.require('model');
+    var query = api.require('query');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            model.findById({
+                class: "followUp",
+                id: follow_up_id
+            }, function(ret, err) {
+                if (err) {
+                    alert(JSON.stringify(err));
+                } else {
+                    if (ret) {
+                        setFollowUp(ret);
+                        api.hideProgress();
+                        return ret;
+                    }
+                }
+                api.hideProgress();
+            });
+        }
+    });
 }
 
 /**
@@ -295,9 +323,9 @@ function physicalModiEvent(physical_id) {
     });
 }
 
-function historyAddEvent(history_id) {
+function historySaveEvent(history_id) {
     api.sendEvent({
-        name: 'historyAddEvent',
+        name: 'historySaveEvent',
         extra: {
             history_id: history_id
         }

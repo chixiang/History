@@ -25,8 +25,8 @@ html {
 }
 
 body {
-    background-color: #B1A686;
-    color: #655A55;
+    background-color: rgba(0, 0, 0, 0);
+    color: #93979e;
     margin: 50px 0px 0px 0px;
     /*font-family: 'Lato', sans-serif;*/
 }

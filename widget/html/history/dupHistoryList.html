@@ -38,24 +38,27 @@ var apiready = function() {
     patients = api.pageParam.patients;
 
     window.closeWin = function(winName) {
-        api.closeWin();
+        api.closeToWin({
+            name: 'historyList'
+        });
     }
 
-    // 测试发现ios初始列表数组为空的话不加载UIListView，所以初始先一个空列表
-    // var historyListData = [{
-    //     title: '',
-    //     subTitle: '',
-    //     remark: ''
-    // }];
-    var historyListData = [];
-
-    model = api.require('model');
-    query = api.require('query');
-    model.config({
-        appId: historyConstants.appId,
-        appKey: historyConstants.appKey,
-        host: historyConstants.host
+    // 接收刷新列表event
+    api.addEventListener({
+        name: 'historySaveEvent'
+    }, function(ret, err) {
+        if (ret) {
+            loadList("refresh");
+        }
     });
+
+    // 测试发现ios初始列表数组为空的话不加载UIListView，所以初始先一个空列表
+    var historyListData = [{
+        title: '',
+        subTitle: '',
+        remark: ''
+    }];
+
     historyList = api.require('UIListView');
     historyList.open({
         rect: {
@@ -95,7 +98,7 @@ var apiready = function() {
             historyList.getDataByIndex({
                 index: ret.index
             }, function(ret, err) {
-                viewHistory(ret.data.id);
+                viewHistory(ret.data.history_id);
             });
         }
     });
@@ -108,6 +111,13 @@ var apiready = function() {
  */
 function loadList() {
     showProgress("正在加载...");
+    var model = api.require('model');
+    var query = api.require('query');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             var queryId = ret.qid;
@@ -161,8 +171,9 @@ function loadList() {
                         while (ret[idx] != undefined) {
                             var historyItem = {
                                 history_id: ret[idx].id,
+                                record_doctor: ret[idx].record_doctor,
                                 title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
-                                subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].record_date,
+                                subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].createdAt.substring(0, 10),
                                 remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
                             };
                             if (userName == "admin") {
@@ -202,15 +213,20 @@ function loadData(json_objs) {
  * @return {[type]}      [description]
  */
 function viewHistory(history_id) {
+    initLocalHistory();
     api.openWin({
-        name: "history",
-        url: './viewFullHistory.html',
+        name: "dup_history",
+        url: 'widget://html/history/viewFullHistory.html',
         pageParam: {
             history_id: history_id
         },
         vScrollBarEnabled: false,
-        reload: false,
-        bounces: false
+        reload: true,
+        bounces: false,
+        animation: {
+            type: "movein",
+            duration: 400
+        },
     });
 }
 </script>

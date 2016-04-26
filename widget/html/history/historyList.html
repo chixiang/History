@@ -56,14 +56,7 @@ var apiready = function() {
 
     // 接收刷新列表event
     api.addEventListener({
-        name: 'historyAddEvent'
-    }, function(ret, err) {
-        if (ret) {
-            loadList("refresh");
-        }
-    });
-    api.addEventListener({
-        name: 'historyModiEvent'
+        name: 'historySaveEvent'
     }, function(ret, err) {
         if (ret) {
             loadList("refresh");
@@ -71,13 +64,11 @@ var apiready = function() {
     });
 
     // 测试发现ios初始列表数组为空的话不加载UIListView，所以初始先一个空列表
-    // var historyListData = [{
-    //     title: '',
-    //     subTitle: '',
-    //     remark: ''
-    // }];
-
-    var historyListData = [];
+    var historyListData = [{
+        title: '',
+        subTitle: '',
+        remark: ''
+    }];
 
     // 每页数据设置为10条
     per_page_num = 10;
@@ -152,7 +143,7 @@ var apiready = function() {
             historyList.getDataByIndex({
                 index: ret.index
             }, function(ret, err) {
-                viewHistory(ret.data.id);
+                viewHistory(ret.data.history_id);
             });
         }
 
@@ -161,7 +152,7 @@ var apiready = function() {
             historyList.getDataByIndex({
                 index: ret.index
             }, function(ret, err) {
-                modiHistory(ret.data.id);
+                modiHistory(ret.data.history_id);
             });
         }
 
@@ -171,7 +162,7 @@ var apiready = function() {
                 historyList.getDataByIndex({
                     index: ret.index
                 }, function(ret, err) {
-                    deleteHistory(ret.data.id);
+                    deleteHistory(ret.data.history_id);
                 });
             }
         }
@@ -272,25 +263,27 @@ function loadList(type) {
                         var idx = 0;
                         var json_objs = [];
                         if (ret != undefined && ret.length > 0) {
-                            while (ret[idx] != undefined) {
-                                var historyItem = {
-                                    history_id: ret[idx].id,
-                                    title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
-                                    subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].createdAt,
-                                    remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
-                                };
-                                if (userName == "admin") {
-                                    historyItem.subTitle = "记录: " + historyItem.record_doctor + " - " + historyItem.subTitle;
+                            while (idx < ret.length) {
+                                if (ret[idx] != undefined && ret[idx].patient_pointer != undefined) {
+                                    var historyItem = {
+                                        history_id: ret[idx].id,
+                                        record_doctor: ret[idx].record_doctor,
+                                        title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
+                                        subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].createdAt.substring(0, 10),
+                                        remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
+                                    };
+                                    if (userName == "admin") {
+                                        historyItem.subTitle = "记录: " + historyItem.record_doctor + " - " + historyItem.subTitle;
+                                    }
+                                    json_objs.push(historyItem);
                                 }
-                                json_objs.push(historyItem);
                                 idx = idx + 1;
                             }
-
-                            if (type == "append") {
-                                appendData(json_objs);
-                            } else {
-                                loadData(json_objs);
-                            }
+                        }
+                        if (type == "append") {
+                            appendData(json_objs);
+                        } else {
+                            loadData(json_objs);
                         }
                     }
                 }
@@ -345,8 +338,12 @@ function addHistory() {
         url: 'widget://html/history/history.html',
         pageParam: {},
         vScrollBarEnabled: false,
-        reload: false,
-        bounces: false
+        reload: true,
+        bounces: false,
+        animation: {
+            type: "movein",
+            duration: 400
+        }
     });
 }
 
@@ -364,8 +361,12 @@ function viewHistory(history_id) {
             history_id: history_id
         },
         vScrollBarEnabled: false,
-        reload: false,
-        bounces: false
+        reload: true,
+        bounces: false,
+        animation: {
+            type: "movein",
+            duration: 400
+        }
     });
 }
 
@@ -375,6 +376,7 @@ function viewHistory(history_id) {
  * @return {[type]}      [description]
  */
 function modiHistory(history_id) {
+    initLocalHistory();
     api.openWin({
         name: "modiHistory",
         url: 'widget://html/history/history.html',
@@ -382,8 +384,12 @@ function modiHistory(history_id) {
             history_id: history_id,
         },
         vScrollBarEnabled: false,
-        reload: false,
-        bounces: false
+        reload: true,
+        bounces: false,
+        animation: {
+            type: "movein",
+            duration: 400
+        }
     });
 }
 

@@ -85,7 +85,7 @@ function openHistory() {
             duration: 300
         },
         vScrollBarEnabled: false,
-        reload: false,
+        reload: true,
         bounces: false
     });
 }

@@ -149,7 +149,7 @@ apiready = function() {
 
 function checkPatientName() {
     var history = getStorage("history");
-    if (history.patient_pointer == undefined || history.patient_pointer.id == undefined) {
+    if (history.patient_pointer != undefined && history.patient_pointer.id != undefined) {
         return;
     }
     var model = api.require('model');
@@ -212,7 +212,7 @@ function showDupHistoryList(patients) {
             patients: patients
         },
         vScrollBarEnabled: false,
-        reload: false,
+        reload: true,
         bounces: false
     });
 }

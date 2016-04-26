@@ -11,7 +11,8 @@
     <script type="text/javascript" src="../../script/constants.js"></script>
     <script type="text/javascript" src="../../script/util.js"></script>
 </head>
-
+<body>
+</body>
 <body class="body-silver">
     <div id="wrap" class="flex-wrap flex-vertical">
         <header id='header' class="header-silver">
@@ -221,8 +222,11 @@ apiready = function() {
         url: './viewFullHistoryFrame.html',
         pageParam: api.pageParam,
         vScrollBarEnabled: false,
-        reload: false,
+        reload: true,
         bounces: false,
+        // progress: {
+        //     type: "default"
+        // }
         animation: {
             type: "fade",
             duration: 0

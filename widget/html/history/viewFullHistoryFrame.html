@@ -274,10 +274,10 @@ apiready = function() {
     getFullHistory(history_id);
 
     api.addEventListener({
-        name: 'historyModiEvent'
+        name: 'historySaveEvent'
     }, function(ret, err) {
         if (ret) {
-            getFullHistory(ret.value.history_id);
+            getFullHistory(history_id);
         }
     });
 
@@ -311,9 +311,9 @@ apiready = function() {
  * @return {[type]}            [description]
  */
 function getFullHistory(history_id) {
-    showProgress();
-    model = api.require('model');
-    query = api.require('query');
+    showProgress("加载中...");
+    var model = api.require('model');
+    var query = api.require('query');
     model.config({
         appId: historyConstants.appId,
         appKey: historyConstants.appKey,
@@ -363,9 +363,13 @@ function getFullHistory(history_id) {
 function openWin(type) {
     var pageParam = {};
     var page = "";
+    var name = type;
     switch (type) {
         case "modiHistory":
             page = "history/history";
+            // if (api.winName == "dup_history") {
+            //     name = "dup_history";
+            // }
             // pageParam = {
             //     "history_id": history_id
             // };
@@ -394,7 +398,7 @@ function openWin(type) {
             break;
     }
     api.openWin({
-        name: type,
+        name: name,
         url: '../' + page + '.html',
         pageParam: pageParam,
         animation: {
@@ -402,8 +406,12 @@ function openWin(type) {
             duration: 300
         },
         vScrollBarEnabled: false,
-        reload: false,
-        bounces: false
+        reload: true,
+        bounces: false,
+        animation: {
+            type: "movein",
+            duration: 400
+        }
     });
 }
 </script>
