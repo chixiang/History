@@ -27,21 +27,27 @@
         </header>
         <div id="main" class="flex-con">
             <div class="groupName">病情</div>
-            <div class="group">
-                <div class="field textarea_field bottom">
+            <div class="group group-edit">
+                <div class="field textarea_field">
                     <div class="textarea_key">病情</div>
                     <div class="textarea_value">
-                        <textarea id="condition"></textarea>
+                        <textarea id="condition" placeholder="请输入病情信息"></textarea>
+                    </div>
+                </div>
+                <div class="field textarea_field bottom">
+                    <div class="textarea_key">治疗</div>
+                    <div class="textarea_value">
+                        <textarea id="treatment" placeholder="请输入治疗信息"></textarea>
                     </div>
                 </div>
             </div>
             <div class="groupName">检查</div>
             <div class="group">
-                <div class="field" onclick="openWin('physical');">
+                <div class="field" tapmode="onFieldClick" onclick="openWin('physical');">
                     <div class="key">体检信息</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
-                <div class="field bottom">
+                <div class="field tapmode="onFieldClick" bottom">
                     <div class="key">辅助检查</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
@@ -61,16 +67,20 @@ apiready = function() {
     }
 
     var followup = getStorage("followup");
-    $api.byId('condition').value = followup.condition;
-    $api.byId('treatment').value = followup.treatment;
+    if (followup.condition != undefined) {
+        $api.byId('condition').value = followup.condition;
+    }
+    if (followup.treatment != undefined) {
+        $api.byId('treatment').value = followup.treatment;
+    }
+
+    if (api.pageParam.follow_up_id != undefined) {
+        getFullFollowUp(api.pageParam.follow_up_id);
+    }
 }
 
-function saveFollowUp() {
-    showProgress();
-    var followup = getStorage("followup");
-    followup.condition = $api.byId('condition').value;
-    followup.treatment = $api.byId('treatment').value;
-
+function getFullFollowUp(follow_up_id) {
+    showProgress("加载中...");
     var model = api.require('model');
     var query = api.require('query');
     model.config({
@@ -78,155 +88,127 @@ function saveFollowUp() {
         appKey: historyConstants.appKey,
         host: historyConstants.host
     });
-    if (followup.physical_pointer != undefined) {
-
-    }
-    model.updateById({ // 保存体检信息
-        class: historyConstants.patientTable,
-        id: history.patient_pointer.id,
-        value: {
-            // history_id: history.id,
-            name: history.patient_pointer.name,
-            gender: history.patient_pointer.gender,
-            birthday: history.patient_pointer.birthday,
-            age: history.patient_pointer.age,
-            admission_number: history.patient_pointer.admission_number,
-            outpatient_number: history.patient_pointer.outpatient_number,
-            phone: history.patient_pointer.phone,
-            address: history.patient_pointer.address,
-            job: history.patient_pointer.job,
-            record_doctor: history.patient_pointer.record_doctor
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            var queryId = ret.qid;
+            query.include({
+                qid: queryId,
+                column: 'physical_pointer'
+            });
+            query.whereEqual({
+                qid: queryId,
+                column: 'id',
+                value: follow_up_id
+            })
+            model.findAll({
+                class: historyConstants.followUpTable,
+                qid: queryId
+            }, function(ret, err) {
+                hideProgress();
+                if (err) {
+                    alert(JSON.stringify(err));
+                } else {
+                    if (ret[0]) {
+                        var followup = ret[0];
+                        setStorage("followup", followup);
+                        $api.byId("condition").value = followup.condition;
+                        $api.byId("treatment").value = followup.treatment;
+                    }
+                }
+            });
         }
-    }, function(ret, err) {
-        hideProgress();
-        if (ret) {
-            history.patient_pointer.id = ret.id;
-            if (history.physical_pointer != undefined) {
+    });
+}
+
+function saveFollowUp(callback) {
+    showProgress("保存中...");
+    var model = api.require('model');
+    var query = api.require('query');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    var history = getStorage("history");
+    var followup = getStorage("followup");
+    if (followup.physical_pointer != undefined) {
+        model.updateById({ // 保存体检信息
+            class: historyConstants.physicalTable,
+            id: followup.physical_pointer.id,
+            value: {
+                // followup_id: followup.id,
+                vod: followup.physical_pointer.vod,
+                vos: followup.physical_pointer.vos,
+                corrected_vod: followup.physical_pointer.corrected_vod,
+                corrected_vos: followup.physical_pointer.corrected_vos,
+                tod: followup.physical_pointer.tod,
+                tos: followup.physical_pointer.tos,
+                outer_eye: followup.physical_pointer.outer_eye,
+                conjunctiva: followup.physical_pointer.conjunctiva,
+                cornea: followup.physical_pointer.cornea,
+                anterior_chamber: followup.physical_pointer.anterior_chamber,
+                lens: followup.physical_pointer.lens,
+                vitreous: followup.physical_pointer.vitreous,
+                eyeground: followup.physical_pointer.eyeground
+            }
+        }, function(ret, err) {
+            if (ret) {
+                followup.physical_pointer.id = ret.id;
+                followup.condition = $api.byId('condition').value;
+                followup.treatment = $api.byId('treatment').value;
                 model.updateById({ // 保存体检信息
-                    class: historyConstants.physicalTable,
-                    id: history.physical_pointer.id,
+                    class: historyConstants.followUpTable,
+                    id: followup.id,
                     value: {
-                        // history_id: history.id,
-                        vod: history.physical_pointer.vod,
-                        vos: history.physical_pointer.vos,
-                        corrected_vod: history.physical_pointer.corrected_vod,
-                        corrected_vos: history.physical_pointer.corrected_vos,
-                        tod: history.physical_pointer.tod,
-                        tos: history.physical_pointer.tos,
-                        outer_eye: history.physical_pointer.outer_eye,
-                        conjunctiva: history.physical_pointer.conjunctiva,
-                        cornea: history.physical_pointer.cornea,
-                        anterior_chamber: history.physical_pointer.anterior_chamber,
-                        lens: history.physical_pointer.lens,
-                        vitreous: history.physical_pointer.vitreous,
-                        eyeground: history.physical_pointer.eyeground
+                        history_id: history.id,
+                        condition: followup.condition,
+                        treatment: followup.treatment,
+                        physical_pointer: followup.physical_pointer.id
                     }
                 }, function(ret, err) {
-                    hideProgress();
                     if (ret) {
-                        history.physical_pointer.id = ret.id;
-                        model.updateById({ // 保存病历信息
-                            class: historyConstants.historyTable,
-                            id: history.id,
-                            value: {
-                                consultation_department: history.consultation_department,
-                                chief_complaint: history.chief_complaint,
-                                diagnosis: history.diagnosis,
-                                treatment: history.treatment,
-                                record_doctor: history.record_doctor,
-                                patient_pointer: history.patient_pointer.id,
-                                physical_pointer: history.physical_pointer.id,
-                                record_doctor: record_doctor
-                            }
-                        }, function(ret, err) {
-                            hideProgress();
-                            if (ret) {
-                                historySaveEvent();
-                                api.toast({
-                                    msg: "保存病历成功"
-                                })
-                                api.closeWin();
-                            } else {
-                                alert("保存病历失败！");
-                            }
-                        });
+                        hideProgress();
+                        api.toast({
+                            msg: "保存随访信息成功"
+                        })
+                        followupSaveEvent();
+                        api.closeWin();
                     } else {
-                        alert("保存病历失败！");
+                        hideProgress();
+                        alert("保存随访信息失败\n" + JSON.stringify(err));
                     }
                 });
             } else {
-                model.updateById({ // 保存病历信息
-                    class: historyConstants.historyTable,
-                    id: history.id,
-                    value: {
-                        consultation_department: history.consultation_department,
-                        chief_complaint: history.chief_complaint,
-                        diagnosis: history.diagnosis,
-                        treatment: history.treatment,
-                        record_doctor: history.record_doctor,
-                        patient_pointer: history.patient_pointer.id,
-                        record_doctor: record_doctor
-                            // physical_pointer: history.physical_pointer.id
-                    }
-                }, function(ret, err) {
-                    hideProgress();
-                    if (ret) {
-                        historySaveEvent();
-                        api.toast({
-                            msg: "保存病历成功"
-                        })
-                        api.closeWin();
-                    } else {
-                        alert("保存病历失败！");
-                    }
-                });
+                hideProgress();
+                alert("保存体检信息失败\n" + JSON.stringify(err));
             }
-        } else {
-            alert("保存病历失败！");
-        }
-    });
+        });
+    } else {
+        followup.condition = $api.byId('condition').value;
+        followup.treatment = $api.byId('treatment').value;
 
-
-}
-
-function savePhysical(callback) {
-    var followup = getStorage("followup");
-    if (followup.physical_pointer == undefined) {
-        return;
+        model.updateById({ // 保存体检信息
+            class: historyConstants.followUpTable,
+            id: followup.id,
+            value: {
+                history_id: history.id,
+                condition: followup.condition,
+                treatment: followup.treatment,
+            }
+        }, function(ret, err) {
+            if (ret) {
+                hideProgress();
+                api.toast({
+                    msg: "保存随访信息成功"
+                })
+                followupSaveEvent();
+                api.closeWin();
+            } else {
+                hideProgress();
+                alert("保存随访信息失败\n" + JSON.stringify(err));
+            }
+        });
     }
-    showProgress();
-
-    var model = api.require('model');
-    var query = api.require('query');
-    model.config({
-        appId: historyConstants.appId,
-        appKey: historyConstants.appKey,
-        host: historyConstants.host
-    });
-    model.updateById({ // 保存体检信息
-        class: historyConstants.physicalTable,
-        id: followup.physical_pointer.id,
-        value: {
-            // followup_id: followup.id,
-            vod: followup.physical_pointer.vod,
-            vos: followup.physical_pointer.vos,
-            corrected_vod: followup.physical_pointer.corrected_vod,
-            corrected_vos: followup.physical_pointer.corrected_vos,
-            tod: followup.physical_pointer.tod,
-            tos: followup.physical_pointer.tos,
-            outer_eye: followup.physical_pointer.outer_eye,
-            conjunctiva: followup.physical_pointer.conjunctiva,
-            cornea: followup.physical_pointer.cornea,
-            anterior_chamber: followup.physical_pointer.anterior_chamber,
-            lens: followup.physical_pointer.lens,
-            vitreous: followup.physical_pointer.vitreous,
-            eyeground: followup.physical_pointer.eyeground
-        }
-    }, function(ret, err) {
-        if(callback) {
-            callback();
-        }
-    });
 }
 
 function openWin(type) {
@@ -237,6 +219,9 @@ function openWin(type) {
         case 'physical':
             name = api.winName + "_physical";
             page = "physical/physical";
+            pageParam = {
+                "source": "followup"
+            }
             break;
         default:
             break;

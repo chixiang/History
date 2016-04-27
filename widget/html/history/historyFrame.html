@@ -28,18 +28,18 @@
         <div id="main" class="flex-con">
             <div class="groupName">患者</div>
             <div class="group">
-                <div class="field bottom" onclick="openWin('patient');">
+                <div class="field bottom" tapmode="onFieldClick" onclick="openWin('patient');">
                     <div class="key">患者信息</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
             </div>
             <div class="groupName">检查</div>
             <div class="group">
-                <div class="field" onclick="openWin('physical');">
+                <div class="field" tapmode="onFieldClick" onclick="openWin('physical');">
                     <div class="key">体检信息</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
-                <div class="field bottom">
+                <div class="field bottom" tapmode="onFieldClick">
                     <div class="key">辅助检查</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
@@ -253,6 +253,7 @@ function saveHistory() {
         alert("未输入患者姓名");
         return;
     }
+    showProgress();
 
     var record_doctor = "";
     if (history.record_doctor != undefined) {
@@ -260,8 +261,6 @@ function saveHistory() {
     } else {
         record_doctor = userName;
     }
-
-    showProgress();
 
     history.consultation_department = $api.byId('consultation_department').value;
     history.chief_complaint = $api.byId('chief_complaint').value;
@@ -292,7 +291,6 @@ function saveHistory() {
             record_doctor: history.patient_pointer.record_doctor
         }
     }, function(ret, err) {
-        hideProgress();
         if (ret) {
             history.patient_pointer.id = ret.id;
             if (history.physical_pointer != undefined) {
@@ -336,15 +334,18 @@ function saveHistory() {
                             hideProgress();
                             if (ret) {
                                 historySaveEvent();
+                                hideProgress();
                                 api.toast({
                                     msg: "保存病历成功"
                                 })
                                 api.closeWin();
                             } else {
+                                hideProgress();
                                 alert("保存病历失败！");
                             }
                         });
                     } else {
+                        hideProgress();
                         alert("保存病历失败！");
                     }
                 });
@@ -365,17 +366,20 @@ function saveHistory() {
                 }, function(ret, err) {
                     hideProgress();
                     if (ret) {
+                        hideProgress();
                         historySaveEvent();
                         api.toast({
                             msg: "保存病历成功"
                         })
                         api.closeWin();
                     } else {
+                        hideProgress();
                         alert("保存病历失败！");
                     }
                 });
             }
         } else {
+            hideProgress();
             alert("保存病历失败！");
         }
     });

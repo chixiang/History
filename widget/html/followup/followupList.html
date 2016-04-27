@@ -69,7 +69,7 @@ apiready = function() {
         data: data,
         rightBtns: [{
             bgColor: '#d5d7dc',
-            activeBgColor: '',
+            activeBgColor: '#688CD4',
             width: 70,
             title: '修改',
             titleSize: 14,
@@ -78,7 +78,7 @@ apiready = function() {
             iconWidth: 20
         }, {
             bgColor: '#d5d7dc',
-            activeBgColor: '',
+            activeBgColor: '#688CD4',
             width: 70,
             title: '删除',
             titleSize: 14,
@@ -90,7 +90,7 @@ apiready = function() {
             borderColor: '#f0f0f0',
             item: {
                 bgColor: '#FFF',
-                activeBgColor: '#6f96d1',
+                activeBgColor: '#688CD4',
                 height: 80,
                 imgWidth: 40,
                 imgHeight: 40,
@@ -147,32 +147,21 @@ apiready = function() {
             bgColor: "#f5f5f5"
         },
         function(ret, err) {
-            reloadList(data);
+            loadList();
         });
 
     followupList.setRefreshFooter({
             bgColor: "#f5f5f5"
         },
         function(ret, err) {
-            reloadList(data);
+            loadList();
         });
 
     api.addEventListener({
-        name: 'followupAddOrModiEvent'
+        name: 'followupSaveEvent'
     }, function(ret, err) {
         if (ret) {
-            follow_up = ret.value.follow_up;
-            data = [];
-            var idx = 0;
-            while (follow_up[idx] != undefined) {
-                follow_up_item = {
-                    "title": follow_up[idx].follow_up_info,
-                    "subTitle": follow_up[idx].follow_up_date
-                }
-                data.push(follow_up_item);
-                idx = idx + 1;
-            }
-            reloadList(data);
+            loadList();
         }
     });
 }
@@ -205,9 +194,9 @@ function loadList() {
                         while (ret[idx] != undefined) {
                             var follow_up_item = {
                                 follow_up_id: ret[idx].id,
-                                title: ret[idx].createdAt.substring(0, 10),
-                                subTitle: "",
-                                remark: ""
+                                title: ret[idx].condition,
+                                subTitle: ret[idx].treatment,
+                                remark: ret[idx].createdAt.substring(0, 10)
                             };
                             json_objs.push(follow_up_item);
                             idx = idx + 1;

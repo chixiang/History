@@ -17,7 +17,8 @@
 }
 
 .onFieldClick {
-    background-color: #6f96d1;
+    background-color: #688CD4;
+    color: #FFF;
 }
 
 html {
@@ -112,15 +113,15 @@ a:visited {
     -moz-border-radius: 5px;
     /*border: 1px solid #f0f0f0;*/
     border-radius: 5px;
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
 }
 
 .group.group-view:hover {
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
 }
 
 .group.group-edit:hover {
-    box-shadow: inset 0px 0px 9px rgba(0,0,0,0.5);
+    box-shadow: inset 0px 0px 15px rgba(0,0,0,0.5);
 }
 
 .field {

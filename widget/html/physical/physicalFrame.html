@@ -194,15 +194,13 @@ apiready = function() {
     // type = "modi";
     var history = getStorage("history");
     var followup = getStorage("followup");
-    var source = "";
-    if (followup != undefined && followup.physical_pointer != undefined) {
-        source = "followup";
+    source = api.pageParam.source;
+    if (source == "followup") {
+        // source = "followup";
         setPhysical(followup.physical_pointer);
-    } else if (history.physical_pointer != undefined) {
+    } else {
         source = "history";
         setPhysical(history.physical_pointer);
-    } else {
-        alert("源数据错误");
     }
 
     // if (history_id != undefined && history_id != null && history_id != "") {

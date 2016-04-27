@@ -347,11 +347,11 @@ function historyModiEvent(history_id) {
     });
 }
 
-function followupAddOrModiEvent(follow_up) {
+function followupSaveEvent(follow_up_id) {
     api.sendEvent({
-        name: 'followupAddOrModiEvent',
+        name: 'followupSaveEvent',
         extra: {
-            follow_up: follow_up
+            follow_up_id: follow_up_id
         }
     });
 }

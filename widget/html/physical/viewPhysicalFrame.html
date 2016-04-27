@@ -22,7 +22,8 @@
                 <span id="title">体检信息</span>
             </div>
             <a id="right" tapmode="" class="button button-raised button-silver">
-            </a>
+
+                </a>
         </header>
         <div id="main" class="flex-con">
             <div class="groupName">裸眼视力</div>
@@ -126,19 +127,59 @@
  * @return {[type]} [description]
  */
 apiready = function() {
-    api.openFrame({
-        name: "viewPhysical",
-        url: './viewPhysicalFrame.html',
-        pageParam: api.pageParam,
-        vScrollBarEnabled: false,
-        reload: true,
-        bounces: false,
-        animation: {
-            type: "fade",
-            duration: 0
-        }
-    });
+    var followup = getStorage("followup");
+
+    $api.attr($api.byId('vod'), 'readonly', 'true');
+    $api.attr($api.byId('vos'), 'readonly', 'true');
+    $api.attr($api.byId('corrected_vod'), 'readonly', 'true');
+    $api.attr($api.byId('corrected_vos'), 'readonly', 'true');
+    $api.attr($api.byId('tod'), 'readonly', 'true');
+    $api.attr($api.byId('tos'), 'readonly', 'true');
+    $api.attr($api.byId('outer_eye'), 'readonly', 'true');
+    $api.attr($api.byId('conjunctiva'), 'readonly', 'true');
+    $api.attr($api.byId('cornea'), 'readonly', 'true');
+    $api.attr($api.byId('anterior_chamber'), 'readonly', 'true');
+    $api.attr($api.byId('lens'), 'readonly', 'true');
+    $api.attr($api.byId('vitreous'), 'readonly', 'true');
+    $api.attr($api.byId('eyeground'), 'readonly', 'true');
+
+    if (followup.physical_pointer != undefined) {
+        setPhysical(followup.physical_pointer);
+    }
+
+    window.closeWin = function(winName) {
+        api.closeWin();
+    }
+
+    // 如果physical修改或者新增，则需刷新本页面
+    // api.addEventListener({
+    //     name: 'physicalSaveEvent'
+    // }, function(ret, err) {
+    //     if (ret) {
+    //         var followup = getStorage("followup");
+    //         setPhysical(followup.physical);
+    //     }
+    // });
 }
+
+/**
+ * [modiPhysical description]
+ * @return {[type]} [description]
+ */
+// function modiPhysical() {
+//     api.openWin({
+//         name: api.winName + "modi_physical",
+//         url: './physical.html',
+//         pageParam: {},
+//         vScrollBarEnabled: false,
+//         reload: true,
+//         bounces: false,
+//         animation: {
+//             type: "movein",
+//             duration: 0
+//         },
+//     });
+// }
 </script>
 
 </html>
