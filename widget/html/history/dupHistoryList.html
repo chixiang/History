@@ -38,9 +38,10 @@ var apiready = function() {
     patients = api.pageParam.patients;
 
     window.closeWin = function(winName) {
-        api.closeToWin({
-            name: 'historyList'
-        });
+        // api.closeToWin({
+        //     name: 'historyList'
+        // });
+        api.closeWin();
     }
 
     // 接收刷新列表event
@@ -215,7 +216,7 @@ function loadData(json_objs) {
 function viewHistory(history_id) {
     initLocalHistory();
     api.openWin({
-        name: "dup_history",
+        name: api.winName + "_full_history",
         url: 'widget://html/history/viewFullHistory.html',
         pageParam: {
             history_id: history_id

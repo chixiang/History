@@ -363,9 +363,10 @@ function getFullHistory(history_id) {
 function openWin(type) {
     var pageParam = {};
     var page = "";
-    var name = type;
+    var name = "";
     switch (type) {
         case "modiHistory":
+            name = api.winName + "_history"
             page = "history/history";
             // if (api.winName == "dup_history") {
             //     name = "dup_history";
@@ -374,21 +375,22 @@ function openWin(type) {
             //     "history_id": history_id
             // };
             break;
-        case "viewPatient":
-            page = "patient/viewPatient";
-            // pageParam = {
-            //     "history_id": history_id,
-            //     "patient_id": patient_id
-            // }
-            break;
-        case "viewPhysical":
-            page = "physical/viewPhysical";
-            // pageParam = {
-            //     "history_id": history_id,
-            //     "physical_id": physical_id
-            // }
-            break;
+        // case "viewPatient":
+        //     page = "patient/viewPatient";
+        //     // pageParam = {
+        //     //     "history_id": history_id,
+        //     //     "patient_id": patient_id
+        //     // }
+        //     break;
+        // case "viewPhysical":
+        //     page = "physical/viewPhysical";
+        //     // pageParam = {
+        //     //     "history_id": history_id,
+        //     //     "physical_id": physical_id
+        //     // }
+        //     break;
         case "followupList":
+            name = api.winName + "_follow_up_list"
             page = "followup/followupList";
             // pageParam = {
             //     "history_id": history_id

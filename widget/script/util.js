@@ -46,6 +46,12 @@ function initLocalHistory() {
     $api.setStorage("history", history);
 }
 
+function initLocalFollowUp() {
+    $api.rmStorage("followup");
+    var followup = {};
+    $api.setStorage("followup", followup);
+}
+
 function setStorage(key, value) {
     $api.setStorage(key, value);
 }

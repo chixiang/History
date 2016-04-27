@@ -334,7 +334,7 @@ function appendData(json_objs) {
 function addHistory() {
     initLocalHistory();
     api.openWin({
-        name: "history",
+        name: api.winName + "_new_history",
         url: 'widget://html/history/history.html',
         pageParam: {},
         vScrollBarEnabled: false,
@@ -355,7 +355,7 @@ function addHistory() {
 function viewHistory(history_id) {
     initLocalHistory();
     api.openWin({
-        name: "history",
+        name: api.winName + "_full_history",
         url: 'widget://html/history/viewFullHistory.html',
         pageParam: {
             history_id: history_id
@@ -378,7 +378,7 @@ function viewHistory(history_id) {
 function modiHistory(history_id) {
     initLocalHistory();
     api.openWin({
-        name: "modiHistory",
+        name: api.winName + "_modi_history",
         url: 'widget://html/history/history.html',
         pageParam: {
             history_id: history_id,

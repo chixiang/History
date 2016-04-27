@@ -81,7 +81,7 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
-        initLocalHistory();
+        // initLocalHistory();
         api.closeWin();
     }
 
@@ -92,7 +92,7 @@ apiready = function() {
     // 从viewFullHistory页面跳转
     if (history.id != undefined) {
         setHistory(history);
-    } else if (history_id != "") {
+    } else if (history_id != "" && history_id != undefined) {
         getFullHistory(history_id);
     }
 
@@ -187,30 +187,30 @@ function getFullHistory(history_id) {
     });
 }
 
-function initHistory() {
-    // showProgress("初始化...");
-    // var model = api.require('model');
-    // model.config({
-    //     appId: historyConstants.appId,
-    //     appKey: historyConstants.appKey,
-    //     host: historyConstants.host
-    // });
-    // model.insert({
-    //     class: historyConstants.historyTable,
-    //     value: {
-    //         record_doctor: userName,
-    //     }
-    // }, function(ret, err) {
-    //     hideProgress();
-    //     if (ret) {
-    //         var history = ret;
-    //         setStorage("history", history);
-    //     } else {
-    //         alert("初始化病历失败！");
-    //         api.closeWin();
-    //     }
-    // });
-}
+// function initHistory() {
+//     showProgress("初始化...");
+//     var model = api.require('model');
+//     model.config({
+//         appId: historyConstants.appId,
+//         appKey: historyConstants.appKey,
+//         host: historyConstants.host
+//     });
+//     model.insert({
+//         class: historyConstants.historyTable,
+//         value: {
+//             record_doctor: userName,
+//         }
+//     }, function(ret, err) {
+//         hideProgress();
+//         if (ret) {
+//             var history = ret;
+//             setStorage("history", history);
+//         } else {
+//             alert("初始化病历失败！");
+//             api.closeWin();
+//         }
+//     });
+// }
 
 // function getHistory(history_id) {
 //     showProgress();
@@ -390,24 +390,44 @@ function openWin(type) {
     // history = $api.getStorage("history");
     // alert(JSON.stringify(history));
     var pageParam = {};
-    var name = type;
+    var name = "";
     switch (type) {
         case 'patient':
+            // if (api.winName == "list_new_history") {
+            //     name = "new_patient";
+            // }
+            // if (api.winName == "list_modi_history") {
+            //     name = "list_modi_patient";
+            // }
+            // if (api.winName == "full_modi_history") {
+            //     name = "full_modi_patient";
+            // }
+            name = api.winName + "_patient";
             page = "patient/patient";
             // if (api.winName == "dup_history") {
             //     name = "dup_patient";
             // }
-                // pageParam = {
-                //     "history_id": history_id,
-                //     "patient_id": patient_id
-                // };
+            // pageParam = {
+            //     "history_id": history_id,
+            //     "patient_id": patient_id
+            // };
             break;
         case 'physical':
+            // if (api.winName == "list_new_history") {
+            //     name = "new_physical";
+            // }
+            // if (api.winName == "list_modi_history") {
+            //     name = "list_mod_physical";
+            // }
+            // if (api.winName == "full_modi_history") {
+            //     name = "full_modi_physical";
+            // }
+            name = api.winName + "_physical";
             page = "physical/physical";
-                // pageParam = {
-                //     "history_id": history_id,
-                //     "physical_id": physical_id
-                // };
+            // pageParam = {
+            //     "history_id": history_id,
+            //     "physical_id": physical_id
+            // };
             break;
         default:
             break;

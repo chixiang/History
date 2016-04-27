@@ -193,9 +193,16 @@ apiready = function() {
     // follow_up_id = api.pageParam.follow_up_id;
     // type = "modi";
     var history = getStorage("history");
-
-    if (history.physical_pointer != undefined) {
+    var followup = getStorage("followup");
+    var source = "";
+    if (followup != undefined && followup.physical_pointer != undefined) {
+        source = "followup";
+        setPhysical(followup.physical_pointer);
+    } else if (history.physical_pointer != undefined) {
+        source = "history";
         setPhysical(history.physical_pointer);
+    } else {
+        alert("源数据错误");
     }
 
     // if (history_id != undefined && history_id != null && history_id != "") {
@@ -234,41 +241,80 @@ apiready = function() {
  * @return {[type]} [description]
  */
 function savePhysical() {
-    var history = getStorage("history");
-    if (history.physical_pointer != undefined) {
-        history.physical_pointer.vod = $api.byId('vod').value;
-        history.physical_pointer.vos = $api.byId('vos').value;
-        history.physical_pointer.corrected_vod = $api.byId('corrected_vod').value;
-        history.physical_pointer.corrected_vos = $api.byId('corrected_vos').value;
-        history.physical_pointer.tod = $api.byId('tod').value;
-        history.physical_pointer.tos = $api.byId('tos').value;
-        history.physical_pointer.outer_eye = $api.byId('outer_eye').value;
-        history.physical_pointer.conjunctiva = $api.byId('conjunctiva').value;
-        history.physical_pointer.cornea = $api.byId('cornea').value;
-        history.physical_pointer.anterior_chamber = $api.byId('anterior_chamber').value;
-        history.physical_pointer.lens = $api.byId('lens').value;
-        history.physical_pointer.vitreous = $api.byId('vitreous').value;
-        history.physical_pointer.eyeground = $api.byId('eyeground').value;
-    } else {
-        var physical_pointer = {
-            vod: $api.byId('vod').value,
-            vos: $api.byId('vos').value,
-            corrected_vod: $api.byId('corrected_vod').value,
-            corrected_vos: $api.byId('corrected_vos').value,
-            tod: $api.byId('tod').value,
-            tos: $api.byId('tos').value,
-            outer_eye: $api.byId('outer_eye').value,
-            conjunctiva: $api.byId('conjunctiva').value,
-            cornea: $api.byId('cornea').value,
-            anterior_chamber: $api.byId('anterior_chamber').value,
-            lens: $api.byId('lens').value,
-            vitreous: $api.byId('vitreous').value,
-            eyeground: $api.byId('eyeground').value,
+    if (source == "history") {
+        var history = getStorage("history");
+        if (history.physical_pointer != undefined) {
+            history.physical_pointer.vod = $api.byId('vod').value;
+            history.physical_pointer.vos = $api.byId('vos').value;
+            history.physical_pointer.corrected_vod = $api.byId('corrected_vod').value;
+            history.physical_pointer.corrected_vos = $api.byId('corrected_vos').value;
+            history.physical_pointer.tod = $api.byId('tod').value;
+            history.physical_pointer.tos = $api.byId('tos').value;
+            history.physical_pointer.outer_eye = $api.byId('outer_eye').value;
+            history.physical_pointer.conjunctiva = $api.byId('conjunctiva').value;
+            history.physical_pointer.cornea = $api.byId('cornea').value;
+            history.physical_pointer.anterior_chamber = $api.byId('anterior_chamber').value;
+            history.physical_pointer.lens = $api.byId('lens').value;
+            history.physical_pointer.vitreous = $api.byId('vitreous').value;
+            history.physical_pointer.eyeground = $api.byId('eyeground').value;
+        } else {
+            var physical_pointer = {
+                vod: $api.byId('vod').value,
+                vos: $api.byId('vos').value,
+                corrected_vod: $api.byId('corrected_vod').value,
+                corrected_vos: $api.byId('corrected_vos').value,
+                tod: $api.byId('tod').value,
+                tos: $api.byId('tos').value,
+                outer_eye: $api.byId('outer_eye').value,
+                conjunctiva: $api.byId('conjunctiva').value,
+                cornea: $api.byId('cornea').value,
+                anterior_chamber: $api.byId('anterior_chamber').value,
+                lens: $api.byId('lens').value,
+                vitreous: $api.byId('vitreous').value,
+                eyeground: $api.byId('eyeground').value,
+            }
+            history.physical_pointer = physical_pointer;
         }
-        history.physical_pointer = physical_pointer;
-    }
 
-    setStorage("history", history);
+        setStorage("history", history);
+
+    } else {
+        var followup = getStorage("followup");
+        if (followup.physical_pointer != undefined) {
+            followup.physical_pointer.vod = $api.byId('vod').value;
+            followup.physical_pointer.vos = $api.byId('vos').value;
+            followup.physical_pointer.corrected_vod = $api.byId('corrected_vod').value;
+            followup.physical_pointer.corrected_vos = $api.byId('corrected_vos').value;
+            followup.physical_pointer.tod = $api.byId('tod').value;
+            followup.physical_pointer.tos = $api.byId('tos').value;
+            followup.physical_pointer.outer_eye = $api.byId('outer_eye').value;
+            followup.physical_pointer.conjunctiva = $api.byId('conjunctiva').value;
+            followup.physical_pointer.cornea = $api.byId('cornea').value;
+            followup.physical_pointer.anterior_chamber = $api.byId('anterior_chamber').value;
+            followup.physical_pointer.lens = $api.byId('lens').value;
+            followup.physical_pointer.vitreous = $api.byId('vitreous').value;
+            followup.physical_pointer.eyeground = $api.byId('eyeground').value;
+        } else {
+            var physical_pointer = {
+                vod: $api.byId('vod').value,
+                vos: $api.byId('vos').value,
+                corrected_vod: $api.byId('corrected_vod').value,
+                corrected_vos: $api.byId('corrected_vos').value,
+                tod: $api.byId('tod').value,
+                tos: $api.byId('tos').value,
+                outer_eye: $api.byId('outer_eye').value,
+                conjunctiva: $api.byId('conjunctiva').value,
+                cornea: $api.byId('cornea').value,
+                anterior_chamber: $api.byId('anterior_chamber').value,
+                lens: $api.byId('lens').value,
+                vitreous: $api.byId('vitreous').value,
+                eyeground: $api.byId('eyeground').value,
+            }
+            followup.physical_pointer = physical_pointer;
+        }
+
+        setStorage("followup", followup);
+    }
     api.closeWin();
 
     // showProgress();

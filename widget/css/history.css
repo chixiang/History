@@ -16,6 +16,10 @@
     flex: 1;
 }
 
+.onFieldClick {
+    background-color: #6f96d1;
+}
+
 html {
     padding: 0px;
     margin: 0px;

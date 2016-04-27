@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>随访信息</title>
-    <link rel="stylesheet" type="text/css" href="../css/history.css" />
-    <link rel="stylesheet" type="text/css" href="../css/button.css" />
-    <script type="text/javascript" src="../script/api.js"></script>
-    <script type="text/javascript" src="../script/util.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/button.css" />
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/constants.js"></script>
+    <script type="text/javascript" src="../../script/util.js"></script>
 </head>
 
 <body class="body-silver">
@@ -59,51 +60,197 @@ apiready = function() {
         api.closeWin();
     }
 
-    history_id = api.pageParam.history_id;
-    follow_up_id = api.pageParam.follow_up_id;
-    physical_id = "";
-    data = {};
-    type = "";
-
-    if (follow_up_id != "" && follow_up_id != undefined && follow_up_id != null) {
-        type = "modi";
-    }
-    if (type == "modi") {
-        data = getFollowUp(follow_up_id);
-        history_id = data.history_id;
-        physical_id = data.physical_pointer;
-    }
+    var followup = getStorage("followup");
+    $api.byId('condition').value = followup.condition;
+    $api.byId('treatment').value = followup.treatment;
 }
 
 function saveFollowUp() {
+    showProgress();
+    var followup = getStorage("followup");
+    followup.condition = $api.byId('condition').value;
+    followup.treatment = $api.byId('treatment').value;
+
+    var model = api.require('model');
+    var query = api.require('query');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    if (followup.physical_pointer != undefined) {
+
+    }
+    model.updateById({ // 保存体检信息
+        class: historyConstants.patientTable,
+        id: history.patient_pointer.id,
+        value: {
+            // history_id: history.id,
+            name: history.patient_pointer.name,
+            gender: history.patient_pointer.gender,
+            birthday: history.patient_pointer.birthday,
+            age: history.patient_pointer.age,
+            admission_number: history.patient_pointer.admission_number,
+            outpatient_number: history.patient_pointer.outpatient_number,
+            phone: history.patient_pointer.phone,
+            address: history.patient_pointer.address,
+            job: history.patient_pointer.job,
+            record_doctor: history.patient_pointer.record_doctor
+        }
+    }, function(ret, err) {
+        hideProgress();
+        if (ret) {
+            history.patient_pointer.id = ret.id;
+            if (history.physical_pointer != undefined) {
+                model.updateById({ // 保存体检信息
+                    class: historyConstants.physicalTable,
+                    id: history.physical_pointer.id,
+                    value: {
+                        // history_id: history.id,
+                        vod: history.physical_pointer.vod,
+                        vos: history.physical_pointer.vos,
+                        corrected_vod: history.physical_pointer.corrected_vod,
+                        corrected_vos: history.physical_pointer.corrected_vos,
+                        tod: history.physical_pointer.tod,
+                        tos: history.physical_pointer.tos,
+                        outer_eye: history.physical_pointer.outer_eye,
+                        conjunctiva: history.physical_pointer.conjunctiva,
+                        cornea: history.physical_pointer.cornea,
+                        anterior_chamber: history.physical_pointer.anterior_chamber,
+                        lens: history.physical_pointer.lens,
+                        vitreous: history.physical_pointer.vitreous,
+                        eyeground: history.physical_pointer.eyeground
+                    }
+                }, function(ret, err) {
+                    hideProgress();
+                    if (ret) {
+                        history.physical_pointer.id = ret.id;
+                        model.updateById({ // 保存病历信息
+                            class: historyConstants.historyTable,
+                            id: history.id,
+                            value: {
+                                consultation_department: history.consultation_department,
+                                chief_complaint: history.chief_complaint,
+                                diagnosis: history.diagnosis,
+                                treatment: history.treatment,
+                                record_doctor: history.record_doctor,
+                                patient_pointer: history.patient_pointer.id,
+                                physical_pointer: history.physical_pointer.id,
+                                record_doctor: record_doctor
+                            }
+                        }, function(ret, err) {
+                            hideProgress();
+                            if (ret) {
+                                historySaveEvent();
+                                api.toast({
+                                    msg: "保存病历成功"
+                                })
+                                api.closeWin();
+                            } else {
+                                alert("保存病历失败！");
+                            }
+                        });
+                    } else {
+                        alert("保存病历失败！");
+                    }
+                });
+            } else {
+                model.updateById({ // 保存病历信息
+                    class: historyConstants.historyTable,
+                    id: history.id,
+                    value: {
+                        consultation_department: history.consultation_department,
+                        chief_complaint: history.chief_complaint,
+                        diagnosis: history.diagnosis,
+                        treatment: history.treatment,
+                        record_doctor: history.record_doctor,
+                        patient_pointer: history.patient_pointer.id,
+                        record_doctor: record_doctor
+                            // physical_pointer: history.physical_pointer.id
+                    }
+                }, function(ret, err) {
+                    hideProgress();
+                    if (ret) {
+                        historySaveEvent();
+                        api.toast({
+                            msg: "保存病历成功"
+                        })
+                        api.closeWin();
+                    } else {
+                        alert("保存病历失败！");
+                    }
+                });
+            }
+        } else {
+            alert("保存病历失败！");
+        }
+    });
+
 
 }
 
+function savePhysical(callback) {
+    var followup = getStorage("followup");
+    if (followup.physical_pointer == undefined) {
+        return;
+    }
+    showProgress();
+
+    var model = api.require('model');
+    var query = api.require('query');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    model.updateById({ // 保存体检信息
+        class: historyConstants.physicalTable,
+        id: followup.physical_pointer.id,
+        value: {
+            // followup_id: followup.id,
+            vod: followup.physical_pointer.vod,
+            vos: followup.physical_pointer.vos,
+            corrected_vod: followup.physical_pointer.corrected_vod,
+            corrected_vos: followup.physical_pointer.corrected_vos,
+            tod: followup.physical_pointer.tod,
+            tos: followup.physical_pointer.tos,
+            outer_eye: followup.physical_pointer.outer_eye,
+            conjunctiva: followup.physical_pointer.conjunctiva,
+            cornea: followup.physical_pointer.cornea,
+            anterior_chamber: followup.physical_pointer.anterior_chamber,
+            lens: followup.physical_pointer.lens,
+            vitreous: followup.physical_pointer.vitreous,
+            eyeground: followup.physical_pointer.eyeground
+        }
+    }, function(ret, err) {
+        if(callback) {
+            callback();
+        }
+    });
+}
+
 function openWin(type) {
-    var data = {};
+    var name = "";
+    var page = "";
+    var pageParam = {};
     switch (type) {
         case 'physical':
-            data = {
-                "source": "follow_up",
-                "id": physical_id
-            };
+            name = api.winName + "_physical";
+            page = "physical/physical";
             break;
         default:
             break;
     }
     api.openWin({
-        name: type,
-        url: './' + type + '.html',
-        pageParam: {
-            data: data
-        },
+        name: name,
+        url: '../' + page + '.html',
+        pageParam: pageParam,
         reload: true,
         bounces: false,
         vScrollBarEnabled: false,
         animation: {
             type: "movein",
-            subType: "from_right",
-            duration: 300
+            duration: 0
         }
     })
 }

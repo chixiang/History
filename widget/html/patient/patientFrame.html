@@ -206,7 +206,7 @@ function checkPatientName() {
 
 function showDupHistoryList(patients) {
     api.openWin({
-        name: "dupHistoryList",
+        name: api.winName + "_dup_historyList",
         url: '../history/dupHistoryList.html',
         pageParam: {
             patients: patients
