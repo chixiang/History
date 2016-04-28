@@ -153,9 +153,20 @@ a:visited {
 }
 
 .textarea_field {
-    height: 120px;
+    /*height: 120px;*/
+    height: auto;
     /*font-size: 17px;*/
     -webkit-box-orient: vertical;
+}
+
+.accessory_img {
+    display: inline;
+}
+
+.accessory_img>img {
+    margin: 0px 5px;
+    height: 70px;
+    width: 70px;
 }
 
 .bottom {
@@ -180,9 +191,22 @@ a:visited {
     width: 50%;
 }
 
+.value_with_unit_3 {
+    width: 30%;
+}
+
+.value_with_unit_4 {
+    width: 40%;
+}
+
+.value_with_unit_6 {
+    width: 50%;
+}
+
 .unit {
     padding: 0px 0px 0px 10px;
     width: 20%;
+/*    text-align: right;*/
 }
 
 .textarea_key {
@@ -192,6 +216,20 @@ a:visited {
 
 .textarea_value {
     width: 100%
+}
+
+.field_img {
+    display: -webkit-box;
+}
+
+.textarea_key_with_img {
+    width: 70%;
+    font-weight: bold;
+}
+
+.img_button {
+    width: 30%;
+    text-align: right;
 }
 
 input {
