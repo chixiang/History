@@ -59,10 +59,10 @@
                 <div class="field textarea_field bottom">
                     <div class="field_img">
                         <div class="textarea_key_with_img">前节照相</div>
-                        <div class="img_button" id="qjzx_btn" onclick="addImg(this.id)">&#43;</div>
+                        <div class="img_button" id="qjzx_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
                     </div>
                     <div class="textarea_value">
-                        <textarea type="text" id="qjzx"></textarea>
+                        <textarea type="text" id="qjzx" placeholder="请输入内容"></textarea>
                     </div>
                     <div class="accessory_img" id="qjzx_img"></div>
                 </div>
@@ -72,30 +72,30 @@
                 <div class="field textarea_field">
                     <div class="field_img">
                         <div class="textarea_key_with_img">角膜曲率</div>
-                        <div class="img_button" id="corneal_curvature_btn" onclick="addImg(this.id)">&#43;</div>
+                        <div class="img_button" id="corneal_curvature_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
                     </div>
                     <div class="textarea_value">
-                        <textarea type="text" id="corneal_curvature"></textarea>
+                        <textarea type="text" id="corneal_curvature" placeholder="请输入内容"></textarea>
                     </div>
                     <div class="accessory_img" id="corneal_curvature_img"></div>
                 </div>
                 <div class="field textarea_field">
                     <div class="field_img">
                         <div class="textarea_key_with_img">角膜地形图</div>
-                        <div class="img_button" id="corneal_topography_btn" onclick="addImg(this.id)">&#43;</div>
+                        <div class="img_button" id="corneal_topography_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
                     </div>
                     <div class="textarea_value">
-                        <textarea type="text" id="corneal_topography"></textarea>
+                        <textarea type="text" id="corneal_topography" placeholder="请输入内容"></textarea>
                     </div>
                     <div class="accessory_img" id="corneal_topography_img"></div>
                 </div>
                 <div class="field textarea_field bottom">
                     <div class="field_img">
                         <div class="textarea_key_with_img">IOL Master</div>
-                        <div class="img_button" id="iol_master_btn" onclick="addImg(this.id)">&#43;</div>
+                        <div class="img_button" id="iol_master_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
                     </div>
                     <div class="textarea_value">
-                        <textarea type="text" id="iol_master"></textarea>
+                        <textarea type="text" id="iol_master" placeholder="请输入内容"></textarea>
                     </div>
                     <div class="accessory_img" id="iol_master_img"></div>
                 </div>
@@ -116,40 +116,129 @@ apiready = function() {
     var history = getStorage("history");
     var followup = getStorage("followup");
     source = api.pageParam.source;
-    if (source == "followup") {
-        setPhysical(followup.physical_pointer);
-    } else {
-        source = "history";
-        setPhysical(history.physical_pointer);
+    // if (source == "followup") {
+    //     setPhysical(followup.physical_pointer);
+    // } else {
+    //     source = "history";
+    //     setPhysical(history.physical_pointer);
+    // }
+    if (history.accessory_exam_pointer == undefined) {
+        var accessory_exam_pointer = {};
+        history.accessory_exam_pointer = accessory_exam_pointer;
+        setStorage("history", history);
     }
+
+    if (followup.accessory_exam_pointer == undefined) {
+        var accessory_exam_pointer = {};
+        followup.accessory_exam_pointer = accessory_exam_pointer;
+        setStorage("followup", followup);
+    }
+
+    // imgStrs = "";
 
 }
 
 function addImg(id) {
-    setImg(id.replace("btn", 'img'), '../../image/people.jpg');
+    var sourceType = "";
+    api.confirm({
+        title: '请选择',
+        msg: '图片来源',
+        buttons: ['拍照', '相册']
+    }, function(ret, err) {
+        if (ret) {
+            if (ret.buttonIndex == 1) {
+                sourceType = "camera";
+            } else if (ret.buttonIndex == 2) {
+                sourceType = "library";
+            }
+            api.getPicture({
+                sourceType: sourceType,
+                encodingType: 'jpg',
+                mediaValue: 'pic',
+                destinationType: 'url',
+                allowEdit: false,
+                quality: 90,
+                // targetWidth: 100,
+                // targetHeight: 100,
+                saveToPhotoAlbum: false
+            }, function(ret, err) {
+                if (ret) {
+                    // alert(JSON.stringify(ret));
+                    if (ret.data != "") {
+                        setImg(id.replace("btn", 'img'), ret.data);
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
 }
 
 function setImg(id, path) {
+    var imgType = id.replace('btn', 'img');
+    var imgStrs = {};
+    var imgStr = "";
+
     if (source == "followup") {
         var followup = getStorage("followup");
-        // var imgStrs = followup.accessory_exam_pointer.id;
-        var imgStrs = ""
-        imgStrs = imgStrs + "<img src=" + path + " style='width: 70px; ' />";
-        $api.byId(id).style.height = "70px";
-        $api.byId(id).innerHTML = imgStrs;
-        followup.accessory_exam_pointer.id = imgStrs;
         setStorage("followup", followup);
     } else {
         var history = getStorage("history");
+        // alert(JSON.stringify(history));
+        if (history.accessory_exam_pointer[imgType] == undefined) {
+            history.accessory_exam_pointer[imgType] = {};
+        }
+        // var imgStr = {
+        //     id: imgStrs.length + 1,
+        //     path: path
+        // }
+        // imgStrs.push(imgStr);
+        imgStrs = history.accessory_exam_pointer[imgType];
+
+        var imgId = JSONLength(imgStrs) + 1;
+        imgStrs[imgId] = path;
+
+        // alert(JSON.stringify(imgStrs));
+        // imgStrs = imgStrs + "<img src=" + path + " onclick='openImg(this.src)' />";
+        var imgHtml = getImgHtml(imgStrs);
+        // $api.byId(id).style.height = "70px";
+        $api.byId(id).innerHTML = imgHtml;
         // var imgStrs = history.accessory_exam_pointer.id;
-        var imgStrs = ""
-        imgStrs = imgStrs + "<img src=" + path + " style='width: 70px; ' />";
-        $api.byId(id).style.height = "70px";
-        $api.byId(id).innerHTML = imgStrs;
-        // var imgStrs = history.accessory_exam_pointer.id;
-        history.accessory_exam_pointer.id = imgStrs;
+        // history.accessory_exam_pointer.id = imgStrs;
         setStorage("history", history);
     }
+}
+
+function openImg(path) {
+    var photoBrowser = api.require('photoBrowser');
+    photoBrowser.open({
+        images: [
+            path,
+            // 'fs://img/encryption.png'
+        ],
+        activeIndex: 0,
+        // placeholderImg: 'widget://res/img/apicloud.png',
+        bgColor: '#000'
+    }, function(ret) {
+        if (ret.eventType == "click") {
+            photoBrowser.close();
+        }
+    });
+}
+
+function getImgHtml(obj) {
+    // alert(JSON.stringify(obj));
+    var size = JSONLength(obj);
+    var idx = 1;
+    var imgHtml = "";
+    while (idx <= size) {
+        imgHtml = imgHtml + "<img src=" + obj[idx + ""] + " onclick='openImg(this.src)' />";
+        idx = idx + 1;
+    }
+    return imgHtml;
 }
 
 /**

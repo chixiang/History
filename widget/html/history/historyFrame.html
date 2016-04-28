@@ -39,7 +39,7 @@
                     <div class="key">体检信息</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
-                <div class="field bottom" tapmode="onFieldClick">
+                <div class="field bottom" tapmode="onFieldClick" onclick="openWin('accessory_exam')">
                     <div class="key">辅助检查</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
@@ -433,6 +433,9 @@ function openWin(type) {
             //     "physical_id": physical_id
             // };
             break;
+        case 'accessory_exam':
+            name = api.winName + "_accessory_exam";
+            page = "accessoryexam/accessoryExam";
         default:
             break;
     }
