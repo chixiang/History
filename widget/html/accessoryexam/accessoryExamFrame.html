@@ -110,36 +110,6 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
-        api.closeWin();
-    }
-
-    var history = getStorage("history");
-    var followup = getStorage("followup");
-    source = api.pageParam.source;
-    // if (source == "followup") {
-    //     setPhysical(followup.physical_pointer);
-    // } else {
-    //     source = "history";
-    //     setPhysical(history.physical_pointer);
-    // }
-    if (source == "history") {
-        if (history.accessory_exam_pointer == undefined) {
-            var accessory_exam_pointer = {};
-            history.accessory_exam_pointer = accessory_exam_pointer;
-            setStorage("history", history);
-        }
-    } else {
-        if (followup.accessory_exam_pointer == undefined) {
-            var accessory_exam_pointer = {};
-            followup.accessory_exam_pointer = accessory_exam_pointer;
-            setStorage("followup", followup);
-        }
-    }
-
-    // 绑定android后退键事件
-    api.addEventListener({
-        name: 'keyback'
-    }, function(ret, err) {
         api.confirm({
             title: '请选择',
             msg: '未确认的修改会丢失，是否确认退出？',
@@ -153,11 +123,64 @@ apiready = function() {
                 alert(JSON.stringify(err));
             }
         });
+    }
+
+    source = api.pageParam.source;
+    var pageData = {};
+    if (source == "history") {
+        pageData = getStorage("history");
+    } else {
+        pageData = getStorage("followup");
+    }
+
+    if (pageData.accessory_exam_pointer != undefined) {
+        $api.byId("but_r").value = pageData.accessory_exam_pointer.but_r;
+        $api.byId("but_l").value = pageData.accessory_exam_pointer.but_l;
+        $api.byId("sit_r").value = pageData.accessory_exam_pointer.sit_r;
+        $api.byId("sit_l").value = pageData.accessory_exam_pointer.sit_l;
+        $api.byId("qjzx").value = pageData.accessory_exam_pointer.qjzx;
+        $api.byId("corneal_curvature").value = pageData.accessory_exam_pointer.corneal_curvature;
+        $api.byId("corneal_topography").value = pageData.accessory_exam_pointer.corneal_topography;
+        $api.byId("iol_master").value = pageData.accessory_exam_pointer.iol_master;
+        setImgs();
+        // 将附加检查数据存储在临时变量中，因为每次增加图片都需拼接图片
+        // 的 html，所以增加完图片要保存到
+        // localStorage中，这样就不能实现取消操作了，所以在此页面的所有操作先使用
+        // 临时变量，确认后再保存到localStorage中
+        setStorage("imgTmp", pageData.accessory_exam_pointer);
+    }
+
+    // 绑定android后退键事件
+    api.addEventListener({
+        name: 'keyback'
+    }, function(ret, err) {
+        if (ret) {
+            api.confirm({
+                title: '请选择',
+                msg: '未确认的修改会丢失，是否确认退出？',
+                buttons: ['退出', '取消']
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.buttonIndex == 1) {
+                        api.closeWin();
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
     });
 }
 
 function addImg(id) {
     var sourceType = "";
+    var model = api.require('model');
+    var localPath = "";
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
     api.confirm({
         title: '请选择',
         msg: '图片来源',
@@ -177,25 +200,35 @@ function addImg(id) {
                 allowEdit: false,
                 quality: 90,
                 // targetWidth: 100,
-                // targetHeight: 100,
+                targetHeight: 960,
                 saveToPhotoAlbum: false
             }, function(ret, err) {
                 if (ret) {
                     if (ret.data != "") {
+                        showProgress("上传中...");
+                        localPath = ret.data;
                         model.uploadFile({
-                            report: false,
+                            report: true,
                             data: {
                                 file: {
-                                    url: ret.data
+                                    url: localPath
                                 },
-                                values: {
-                                    key1: id.replace("btn", "img")
-                                }
+                                // values: {
+                                //     key1: id.replace("btn", "img")
+                                // }
                             }
                         }, function(ret, err) {
                             if (ret) {
-                                alert(JSON.stringify(ret));
-                                setImg(id.replace("btn", "img"), ret.data);
+                                var state = ret.state;
+                                if (state == 1) {
+                                    var body = ret.body;
+                                    if (body) {
+                                        hideProgress();
+                                        setImg(id.replace("btn", "img"), body.url);
+                                    }
+                                } else {
+                                    // 可做进度条
+                                }
                             } else {
                                 alert(JSON.stringify(err))
                             }
@@ -211,49 +244,57 @@ function addImg(id) {
     });
 }
 
-function setImg(id, path) {
+function setImg(id, url) {
     var imgType = id.replace('btn', 'img');
     var imgStrs = {};
     var imgStr = "";
 
-    if (source == "followup") {
-        var followup = getStorage("followup");
-        if (followup.accessory_exam_pointer == undefined) {
-            var accessory_exam_pointer = {};
-            followup.accessory_exam_pointer = accessory_exam_pointer;
-        }
-        setStorage("followup", followup);
+    var pageData = {};
+    if (source == "history") {
+        pageData = getStorage("history");
     } else {
-        var history = getStorage("history");
-
-        // 初始化本地存储
-        if (history.accessory_exam_pointer == undefined) {
-            var accessory_exam_pointer = {};
-            history.accessory_exam_pointer = accessory_exam_pointer;
-        }
-        if (history.accessory_exam_pointer[imgType] == undefined) {
-            history.accessory_exam_pointer[imgType] = {};
-        }
-
-        // 获取已添加的图片
-        imgStrs = history.accessory_exam_pointer[imgType];
-        // 按数字累加图片的key值，value为图片路径
-        var imgId = JSONLength(imgStrs) + 1;
-        imgStrs[imgId] = path;
-
-        // 将图片组转换成可显示的html代码
-        var imgHtml = getImgHtml(imgStrs);
-        $api.byId(id).innerHTML = imgHtml;
-
-        setStorage("history", history);
+        pageData = getStorage("followup");
     }
+
+    // 获取已添加的图片
+    var accessory_exam_pointer_tmp = getStorage("imgTmp");
+    // 第一次添加某栏位图片，需初始化
+    if (accessory_exam_pointer_tmp[imgType] == undefined) {
+        accessory_exam_pointer_tmp[imgType] = {};
+    }
+    imgStrs = accessory_exam_pointer_tmp[imgType];
+    // 按数字累加图片的key值，value为图片url
+    var imgId = JSONLength(imgStrs) + 1;
+    imgStrs[imgId] = url;
+
+    // 将图片组转换成可显示的html代码
+    var imgHtml = getImgHtml(imgStrs);
+    $api.byId(id).innerHTML = imgHtml;
+
+    setStorage("imgTmp", accessory_exam_pointer_tmp);
 }
 
-function openImg(path) {
+function setImgs() {
+    var pageData = {};
+    if (source == "history") {
+        pageData = getStorage("history");
+    } else {
+        pageData = getStorage("followup");
+    }
+    var idx = 0;
+    while (idx < historyConstants.imgGroup.length) {
+        var imgHtml = getImgHtml(pageData.accessory_exam_pointer[historyConstants.imgGroup[idx]]);
+        $api.byId(historyConstants.imgGroup[idx]).innerHTML = imgHtml;
+        idx = idx + 1;
+    }
+
+}
+
+function openImg(url) {
     var photoBrowser = api.require('photoBrowser');
     photoBrowser.open({
         images: [
-            path,
+            url,
         ],
         activeIndex: 0,
         // placeholderImg: 'widget://res/img/apicloud.png',
@@ -277,22 +318,59 @@ function getImgHtml(obj) {
     return imgHtml;
 }
 
+function saveAccessoryExamDB(source, data) {
+    var model = api.require('model');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    model.updateById({
+        class: historyConstants.table.accessoryExam,
+        id: data.id,
+        value: data
+    }, function(ret, err) {
+        if (ret) {
+            var pageData = getStorage(source);
+            pageData.accessory_exam_pointer.id = ret.id;
+            setStorage(source, pageData);
+            accessoryExamSaveEvent(ret.id);
+            api.closeWin();
+        } else {
+            alert(JSON.stringify(ret));
+        }
+    });
+}
+
 /**
  * [savePhysical description]
  * @return {[type]} [description]
  */
 function saveAccessoryExam() {
+    var pageData = {};
     if (source == "history") {
-        var history = getStorage("history");
-
-        setStorage("history", history);
-
+        pageData = getStorage("history");
     } else {
-        var followup = getStorage("followup");
-
-        setStorage("followup", followup);
+        pageData = getStorage("followup");
     }
-    api.closeWin();
+    if (getStorage("imgTmp") != undefined) {
+        pageData.accessory_exam_pointer = getStorage("imgTmp");
+    }
+
+    pageData.accessory_exam_pointer.but_r = $api.byId("but_r").value;
+    pageData.accessory_exam_pointer.but_l = $api.byId("but_l").value;
+    pageData.accessory_exam_pointer.sit_r = $api.byId("sit_r").value;
+    pageData.accessory_exam_pointer.sit_l = $api.byId("sit_l").value;
+    pageData.accessory_exam_pointer.qjzx = $api.byId("qjzx").value;
+    pageData.accessory_exam_pointer.corneal_curvature = $api.byId("corneal_curvature").value;
+    pageData.accessory_exam_pointer.corneal_topography = $api.byId("corneal_topography").value;
+    pageData.accessory_exam_pointer.iol_master = $api.byId("iol_master").value;
+
+    // 保存在本地
+    setStorage(source, pageData);
+
+    // 保存到云端
+    saveAccessoryExamDB(source, pageData.accessory_exam_pointer);
 }
 </script>
 

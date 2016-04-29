@@ -125,8 +125,11 @@ function confirmCloseWin() {
 
 function initLocalHistory() {
     $api.rmStorage("history");
+    $api.rmStorage("imgTmp");
     var history = {};
+    var accessory_exam_pointer_tmp = {};
     $api.setStorage("history", history);
+    $api.setStorage("imgTmp", accessory_exam_pointer_tmp);
 }
 
 function initLocalFollowUp() {
@@ -435,6 +438,15 @@ function followupSaveEvent(follow_up_id) {
         name: 'followupSaveEvent',
         extra: {
             follow_up_id: follow_up_id
+        }
+    });
+}
+
+function accessoryExamSaveEvent(accessory_exam_id) {
+    api.sendEvent({
+        name: 'accessoryExamSaveEvent',
+        extra: {
+            accessory_exam_id: accessory_exam_id
         }
     });
 }

@@ -4,15 +4,16 @@ var historyConstants = {
     appId: 'A6903478274381',
     appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
     host: 'https://d.apicloud.com',
-    
+
     // 数据库表名称
     table: {
         history: "historyTest",
         patient: "patientTest",
         physical: "physicalTest",
+        accessoryExam: "accessoryExam",
         followup: "followUpTest",
         log: "historyLog",
-    }
+    },
 
     // 日志状态
     logStatus: {
@@ -20,6 +21,13 @@ var historyConstants = {
         success: "0",
         fail: "2"
     },
+
+    imgGroup: [
+        "qjzx_img",
+        "corneal_curvature_img",
+        "corneal_topography_img",
+        "iol_master_img"
+    ],
 
     // 科室名称
     consultation_department: [

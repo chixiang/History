@@ -330,6 +330,10 @@ function getFullHistory(history_id) {
                 qid: queryId,
                 column: 'physical_pointer'
             });
+            query.include({
+                qid: queryId,
+                column: 'accessory_exam_pointer'
+            });
             query.whereEqual({
                 qid: queryId,
                 column: "id",
@@ -361,40 +365,19 @@ function getFullHistory(history_id) {
  * @return {[type]}      [description]
  */
 function openWin(type) {
-    var pageParam = {};
+    var pageParam = {
+        source: "history"
+    };
     var page = "";
     var name = "";
     switch (type) {
         case "modiHistory":
             name = api.winName + "_history"
             page = "history/history";
-            // if (api.winName == "dup_history") {
-            //     name = "dup_history";
-            // }
-            // pageParam = {
-            //     "history_id": history_id
-            // };
             break;
-        // case "viewPatient":
-        //     page = "patient/viewPatient";
-        //     // pageParam = {
-        //     //     "history_id": history_id,
-        //     //     "patient_id": patient_id
-        //     // }
-        //     break;
-        // case "viewPhysical":
-        //     page = "physical/viewPhysical";
-        //     // pageParam = {
-        //     //     "history_id": history_id,
-        //     //     "physical_id": physical_id
-        //     // }
-        //     break;
         case "followupList":
             name = api.winName + "_follow_up_list"
             page = "followup/followupList";
-            // pageParam = {
-            //     "history_id": history_id
-            // }
             break;
         default:
             break;
