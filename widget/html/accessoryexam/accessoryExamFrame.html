@@ -148,7 +148,7 @@ apiready = function() {
             if (ret) {
                 if (ret.buttonIndex == 1) {
                     api.closeWin();
-                } 
+                }
             } else {
                 alert(JSON.stringify(err));
             }
@@ -181,9 +181,25 @@ function addImg(id) {
                 saveToPhotoAlbum: false
             }, function(ret, err) {
                 if (ret) {
-                    // alert(JSON.stringify(ret));
                     if (ret.data != "") {
-                        setImg(id.replace("btn", 'img'), ret.data);
+                        model.uploadFile({
+                            report: false,
+                            data: {
+                                file: {
+                                    url: ret.data
+                                },
+                                values: {
+                                    key1: id.replace("btn", "img")
+                                }
+                            }
+                        }, function(ret, err) {
+                            if (ret) {
+                                alert(JSON.stringify(ret));
+                                setImg(id.replace("btn", "img"), ret.data);
+                            } else {
+                                alert(JSON.stringify(err))
+                            }
+                        });
                     }
                 } else {
                     alert(JSON.stringify(err));
