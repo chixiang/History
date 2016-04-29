@@ -103,6 +103,26 @@ function updateLog(id, deal_id, deal_data, status) {
     });
 }
 
+function confirmCloseWin() {
+    api.addEventListener({
+        name: 'keyback'
+    }, function(ret, err) {
+        api.confirm({
+            title: '请选择',
+            msg: '未确认的修改会丢失，是否确认退出？',
+            buttons: ['退出', '取消']
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.buttonIndex == 1) {
+                    api.closeWin();
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    });
+}
+
 function initLocalHistory() {
     $api.rmStorage("history");
     var history = {};
