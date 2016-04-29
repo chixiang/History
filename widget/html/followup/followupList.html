@@ -182,7 +182,7 @@ function loadList() {
             });
             var json_objs = [];
             model.findAll({
-                class: historyConstants.followUpTable,
+                class: historyConstants.table.followup,
                 qid: queryId
             }, function(ret, err) {
                 hideProgress();
@@ -278,7 +278,7 @@ function modiFollowUp(follow_up_id) {
 function deleteFollowUp(follow_up_id) {
     showProgress();
     model.deleteById({
-        class: historyConstants.followUpTable,
+        class: historyConstants.table.followup,
         id: follow_up_id,
     }, function(ret, err) {
         hideProgress();

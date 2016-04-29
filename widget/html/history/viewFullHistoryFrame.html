@@ -336,7 +336,7 @@ function getFullHistory(history_id) {
                 value: history_id
             });
             model.findAll({
-                class: historyConstants.historyTable,
+                class: historyConstants.table.history,
                 qid: queryId
             }, function(ret, err) {
                 hideProgress();

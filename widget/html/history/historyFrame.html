@@ -169,7 +169,7 @@ function getFullHistory(history_id) {
                 value: history_id
             });
             model.findAll({
-                class: historyConstants.historyTable,
+                class: historyConstants.table.history,
                 qid: queryId
             }, function(ret, err) {
                 hideProgress();
@@ -195,21 +195,21 @@ function getFullHistory(history_id) {
 //         appKey: historyConstants.appKey,
 //         host: historyConstants.host
 //     });
-//     model.insert({
-//         class: historyConstants.historyTable,
-//         value: {
-//             record_doctor: userName,
-//         }
-//     }, function(ret, err) {
-//         hideProgress();
-//         if (ret) {
-//             var history = ret;
-//             setStorage("history", history);
-//         } else {
-//             alert("初始化病历失败！");
-//             api.closeWin();
-//         }
-//     });
+    // model.insert({
+    //     class: historyConstants.table.history,
+    //     value: {
+    //         record_doctor: userName,
+    //     }
+    // }, function(ret, err) {
+    //     hideProgress();
+    //     if (ret) {
+    //         var history = ret;
+    //         setStorage("history", history);
+    //     } else {
+    //         alert("初始化病历失败！");
+    //         api.closeWin();
+    //     }
+    // });
 // }
 
 // function getHistory(history_id) {
@@ -218,7 +218,7 @@ function getFullHistory(history_id) {
 //     query.createQuery(function(ret, err) {
 //         if (ret && ret.qid) {
 //             model.findById({
-//                 class: historyConstants.historyTable,
+//                 class: historyConstants.table.history,
 //                 id: history_id
 //             }, function(ret, err) {
 //                 hideProgress();
@@ -275,7 +275,7 @@ function saveHistory() {
         host: historyConstants.host
     });
     model.updateById({ // 保存患者信息
-        class: historyConstants.patientTable,
+        class: historyConstants.table.patient,
         id: history.patient_pointer.id,
         value: {
             // history_id: history.id,
@@ -295,7 +295,7 @@ function saveHistory() {
             history.patient_pointer.id = ret.id;
             if (history.physical_pointer != undefined) {
                 model.updateById({ // 保存体检信息
-                    class: historyConstants.physicalTable,
+                    class: historyConstants.table.physical,
                     id: history.physical_pointer.id,
                     value: {
                         // history_id: history.id,
@@ -318,7 +318,7 @@ function saveHistory() {
                     if (ret) {
                         history.physical_pointer.id = ret.id;
                         model.updateById({ // 保存病历信息
-                            class: historyConstants.historyTable,
+                            class: historyConstants.table.history,
                             id: history.id,
                             value: {
                                 consultation_department: history.consultation_department,
@@ -351,7 +351,7 @@ function saveHistory() {
                 });
             } else {
                 model.updateById({ // 保存病历信息
-                    class: historyConstants.historyTable,
+                    class: historyConstants.table.history,
                     id: history.id,
                     value: {
                         consultation_department: history.consultation_department,
@@ -436,6 +436,9 @@ function openWin(type) {
         case 'accessory_exam':
             name = api.winName + "_accessory_exam";
             page = "accessoryexam/accessoryExam";
+            pageParam = {
+                source: "history"
+            };
         default:
             break;
     }

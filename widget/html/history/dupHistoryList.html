@@ -160,7 +160,7 @@ function loadList() {
             }
             var json_objs = [];
             model.findAll({
-                class: historyConstants.historyTable,
+                class: historyConstants.table.history,
                 qid: queryId
             }, function(ret, err) {
                 hideProgress();

@@ -122,17 +122,20 @@ apiready = function() {
     //     source = "history";
     //     setPhysical(history.physical_pointer);
     // }
-    if (history.accessory_exam_pointer == undefined) {
-        var accessory_exam_pointer = {};
-        history.accessory_exam_pointer = accessory_exam_pointer;
-        setStorage("history", history);
+    if (source == "history") {
+        if (history.accessory_exam_pointer == undefined) {
+            var accessory_exam_pointer = {};
+            history.accessory_exam_pointer = accessory_exam_pointer;
+            setStorage("history", history);
+        }
+    } else {
+        if (followup.accessory_exam_pointer == undefined) {
+            var accessory_exam_pointer = {};
+            followup.accessory_exam_pointer = accessory_exam_pointer;
+            setStorage("followup", followup);
+        }
     }
 
-    if (followup.accessory_exam_pointer == undefined) {
-        var accessory_exam_pointer = {};
-        followup.accessory_exam_pointer = accessory_exam_pointer;
-        setStorage("followup", followup);
-    }
 
     // imgStrs = "";
 

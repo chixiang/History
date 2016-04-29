@@ -103,7 +103,7 @@ function getFullFollowUp(follow_up_id) {
                 value: follow_up_id
             })
             model.findAll({
-                class: historyConstants.followUpTable,
+                class: historyConstants.table.followup,
                 qid: queryId
             }, function(ret, err) {
                 hideProgress();

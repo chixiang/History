@@ -51,6 +51,58 @@ function JSONLength(obj) {
     return size;
 };
 
+function preLog(deal_table, deal_type) {
+    var model = api.require('model');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    model.insert({
+        class: historyConstants.table.log,
+        value: {
+            deal_table: deal_table,
+            deal_type: deal_type,
+            status: historyConstants.logStatus.init
+        }
+    }, function(ret, err) {
+        if (ret) {
+            return ret.id;
+        } else {
+            api.toast({
+                msg: "预记日志失败"
+            })
+            return -1;
+        }
+    });
+}
+
+function updateLog(id, deal_id, deal_data, status) {
+    var model = api.require('model');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    model.updateById({
+        class: historyConstants.table.log,
+        id: id,
+        value: {
+            deal_id: deal_id,
+            deal_data: deal_data,
+            status: status
+        }
+    }, function(ret, err) {
+        if (ret) {
+
+        } else {
+            api.toast({
+                msg: "更新日志失败"
+            })
+        }
+    });
+}
+
 function initLocalHistory() {
     $api.rmStorage("history");
     var history = {};

@@ -101,7 +101,7 @@ function getFullFollowUp(follow_up_id) {
                 value: follow_up_id
             })
             model.findAll({
-                class: historyConstants.followUpTable,
+                class: historyConstants.table.followup,
                 qid: queryId
             }, function(ret, err) {
                 hideProgress();
@@ -133,7 +133,7 @@ function saveFollowUp(callback) {
     var followup = getStorage("followup");
     if (followup.physical_pointer != undefined) {
         model.updateById({ // 保存体检信息
-            class: historyConstants.physicalTable,
+            class: historyConstants.table.physical,
             id: followup.physical_pointer.id,
             value: {
                 // followup_id: followup.id,
@@ -157,7 +157,7 @@ function saveFollowUp(callback) {
                 followup.condition = $api.byId('condition').value;
                 followup.treatment = $api.byId('treatment').value;
                 model.updateById({ // 保存体检信息
-                    class: historyConstants.followUpTable,
+                    class: historyConstants.table.followup,
                     id: followup.id,
                     value: {
                         history_id: history.id,
@@ -188,7 +188,7 @@ function saveFollowUp(callback) {
         followup.treatment = $api.byId('treatment').value;
 
         model.updateById({ // 保存体检信息
-            class: historyConstants.followUpTable,
+            class: historyConstants.table.followup,
             id: followup.id,
             value: {
                 history_id: history.id,

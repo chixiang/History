@@ -1,14 +1,27 @@
 var historyConstants = {
 
+    // mcm参数
     appId: 'A6903478274381',
     appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
     host: 'https://d.apicloud.com',
+    
+    // 数据库表名称
+    table: {
+        history: "historyTest",
+        patient: "patientTest",
+        physical: "physicalTest",
+        followup: "followUpTest",
+        log: "historyLog",
+    }
 
-    historyTable: "historyTest",
-    patientTable: "patientTest",
-    physicalTable: "physicalTest",
-    followUpTable: "followUpTest",
+    // 日志状态
+    logStatus: {
+        init: "1",
+        success: "0",
+        fail: "2"
+    },
 
+    // 科室名称
     consultation_department: [
         "急诊",
         "急救中心",
@@ -40,6 +53,7 @@ var historyConstants = {
         "其他科室"
     ],
 
+    // 视力选项
     vision: [
         "1.0",
         "0.8",

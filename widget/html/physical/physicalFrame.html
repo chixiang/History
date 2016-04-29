@@ -216,7 +216,7 @@ apiready = function() {
     //     query.createQuery(function(ret, err) {
     //         if (ret && ret.qid) {
     //             model.findById({
-    //                 class: historyConstants.physicalTable,
+    //                 class: historyConstants.table.physical,
     //                 id: physical_id
     //             }, function(ret, err) {
     //                 hideProgress();
@@ -319,7 +319,7 @@ function savePhysical() {
 
     // if (type == "modi") {
     //     model.updateById({
-    //         class: historyConstants.physicalTable,
+    //         class: historyConstants.table.physical,
     //         id: physical_id,
     //         value: {
     //             vod: $api.byId('vod').value,
@@ -347,7 +347,7 @@ function savePhysical() {
     //     });
     // } else {
     //     model.insert({
-    //         class: historyConstants.physicalTable,
+    //         class: historyConstants.table.physical,
     //         value: {
     //             vod: $api.byId('vod').value,
     //             vos: $api.byId('vos').value,
@@ -369,10 +369,10 @@ function savePhysical() {
     //             var db_class = "";
     //             var db_id = "";
     //             if (source == "history") {
-    //                 db_class = historyConstants.historyTable;
+    //                 db_class = historyConstants.table.history;
     //                 db_id = history_id;
     //             } else {
-    //                 db_class = historyConstants.followUpTable;
+    //                 db_class = historyConstants.table.followup;
     //                 db_id = follow_up_id;
     //             }
     //             if (history_id != "")

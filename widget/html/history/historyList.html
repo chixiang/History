@@ -252,7 +252,7 @@ function loadList(type) {
             }
             var json_objs = [];
             model.findAll({
-                class: historyConstants.historyTable,
+                class: historyConstants.table.history,
                 qid: queryId
             }, function(ret, err) {
                 hideProgress();
@@ -400,7 +400,7 @@ function modiHistory(history_id) {
  */
 function deleteHistory(history_id) {
     model.deleteById({
-            class: historyConstants.historyTable,
+            class: historyConstants.table.history,
             id: history_id
         },
         function(ret, err) {

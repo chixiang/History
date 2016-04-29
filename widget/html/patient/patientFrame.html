@@ -180,7 +180,7 @@ function checkPatientName() {
             }
             var patients = [];
             model.findAll({
-                class: historyConstants.patientTable,
+                class: historyConstants.table.patient,
                 qid: queryId
             }, function(ret, err) {
                 if (err) {
@@ -222,7 +222,7 @@ function showDupHistoryList(patients) {
 //     query.createQuery(function(ret, err) {
 //         if (ret && ret.qid) {
 //             model.findById({
-//                 class: historyConstants.patientTable,
+//                 class: historyConstants.table.patient,
 //                 id: patient_id
 //             }, function(ret, err) {
 //                 hideProgress();
@@ -280,7 +280,7 @@ function savePatient() {
     // showProgress();
     // if (type == "modi") {
     //     model.updateById({
-    //         class: historyConstants.patientTable,
+    //         class: historyConstants.table.patient,
     //         id: patient_id,
     //         value: {
     //             // name: $api.byId('name').value,
@@ -304,7 +304,7 @@ function savePatient() {
     //     });
     // } else {
     //     model.insert({
-    //         class: historyConstants.patientTable,
+    //         class: historyConstants.table.patient,
     //         value: {
     // name: $api.byId('name').value,
     // gender: $api.byId('gender').value,
@@ -321,7 +321,7 @@ function savePatient() {
     //         if (ret) {
     //             patientAddEvent(ret.id);
     //             model.updateById({
-    //                 class: historyConstants.historyTable,
+    //                 class: historyConstants.table.history,
     //                 id: history_id,
     //                 value: {
     //                     patient_pointer: ret.id
