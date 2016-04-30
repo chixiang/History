@@ -47,7 +47,7 @@
                     <div class="key">体检信息</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
-                <div class="field tapmode="onFieldClick" bottom">
+                <div class="field bottom" tapmode="onFieldClick" onclick="openWin('accessory_exam');">
                     <div class="key">辅助检查</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
@@ -95,6 +95,10 @@ function getFullFollowUp(follow_up_id) {
                 qid: queryId,
                 column: 'physical_pointer'
             });
+            query.include({
+                qid: queryId,
+                column: 'accessory_exam_pointer'
+            });
             query.whereEqual({
                 qid: queryId,
                 column: 'id',
@@ -131,6 +135,10 @@ function saveFollowUp(callback) {
     });
     var history = getStorage("history");
     var followup = getStorage("followup");
+    var accessory_exam_pointer_id = "";
+    if (followup.accessory_exam_pointer != undefined) {
+        accessory_exam_pointer_id = followup.accessory_exam_pointer.id;
+    }
     if (followup.physical_pointer != undefined) {
         model.updateById({ // 保存体检信息
             class: historyConstants.table.physical,
@@ -163,7 +171,8 @@ function saveFollowUp(callback) {
                         history_id: history.id,
                         condition: followup.condition,
                         treatment: followup.treatment,
-                        physical_pointer: followup.physical_pointer.id
+                        physical_pointer: followup.physical_pointer.id,
+                        accessory_exam_pointer: accessory_exam_pointer_id
                     }
                 }, function(ret, err) {
                     if (ret) {
@@ -194,6 +203,7 @@ function saveFollowUp(callback) {
                 history_id: history.id,
                 condition: followup.condition,
                 treatment: followup.treatment,
+                accessory_exam_pointer: accessory_exam_pointer_id
             }
         }, function(ret, err) {
             if (ret) {
@@ -214,15 +224,17 @@ function saveFollowUp(callback) {
 function openWin(type) {
     var name = "";
     var page = "";
-    var pageParam = {};
+    var pageParam = {
+        "source": "followup"
+    }
     switch (type) {
         case 'physical':
             name = api.winName + "_physical";
             page = "physical/physical";
-            pageParam = {
-                "source": "followup"
-            }
             break;
+        case 'accessory_exam':
+            name = api.winName + "_accessory_exam";
+            page = "accessoryexam/accessoryExam"
         default:
             break;
     }

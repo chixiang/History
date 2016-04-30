@@ -97,6 +97,10 @@ function getFullFollowUp(follow_up_id) {
                 qid: queryId,
                 column: 'physical_pointer'
             });
+            query.include({
+                qid: queryId,
+                column: 'accessory_exam_pointer'
+            })
             query.whereEqual({
                 qid: queryId,
                 column: 'id',
@@ -138,12 +142,18 @@ function modiFollowUp() {
 }
 
 function openWin(type) {
-    var pageParam = {};
+    var pageParam = {
+        source: "followup"
+    };
     var name = "";
     switch (type) {
         case 'physical':
             name = api.winName + "_view_physical";
             page = "physical/viewPhysical";
+            break;
+        case 'accessory_exam':
+            name = api.winName + "_view_accessory_exam";
+            page = "accessoryexam/viewAccessoryExam";
             break;
         default:
             break;

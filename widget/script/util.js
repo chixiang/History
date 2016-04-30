@@ -134,8 +134,11 @@ function initLocalHistory() {
 
 function initLocalFollowUp() {
     $api.rmStorage("followup");
+    $api.rmStorage("imgTmp");
     var followup = {};
+    var accessory_exam_pointer_tmp = {};
     $api.setStorage("followup", followup);
+    $api.setStorage("imgTmp", accessory_exam_pointer_tmp);
 }
 
 function setStorage(key, value) {
