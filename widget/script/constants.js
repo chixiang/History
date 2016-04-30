@@ -12,7 +12,7 @@ var historyConstants = {
         physical: "physicalTest",
         accessoryExam: "accessoryExam",
         followup: "followUpTest",
-        log: "historyLog",
+        log: "historyLog"
     },
 
     // 日志状态
@@ -26,7 +26,21 @@ var historyConstants = {
         "qjzx_img",
         "corneal_curvature_img",
         "corneal_topography_img",
-        "iol_master_img"
+        "iol_master_img",
+        "ubm_img",
+        "view_horizon_img",
+        "glaucoma_rnfl_img",
+        "glaucoma_mri_img",
+        "oct_img",
+        "octa_img",
+        "fundus_oculi_pic_img",
+        "b_ultrasonic_img",
+        "ffa_img",
+        "icg_img",
+        "vep_img",
+        "erg_img",
+        "no_rnfl_img",
+        "no_mri_img"
     ],
 
     // 科室名称

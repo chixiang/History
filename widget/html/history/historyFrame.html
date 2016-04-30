@@ -96,17 +96,6 @@ apiready = function() {
         getFullHistory(history_id);
     }
 
-
-    // history_id = api.pageParam.history_id;
-    // patient_id = "";
-    // physical_id = "";
-    // data = {};
-    // if (history_id == undefined || history_id == "") {
-    //     newHistory(userName);
-    // } else {
-    //     getHistory(history_id);
-    // }
-
     // 会诊科室使用选择器
     $api.attr($api.byId('consultation_department'), 'readonly', 'true');
     // 回填Picker返回的会诊科室
@@ -118,40 +107,12 @@ apiready = function() {
         }
     });
 
-    // api.addEventListener({
-    //     name: 'accessoryExamSaveEvent'
-    // }, function(ret, err) {
-    //     if(ret && ret.value) {
-    //         var current_history = getStorage("history");
-    //         current_history.accessory_exam_pointer.id = ret.value.accessory_exam_id;
-    //         setStorage("history", current_history);
-    //     }
-    // });
-
     api.addEventListener({
         name: 'keyback'
     }, function(ret, err) {
         initLocalHistory();
     });
 
-
-    // 新增患者信息，本页面需要知道patient_id
-    // api.addEventListener({
-    //     name: 'patientAddEvent'
-    // }, function(ret, err) {
-    //     if (ret) {
-    //         alert(JSON.stringify($api.getStorage("history")));
-    //     }
-    // });
-
-    // // 新增体检信息，本页面需要知道physical_id
-    // api.addEventListener({
-    //     name: 'physicalAddEvent'
-    // }, function(ret, err) {
-    //     if (ret && ret.value) {
-    //         physical_id = ret.value.physical_id;
-    //     }
-    // });
 }
 
 function getFullHistory(history_id) {
@@ -202,57 +163,6 @@ function getFullHistory(history_id) {
     });
 }
 
-// function initHistory() {
-//     showProgress("初始化...");
-//     var model = api.require('model');
-//     model.config({
-//         appId: historyConstants.appId,
-//         appKey: historyConstants.appKey,
-//         host: historyConstants.host
-//     });
-    // model.insert({
-    //     class: historyConstants.table.history,
-    //     value: {
-    //         record_doctor: userName,
-    //     }
-    // }, function(ret, err) {
-    //     hideProgress();
-    //     if (ret) {
-    //         var history = ret;
-    //         setStorage("history", history);
-    //     } else {
-    //         alert("初始化病历失败！");
-    //         api.closeWin();
-    //     }
-    // });
-// }
-
-// function getHistory(history_id) {
-//     showProgress();
-
-//     query.createQuery(function(ret, err) {
-//         if (ret && ret.qid) {
-//             model.findById({
-//                 class: historyConstants.table.history,
-//                 id: history_id
-//             }, function(ret, err) {
-//                 hideProgress();
-//                 if (err) {
-//                     alert(JSON.stringify(err));
-//                 } else {
-//                     if (ret) {
-//                         data = ret;
-//                         setHistory(data);
-//                         patient_id = data.patient_pointer;
-//                         physical_id = data.physical_pointer;
-//                     }
-//                 }
-//             });
-//         }
-//     });
-// }
-
-
 /**
  * [saveHistory 保存病历信息]
  * @return {[type]} [description]
@@ -281,6 +191,11 @@ function saveHistory() {
     history.chief_complaint = $api.byId('chief_complaint').value;
     history.diagnosis = $api.byId('diagnosis').value;
     history.treatment = $api.byId('treatment').value;
+
+    var accessory_exam_pointer_id = "";
+    if (history.accessory_exam_pointer != undefined) {
+        accessory_exam_pointer_id = history.accessory_exam_pointer.id;
+    }
 
     var model = api.require('model');
     var query = api.require('query');
@@ -343,7 +258,7 @@ function saveHistory() {
                                 record_doctor: history.record_doctor,
                                 patient_pointer: history.patient_pointer.id,
                                 physical_pointer: history.physical_pointer.id,
-                                accessory_exam_pointer: history.accessory_exam_pointer.id,
+                                accessory_exam_pointer: accessory_exam_pointer_id,
                                 record_doctor: record_doctor
                             }
                         }, function(ret, err) {
@@ -376,9 +291,8 @@ function saveHistory() {
                         treatment: history.treatment,
                         record_doctor: history.record_doctor,
                         patient_pointer: history.patient_pointer.id,
-                        accessory_exam_pointer: history.accessory_exam_pointer.id,
+                        accessory_exam_pointer: accessory_exam_pointer_id,
                         record_doctor: record_doctor
-                            // physical_pointer: history.physical_pointer.id
                     }
                 }, function(ret, err) {
                     hideProgress();
