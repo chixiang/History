@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>辅助检查维护</title>
+    <link rel="stylesheet" type="text/css" href="../../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/button.css" />
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/constants.js"></script>
+    <script type="text/javascript" src="../../script/util.js"></script>
+</head>
+
+<body class="body-silver">
+    <div class="flex-wrap flex-vertical">
+        <header class="header-silver">
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-silver">
+                &lt; 取消
+            </a>
+            <div id="middle">
+                <span id="title">辅助检查维护</span>
+            </div>
+            <a id="right" tapmode="" onclick="saveAccessoryExam();" class="button button-raised button-blue">
+                确认
+            </a>
+        </header>
+        <div id="main" class="flex-con">
+            <div class="groupName">干眼</div>
+            <div class="group group-edit">
+                <div class="field">
+                    <div class="key">BUT. R</div>
+                    <div class="value_with_unit">
+                        <input type="text" id="but_r" />
+                    </div>
+                    <div class="unit">s</div>
+                </div>
+                <div class="field">
+                    <div class="key">BUT. L</div>
+                    <div class="value_with_unit">
+                        <input type="text" id="but_l" />
+                    </div>
+                    <div class="unit">s</div>
+                </div>
+                <div class="field">
+                    <div class="key">SIT. R</div>
+                    <div class="value_with_unit_4">
+                        <input type="text" id="sit_r" />
+                    </div>
+                    <div class="unit">mm&#47;5min</div>
+                </div>
+                <div class="field">
+                    <div class="key">SIT. L</div>
+                    <div class="value_with_unit_4">
+                        <input type="text" id="sit_l" />
+                    </div>
+                    <div class="unit">mm&#47;5min</div>
+                </div>
+                <div class="field textarea_field bottom">
+                    <div class="field_img">
+                        <div class="textarea_key_with_img">前节照相</div>
+                        <div class="img_button" id="qjzx_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
+                    </div>
+                    <div class="textarea_value">
+                        <textarea type="text" id="qjzx" placeholder="请输入内容"></textarea>
+                    </div>
+                    <div class="accessory_img" id="qjzx_img"></div>
+                </div>
+            </div>
+            <div class="groupName">白内障屈光</div>
+            <div class="group group-edit">
+                <div class="field textarea_field">
+                    <div class="field_img">
+                        <div class="textarea_key_with_img">角膜曲率</div>
+                        <div class="img_button" id="corneal_curvature_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
+                    </div>
+                    <div class="textarea_value">
+                        <textarea type="text" id="corneal_curvature" placeholder="请输入内容"></textarea>
+                    </div>
+                    <div class="accessory_img" id="corneal_curvature_img"></div>
+                </div>
+                <div class="field textarea_field">
+                    <div class="field_img">
+                        <div class="textarea_key_with_img">角膜地形图</div>
+                        <div class="img_button" id="corneal_topography_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
+                    </div>
+                    <div class="textarea_value">
+                        <textarea type="text" id="corneal_topography" placeholder="请输入内容"></textarea>
+                    </div>
+                    <div class="accessory_img" id="corneal_topography_img"></div>
+                </div>
+                <div class="field textarea_field bottom">
+                    <div class="field_img">
+                        <div class="textarea_key_with_img">IOL Master</div>
+                        <div class="img_button" id="iol_master_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
+                    </div>
+                    <div class="textarea_value">
+                        <textarea type="text" id="iol_master" placeholder="请输入内容"></textarea>
+                    </div>
+                    <div class="accessory_img" id="iol_master_img"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+/**
+ * [apiready description]
+ * @return {[type]} [description]
+ */
+apiready = function() {
+    window.closeWin = function(winName) {
+        api.confirm({
+            title: '请选择',
+            msg: '未确认的修改会丢失，是否确认退出？',
+            buttons: ['退出', '取消']
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.buttonIndex == 1) {
+                    api.closeWin();
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    $api.attr($api.byId('but_r'), 'readonly', 'true');
+    $api.attr($api.byId('but_l'), 'readonly', 'true');
+    $api.attr($api.byId('sit_r'), 'readonly', 'true');
+    $api.attr($api.byId('sit_l'), 'readonly', 'true');
+    $api.attr($api.byId('qjzx'), 'readonly', 'true');
+    $api.attr($api.byId('corneal_curvature'), 'readonly', 'true');
+    $api.attr($api.byId('corneal_topography'), 'readonly', 'true');
+    $api.attr($api.byId('iol_master'), 'readonly', 'true');
+
+    source = api.pageParam.source;
+    var pageData = {};
+    if (source == "history") {
+        pageData = getStorage("history");
+    } else {
+        pageData = getStorage("followup");
+    }
+
+    if (pageData.accessory_exam_pointer != undefined) {
+        $api.byId("but_r").value = pageData.accessory_exam_pointer.but_r;
+        $api.byId("but_l").value = pageData.accessory_exam_pointer.but_l;
+        $api.byId("sit_r").value = pageData.accessory_exam_pointer.sit_r;
+        $api.byId("sit_l").value = pageData.accessory_exam_pointer.sit_l;
+        $api.byId("qjzx").value = pageData.accessory_exam_pointer.qjzx;
+        $api.byId("corneal_curvature").value = pageData.accessory_exam_pointer.corneal_curvature;
+        $api.byId("corneal_topography").value = pageData.accessory_exam_pointer.corneal_topography;
+        $api.byId("iol_master").value = pageData.accessory_exam_pointer.iol_master;
+        setImgs();
+        // 将附加检查数据存储在临时变量中，因为每次增加图片都需拼接图片
+        // 的 html，所以增加完图片要保存到
+        // localStorage中，这样就不能实现取消操作了，所以在此页面的所有操作先使用
+        // 临时变量，确认后再保存到localStorage中
+        setStorage("imgTmp", pageData.accessory_exam_pointer);
+    }
+
+    // 绑定android后退键事件
+    api.addEventListener({
+        name: 'keyback'
+    }, function(ret, err) {
+        if (ret) {
+            api.confirm({
+                title: '请选择',
+                msg: '未确认的修改会丢失，是否确认退出？',
+                buttons: ['退出', '取消']
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.buttonIndex == 1) {
+                        api.closeWin();
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
+    });
+}
+
+function addImg(id) {
+    var sourceType = "";
+    var model = api.require('model');
+    var localPath = "";
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    api.confirm({
+        title: '请选择',
+        msg: '图片来源',
+        buttons: ['拍照', '相册']
+    }, function(ret, err) {
+        if (ret) {
+            if (ret.buttonIndex == 1) {
+                sourceType = "camera";
+            } else if (ret.buttonIndex == 2) {
+                sourceType = "library";
+            }
+            api.getPicture({
+                sourceType: sourceType,
+                encodingType: 'jpg',
+                mediaValue: 'pic',
+                destinationType: 'url',
+                allowEdit: false,
+                quality: 90,
+                // targetWidth: 100,
+                targetHeight: 960,
+                saveToPhotoAlbum: false
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.data != "") {
+                        showProgress("上传中...");
+                        localPath = ret.data;
+                        model.uploadFile({
+                            report: true,
+                            data: {
+                                file: {
+                                    url: localPath
+                                },
+                                // values: {
+                                //     key1: id.replace("btn", "img")
+                                // }
+                            }
+                        }, function(ret, err) {
+                            if (ret) {
+                                var state = ret.state;
+                                if (state == 1) {
+                                    var body = ret.body;
+                                    if (body) {
+                                        hideProgress();
+                                        setImg(id.replace("btn", "img"), body.url);
+                                    }
+                                } else {
+                                    // 可做进度条
+                                }
+                            } else {
+                                alert(JSON.stringify(err))
+                            }
+                        });
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
+}
+
+function setImg(id, url) {
+    var imgType = id.replace('btn', 'img');
+    var imgStrs = {};
+    var imgStr = "";
+
+    var pageData = {};
+    if (source == "history") {
+        pageData = getStorage("history");
+    } else {
+        pageData = getStorage("followup");
+    }
+
+    // 获取已添加的图片
+    var accessory_exam_pointer_tmp = getStorage("imgTmp");
+    // 第一次添加某栏位图片，需初始化
+    if (accessory_exam_pointer_tmp[imgType] == undefined) {
+        accessory_exam_pointer_tmp[imgType] = {};
+    }
+    imgStrs = accessory_exam_pointer_tmp[imgType];
+    // 按数字累加图片的key值，value为图片url
+    var imgId = JSONLength(imgStrs) + 1;
+    imgStrs[imgId] = url;
+
+    // 将图片组转换成可显示的html代码
+    var imgHtml = getImgHtml(imgStrs);
+    $api.byId(id).innerHTML = imgHtml;
+
+    setStorage("imgTmp", accessory_exam_pointer_tmp);
+}
+
+function setImgs() {
+    var pageData = {};
+    if (source == "history") {
+        pageData = getStorage("history");
+    } else {
+        pageData = getStorage("followup");
+    }
+    var idx = 0;
+    while (idx < historyConstants.imgGroup.length) {
+        var imgHtml = getImgHtml(pageData.accessory_exam_pointer[historyConstants.imgGroup[idx]]);
+        $api.byId(historyConstants.imgGroup[idx]).innerHTML = imgHtml;
+        idx = idx + 1;
+    }
+
+}
+
+function openImg(url) {
+    var photoBrowser = api.require('photoBrowser');
+    photoBrowser.open({
+        images: [
+            url,
+        ],
+        activeIndex: 0,
+        // placeholderImg: 'widget://res/img/apicloud.png',
+        bgColor: '#000'
+    }, function(ret) {
+        if (ret.eventType == "click") {
+            photoBrowser.close();
+        }
+    });
+}
+
+function getImgHtml(obj) {
+    // alert(JSON.stringify(obj));
+    var size = JSONLength(obj);
+    var idx = 1;
+    var imgHtml = "";
+    while (idx <= size) {
+        imgHtml = imgHtml + "<img src=" + obj[idx + ""] + " onclick='openImg(this.src)' />";
+        idx = idx + 1;
+    }
+    return imgHtml;
+}
+
+function saveAccessoryExamDB(source, data) {
+    var model = api.require('model');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    model.updateById({
+        class: historyConstants.table.accessoryExam,
+        id: data.id,
+        value: data
+    }, function(ret, err) {
+        if (ret) {
+            var pageData = getStorage(source);
+            pageData.accessory_exam_pointer.id = ret.id;
+            setStorage(source, pageData);
+            accessoryExamSaveEvent(ret.id);
+            api.closeWin();
+        } else {
+            alert(JSON.stringify(ret));
+        }
+    });
+}
+
+/**
+ * [savePhysical description]
+ * @return {[type]} [description]
+ */
+function saveAccessoryExam() {
+    var pageData = {};
+    if (source == "history") {
+        pageData = getStorage("history");
+    } else {
+        pageData = getStorage("followup");
+    }
+    if (getStorage("imgTmp") != undefined) {
+        pageData.accessory_exam_pointer = getStorage("imgTmp");
+    }
+
+    pageData.accessory_exam_pointer.but_r = $api.byId("but_r").value;
+    pageData.accessory_exam_pointer.but_l = $api.byId("but_l").value;
+    pageData.accessory_exam_pointer.sit_r = $api.byId("sit_r").value;
+    pageData.accessory_exam_pointer.sit_l = $api.byId("sit_l").value;
+    pageData.accessory_exam_pointer.qjzx = $api.byId("qjzx").value;
+    pageData.accessory_exam_pointer.corneal_curvature = $api.byId("corneal_curvature").value;
+    pageData.accessory_exam_pointer.corneal_topography = $api.byId("corneal_topography").value;
+    pageData.accessory_exam_pointer.iol_master = $api.byId("iol_master").value;
+
+    // 保存在本地
+    setStorage(source, pageData);
+
+    // 保存到云端
+    saveAccessoryExamDB(source, pageData.accessory_exam_pointer);
+}
+</script>
+
+</html>

@@ -221,6 +221,13 @@
                     </div>
                 </div>
             </div>
+            <div class="groupName">辅助检查</div>
+            <div class="group">
+                <div class="field bottom" tapmode="onFieldClick" onclick="openWin('accessory_exam')">
+                    <div class="key">辅助检查</div>
+                    <div class="value more"><span>&gt;</span></div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
@@ -378,6 +385,10 @@ function openWin(type) {
         case "followupList":
             name = api.winName + "_follow_up_list"
             page = "followup/followupList";
+            break;
+        case "accessory_exam":
+            name = api.winName + "_accessory_exam"
+            page = "accessoryExam/viewAccessoryExam";
             break;
         default:
             break;

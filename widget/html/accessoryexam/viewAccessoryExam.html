@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>辅助检查维护</title>
+    <link rel="stylesheet" type="text/css" href="../../css/history.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/button.css" />
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/constants.js"></script>
+    <script type="text/javascript" src="../../script/util.js"></script>
+</head>
+
+<body class="body-silver">
+    <div class="flex-wrap flex-vertical">
+        <header class="header-silver">
+            <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-silver">
+                &lt; 取消
+            </a>
+            <div id="middle">
+                <span id="title">辅助检查维护</span>
+            </div>
+            <a id="right" tapmode="" onclick="saveAccessoryExam();" class="button button-raised button-blue">
+                确认
+            </a>
+        </header>
+        <div id="main" class="flex-con">
+            <div class="groupName">干眼</div>
+            <div class="group group-edit">
+                <div class="field">
+                    <div class="key">BUT. R</div>
+                    <div class="value_with_unit">
+                        <input type="text" id="but_r" />
+                    </div>
+                    <div class="unit">s</div>
+                </div>
+                <div class="field">
+                    <div class="key">BUT. L</div>
+                    <div class="value_with_unit">
+                        <input type="text" id="but_l" />
+                    </div>
+                    <div class="unit">s</div>
+                </div>
+                <div class="field">
+                    <div class="key">SIT. R</div>
+                    <div class="value_with_unit_4">
+                        <input type="text" id="sit_r" />
+                    </div>
+                    <div class="unit">mm&#47;5min</div>
+                </div>
+                <div class="field">
+                    <div class="key">SIT. L</div>
+                    <div class="value_with_unit_4">
+                        <input type="text" id="sit_l" />
+                    </div>
+                    <div class="unit">mm&#47;5min</div>
+                </div>
+                <div class="field textarea_field bottom">
+                    <div class="field_img">
+                        <div class="textarea_key_with_img">前节照相</div>
+                        <div class="img_button" id="qjzx_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
+                    </div>
+                    <div class="textarea_value">
+                        <textarea type="text" id="qjzx" placeholder="请输入内容"></textarea>
+                    </div>
+                    <div class="accessory_img" id="qjzx_img"></div>
+                </div>
+            </div>
+            <div class="groupName">白内障屈光</div>
+            <div class="group group-edit">
+                <div class="field textarea_field">
+                    <div class="field_img">
+                        <div class="textarea_key_with_img">角膜曲率</div>
+                        <div class="img_button" id="corneal_curvature_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
+                    </div>
+                    <div class="textarea_value">
+                        <textarea type="text" id="corneal_curvature" placeholder="请输入内容"></textarea>
+                    </div>
+                    <div class="accessory_img" id="corneal_curvature_img"></div>
+                </div>
+                <div class="field textarea_field">
+                    <div class="field_img">
+                        <div class="textarea_key_with_img">角膜地形图</div>
+                        <div class="img_button" id="corneal_topography_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
+                    </div>
+                    <div class="textarea_value">
+                        <textarea type="text" id="corneal_topography" placeholder="请输入内容"></textarea>
+                    </div>
+                    <div class="accessory_img" id="corneal_topography_img"></div>
+                </div>
+                <div class="field textarea_field bottom">
+                    <div class="field_img">
+                        <div class="textarea_key_with_img">IOL Master</div>
+                        <div class="img_button" id="iol_master_btn" onclick="addImg(this.id)"><img src="../../image/insertImg.png" /></div>
+                    </div>
+                    <div class="textarea_value">
+                        <textarea type="text" id="iol_master" placeholder="请输入内容"></textarea>
+                    </div>
+                    <div class="accessory_img" id="iol_master_img"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+/**
+ * [apiready description]
+ * @return {[type]} [description]
+ */
+apiready = function() {
+    api.openFrame({
+        name: "accessory_exam",
+        url: './viewAccessoryExamFrame.html',
+        pageParam: api.pageParam,
+        vScrollBarEnabled: false,
+        reload: true,
+        bounces: false,
+        animation: {
+            type: "fade",
+            duration: 0
+        },
+    });
+}
+</script>
+
+</html>
