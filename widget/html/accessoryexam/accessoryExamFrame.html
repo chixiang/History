@@ -16,13 +16,13 @@
     <div class="flex-wrap flex-vertical">
         <header class="header-silver">
             <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-silver">
-                &lt; 取消
+                &lt; 返回
             </a>
             <div id="middle">
                 <span id="title">辅助检查维护</span>
             </div>
             <a id="right" tapmode="" onclick="saveAccessoryExam();" class="button button-raised button-blue">
-                确认
+                保存
             </a>
         </header>
         <div id="main" class="flex-con">
@@ -274,44 +274,9 @@ apiready = function() {
         });
     }
 
-    source = api.pageParam.source;
-    var pageData = {};
-    if (source == "history") {
-        pageData = getStorage("history");
-    } else {
-        pageData = getStorage("followup");
-    }
-
-    if (pageData.accessory_exam_pointer != undefined) {
-        $api.byId("but_r").value = pageData.accessory_exam_pointer.but_r;
-        $api.byId("but_l").value = pageData.accessory_exam_pointer.but_l;
-        $api.byId("sit_r").value = pageData.accessory_exam_pointer.sit_r;
-        $api.byId("sit_l").value = pageData.accessory_exam_pointer.sit_l;
-        $api.byId("qjzx").value = pageData.accessory_exam_pointer.qjzx;
-        $api.byId("corneal_curvature").value = pageData.accessory_exam_pointer.corneal_curvature;
-        $api.byId("corneal_topography").value = pageData.accessory_exam_pointer.corneal_topography;
-        $api.byId("iol_master").value = pageData.accessory_exam_pointer.iol_master;
-        $api.byId("ubm").value = pageData.accessory_exam_pointer.ubm;
-        $api.byId("view_horizon").value = pageData.accessory_exam_pointer.view_horizon;
-        $api.byId("glaucoma_rnfl").value = pageData.accessory_exam_pointer.glaucoma_rnfl;
-        $api.byId("glaucoma_mri").value = pageData.accessory_exam_pointer.glaucoma_mri;
-        $api.byId("oct").value = pageData.accessory_exam_pointer.oct;
-        $api.byId("octa").value = pageData.accessory_exam_pointer.octa;
-        $api.byId("fundus_oculi_pic").value = pageData.accessory_exam_pointer.fundus_oculi_pic;
-        $api.byId("b_ultrasonic").value = pageData.accessory_exam_pointer.b_ultrasonic;
-        $api.byId("ffa").value = pageData.accessory_exam_pointer.ffa;
-        $api.byId("icg").value = pageData.accessory_exam_pointer.icg;
-        $api.byId("vep").value = pageData.accessory_exam_pointer.vep;
-        $api.byId("erg").value = pageData.accessory_exam_pointer.erg;
-        $api.byId("no_rnfl").value = pageData.accessory_exam_pointer.no_rnfl;
-        $api.byId("no_mri").value = pageData.accessory_exam_pointer.no_mri;
-        setImgs();
-        // 将附加检查数据存储在临时变量中，因为每次增加图片都需拼接图片
-        // 的 html，所以增加完图片要保存到
-        // localStorage中，这样就不能实现取消操作了，所以在此页面的所有操作先使用
-        // 临时变量，确认后再保存到localStorage中
-        setStorage("imgTmp", pageData.accessory_exam_pointer);
-    }
+    accessoryExam = {};
+    var accessoryExamTmp = getStorage("accessoryExam");
+    setAccessoryExam(accessoryExamTmp);
 
     // 绑定android后退键事件
     api.addEventListener({
@@ -412,20 +377,13 @@ function setImg(id, url) {
     var imgStrs = {};
     var imgStr = "";
 
-    var pageData = {};
-    if (source == "history") {
-        pageData = getStorage("history");
-    } else {
-        pageData = getStorage("followup");
-    }
-
     // 获取已添加的图片
-    var accessory_exam_pointer_tmp = getStorage("imgTmp");
+    // var accessoryExam = getStorage("accessoryExamTmp");
     // 第一次添加某栏位图片，需初始化
-    if (accessory_exam_pointer_tmp[imgType] == undefined) {
-        accessory_exam_pointer_tmp[imgType] = {};
+    if (accessoryExam[imgType] == undefined) {
+        accessoryExam[imgType] = {};
     }
-    imgStrs = accessory_exam_pointer_tmp[imgType];
+    imgStrs = accessoryExam[imgType];
     // 按数字累加图片的key值，value为图片url
     var imgId = JSONLength(imgStrs) + 1;
     imgStrs[imgId] = url;
@@ -434,54 +392,38 @@ function setImg(id, url) {
     var imgHtml = getImgHtml(imgStrs);
     $api.byId(id).innerHTML = imgHtml;
 
-    setStorage("imgTmp", accessory_exam_pointer_tmp);
+    // setStorage("accessoryExam", accessoryExamTmp);
 }
 
-function setImgs() {
-    var pageData = {};
-    if (source == "history") {
-        pageData = getStorage("history");
-    } else {
-        pageData = getStorage("followup");
+function saveAccessoryExam() {
+    var id = "";
+    var accessoryExamTmp = getStorage("accessoryExam");
+    if (accessoryExamTmp != undefined) {
+        id = accessoryExamTmp.id;
     }
-    var idx = 0;
-    while (idx < historyConstants.imgGroup.length) {
-        var imgHtml = getImgHtml(pageData.accessory_exam_pointer[historyConstants.imgGroup[idx]]);
-        $api.byId(historyConstants.imgGroup[idx]).innerHTML = imgHtml;
-        idx = idx + 1;
-    }
-
-}
-
-function openImg(url) {
-    var photoBrowser = api.require('photoBrowser');
-    photoBrowser.open({
-        images: [
-            url,
-        ],
-        activeIndex: 0,
-        // placeholderImg: 'widget://res/img/apicloud.png',
-        bgColor: '#000'
-    }, function(ret) {
-        if (ret.eventType == "click") {
-            photoBrowser.close();
-        }
-    });
-}
-
-function getImgHtml(obj) {
-    // alert(JSON.stringify(obj));
-    var size = JSONLength(obj);
-    var idx = 1;
-    var imgHtml = "";
-    while (idx <= size) {
-        imgHtml = imgHtml + "<img src=" + obj[idx + ""] + " onclick='openImg(this.src)' />";
-        idx = idx + 1;
-    }
-    return imgHtml;
-}
-
-function saveAccessoryExamDB(source, data) {
+    accessoryExam.source_id = api.pageParam.source_id;
+    accessoryExam.but_r = $api.byId("but_r").value;
+    accessoryExam.but_l = $api.byId("but_l").value;
+    accessoryExam.sit_r = $api.byId("sit_r").value;
+    accessoryExam.sit_l = $api.byId("sit_l").value;
+    accessoryExam.qjzx = $api.byId("qjzx").value;
+    accessoryExam.corneal_curvature = $api.byId("corneal_curvature").value;
+    accessoryExam.corneal_topography = $api.byId("corneal_topography").value;
+    accessoryExam.iol_master = $api.byId("iol_master").value;
+    accessoryExam.ubm = $api.byId("ubm").value;
+    accessoryExam.view_horizon = $api.byId("view_horizon").value;
+    accessoryExam.glaucoma_rnfl = $api.byId("glaucoma_rnfl").value;
+    accessoryExam.glaucoma_mri = $api.byId("glaucoma_mri").value;
+    accessoryExam.oct = $api.byId("oct").value;
+    accessoryExam.octa = $api.byId("octa").value;
+    accessoryExam.fundus_oculi_pic = $api.byId("fundus_oculi_pic").value;
+    accessoryExam.b_ultrasonic = $api.byId("b_ultrasonic").value;
+    accessoryExam.ffa = $api.byId("ffa").value;
+    accessoryExam.icg = $api.byId("icg").value;
+    accessoryExam.vep = $api.byId("vep").value;
+    accessoryExam.erg = $api.byId("erg").value;
+    accessoryExam.no_rnfl = $api.byId("no_rnfl").value;
+    accessoryExam.no_mri = $api.byId("no_mri").value;
     var model = api.require('model');
     model.config({
         appId: historyConstants.appId,
@@ -490,13 +432,11 @@ function saveAccessoryExamDB(source, data) {
     });
     model.updateById({
         class: historyConstants.table.accessoryExam,
-        id: data.id,
-        value: data
+        id: id,
+        value: accessoryExam
     }, function(ret, err) {
         if (ret) {
-            var pageData = getStorage(source);
-            pageData.accessory_exam_pointer.id = ret.id;
-            setStorage(source, pageData);
+            setStorage("accessoryExam", ret);
             accessoryExamSaveEvent(ret.id);
             api.closeWin();
         } else {
@@ -505,50 +445,6 @@ function saveAccessoryExamDB(source, data) {
     });
 }
 
-/**
- * [savePhysical description]
- * @return {[type]} [description]
- */
-function saveAccessoryExam() {
-    var pageData = {};
-    if (source == "history") {
-        pageData = getStorage("history");
-    } else {
-        pageData = getStorage("followup");
-    }
-    if (getStorage("imgTmp") != undefined) {
-        pageData.accessory_exam_pointer = getStorage("imgTmp");
-    }
-
-    pageData.accessory_exam_pointer.but_r = $api.byId("but_r").value;
-    pageData.accessory_exam_pointer.but_l = $api.byId("but_l").value;
-    pageData.accessory_exam_pointer.sit_r = $api.byId("sit_r").value;
-    pageData.accessory_exam_pointer.sit_l = $api.byId("sit_l").value;
-    pageData.accessory_exam_pointer.qjzx = $api.byId("qjzx").value;
-    pageData.accessory_exam_pointer.corneal_curvature = $api.byId("corneal_curvature").value;
-    pageData.accessory_exam_pointer.corneal_topography = $api.byId("corneal_topography").value;
-    pageData.accessory_exam_pointer.iol_master = $api.byId("iol_master").value;
-    pageData.accessory_exam_pointer.ubm = $api.byId("ubm").value;
-    pageData.accessory_exam_pointer.view_horizon = $api.byId("view_horizon").value;
-    pageData.accessory_exam_pointer.glaucoma_rnfl = $api.byId("glaucoma_rnfl").value;
-    pageData.accessory_exam_pointer.glaucoma_mri = $api.byId("glaucoma_mri").value;
-    pageData.accessory_exam_pointer.oct = $api.byId("oct").value;
-    pageData.accessory_exam_pointer.octa = $api.byId("octa").value;
-    pageData.accessory_exam_pointer.fundus_oculi_pic = $api.byId("fundus_oculi_pic").value;
-    pageData.accessory_exam_pointer.b_ultrasonic = $api.byId("b_ultrasonic").value;
-    pageData.accessory_exam_pointer.ffa = $api.byId("ffa").value;
-    pageData.accessory_exam_pointer.icg = $api.byId("icg").value;
-    pageData.accessory_exam_pointer.vep = $api.byId("vep").value;
-    pageData.accessory_exam_pointer.erg = $api.byId("erg").value;
-    pageData.accessory_exam_pointer.no_rnfl = $api.byId("no_rnfl").value;
-    pageData.accessory_exam_pointer.no_mri = $api.byId("no_mri").value;
-
-    // 保存在本地
-    setStorage(source, pageData);
-
-    // 保存到云端
-    saveAccessoryExamDB(source, pageData.accessory_exam_pointer);
-}
 </script>
 
 </html>

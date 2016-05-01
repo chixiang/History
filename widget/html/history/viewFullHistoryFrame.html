@@ -129,100 +129,12 @@
                     </div>
                 </div>
             </div>
-            <div class="groupName">裸眼视力</div>
+            <div class="groupName">检查</div>
             <div class="group">
-                <div class="field">
-                    <div class="key">Vod</div>
-                    <div class="value">
-                        <input type="text" id="vod" />
-                    </div>
+                <div class="field" tapmode="onFieldClick" onclick="openWin('physical');">
+                    <div class="key">体检信息</div>
+                    <div class="value more"><span>&gt;</span></div>
                 </div>
-                <div class="field bottom">
-                    <div class="key">Vos</div>
-                    <div class="value">
-                        <input type="text" id="vos" />
-                    </div>
-                </div>
-            </div>
-            <div class="groupName">矫正视力</div>
-            <div class="group">
-                <div class="field">
-                    <div class="key">Vod</div>
-                    <div class="value">
-                        <input type="text" id="corrected_vod" />
-                    </div>
-                </div>
-                <div class="field bottom">
-                    <div class="key">Vos</div>
-                    <div class="value">
-                        <input type="text" id="corrected_vos" />
-                    </div>
-                </div>
-            </div>
-            <div class="groupName">眼压</div>
-            <div class="group">
-                <div class="field">
-                    <div class="key">Tod</div>
-                    <div class="value_with_unit">
-                        <input type="text" id="tod" />
-                    </div>
-                    <div class="unit">mmHg</div>
-                </div>
-                <div class="field bottom">
-                    <div class="key">Tos</div>
-                    <div class="value_with_unit">
-                        <input type="text" id="tos" />
-                    </div>
-                    <div class="unit">mmHg</div>
-                </div>
-            </div>
-            <div class="groupName">其他</div>
-            <div class="group">
-                <div class="field">
-                    <div class="key">外眼</div>
-                    <div class="value">
-                        <input type="text" id="outer_eye" />
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="key">结膜</div>
-                    <div class="value">
-                        <input type="text" id="conjunctiva" />
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="key">角膜</div>
-                    <div class="value">
-                        <input type="text" id="cornea" />
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="key">前房</div>
-                    <div class="value">
-                        <input type="text" id="anterior_chamber" />
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="key">晶体</div>
-                    <div class="value">
-                        <input type="text" id="lens" />
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="key">玻璃体</div>
-                    <div class="value">
-                        <input type="text" id="vitreous" />
-                    </div>
-                </div>
-                <div class="field bottom">
-                    <div class="key">眼底</div>
-                    <div class="value">
-                        <input type="text" id="eyeground" />
-                    </div>
-                </div>
-            </div>
-            <div class="groupName">辅助检查</div>
-            <div class="group">
                 <div class="field bottom" tapmode="onFieldClick" onclick="openWin('accessory_exam')">
                     <div class="key">辅助检查</div>
                     <div class="value more"><span>&gt;</span></div>
@@ -238,7 +150,6 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
-        initLocalHistory();
         api.closeWin();
     }
 
@@ -260,24 +171,8 @@ apiready = function() {
     $api.attr($api.byId('address'), 'readonly', 'true');
     $api.attr($api.byId('job'), 'readonly', 'true');
 
-    $api.attr($api.byId('vod'), 'readonly', 'true');
-    $api.attr($api.byId('vos'), 'readonly', 'true');
-    $api.attr($api.byId('corrected_vod'), 'readonly', 'true');
-    $api.attr($api.byId('corrected_vos'), 'readonly', 'true');
-    $api.attr($api.byId('tod'), 'readonly', 'true');
-    $api.attr($api.byId('tos'), 'readonly', 'true');
-    $api.attr($api.byId('outer_eye'), 'readonly', 'true');
-    $api.attr($api.byId('conjunctiva'), 'readonly', 'true');
-    $api.attr($api.byId('cornea'), 'readonly', 'true');
-    $api.attr($api.byId('anterior_chamber'), 'readonly', 'true');
-    $api.attr($api.byId('lens'), 'readonly', 'true');
-    $api.attr($api.byId('vitreous'), 'readonly', 'true');
-    $api.attr($api.byId('eyeground'), 'readonly', 'true');
-
     // 设置需要显示的字段值
     history_id = api.pageParam.history_id;
-    // patient_id = "";
-    // physical_id = "";
     getFullHistory(history_id);
 
     api.addEventListener({
@@ -286,28 +181,6 @@ apiready = function() {
         if (ret) {
             getFullHistory(history_id);
         }
-    });
-
-    api.addEventListener({
-        name: 'physicalAddEvent'
-    }, function(ret, err) {
-        if (ret) {
-            getFullHistory(history_id);
-        }
-    });
-
-    api.addEventListener({
-        name: 'followupAddOrModiEvent'
-    }, function(ret, err) {
-        if (ret) {
-            getFullHistory(history_id);
-        }
-    });
-
-    api.addEventListener({
-        name: 'keyback'
-    }, function(ret, err) {
-        initLocalHistory();
     });
 
 }
@@ -332,14 +205,6 @@ function getFullHistory(history_id) {
             query.include({
                 qid: queryId,
                 column: 'patient_pointer'
-            });
-            query.include({
-                qid: queryId,
-                column: 'physical_pointer'
-            });
-            query.include({
-                qid: queryId,
-                column: 'accessory_exam_pointer'
             });
             query.whereEqual({
                 qid: queryId,
@@ -373,7 +238,7 @@ function getFullHistory(history_id) {
  */
 function openWin(type) {
     var pageParam = {
-        source: "history"
+        source_id: history_id
     };
     var page = "";
     var name = "";
@@ -385,6 +250,10 @@ function openWin(type) {
         case "followupList":
             name = api.winName + "_follow_up_list"
             page = "followup/followupList";
+            break;
+        case "physical":
+            name = api.winName + "_physical"
+            page = "physical/viewPhysical";
             break;
         case "accessory_exam":
             name = api.winName + "_accessory_exam"

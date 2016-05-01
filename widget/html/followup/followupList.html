@@ -163,6 +163,18 @@ apiready = function() {
         if (ret) {
             loadList();
         }
+        // if (ret.value.type == "new") {
+        //     var follow_up_id = ret.value.follow_up_id;
+        //     api.confirm({
+        //         title: '请选择',
+        //         msg: '是否继续新增体检信息或辅助检查信息？\n也可后续在【随访信息查看】界面新增',
+        //         buttons: ['是', '否']
+        //     }, function(ret, err) {
+        //         if (ret) {
+        //             viewFollowUp(follow_up_id);
+        //         }
+        //     });
+        // }
     });
 }
 

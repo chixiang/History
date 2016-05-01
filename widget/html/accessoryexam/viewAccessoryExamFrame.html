@@ -19,9 +19,10 @@
                 &lt; 返回
             </a>
             <div id="middle">
-                <span id="title">辅助检查维护</span>
+                <span id="title">辅助检查信息</span>
             </div>
-            <a id="right" tapmode="" class="button button-raised button-silver">
+            <a id="right" tapmode="" class="button button-raised button-silver" onclick="modiAccessoryExam()">
+                修改
             </a>
         </header>
         <div id="main" class="flex-con">
@@ -284,191 +285,70 @@ apiready = function() {
     $api.attr($api.byId('no_rnfl'), 'readonly', 'true');
     $api.attr($api.byId('no_mri'), 'readonly', 'true');
 
-    source = api.pageParam.source;
-    var pageData = {};
-    if (source == "history") {
-        pageData = getStorage("history");
-    } else {
-        pageData = getStorage("followup");
-    }
+    getAccessoryExam();
 
-    if (pageData.accessory_exam_pointer != undefined) {
-        $api.byId("but_r").value = pageData.accessory_exam_pointer.but_r;
-        $api.byId("but_l").value = pageData.accessory_exam_pointer.but_l;
-        $api.byId("sit_r").value = pageData.accessory_exam_pointer.sit_r;
-        $api.byId("sit_l").value = pageData.accessory_exam_pointer.sit_l;
-        $api.byId("qjzx").value = pageData.accessory_exam_pointer.qjzx;
-        $api.byId("corneal_curvature").value = pageData.accessory_exam_pointer.corneal_curvature;
-        $api.byId("corneal_topography").value = pageData.accessory_exam_pointer.corneal_topography;
-        $api.byId("iol_master").value = pageData.accessory_exam_pointer.iol_master;
-        $api.byId("ubm").value = pageData.accessory_exam_pointer.ubm;
-        $api.byId("view_horizon").value = pageData.accessory_exam_pointer.view_horizon;
-        $api.byId("glaucoma_rnfl").value = pageData.accessory_exam_pointer.glaucoma_rnfl;
-        $api.byId("glaucoma_mri").value = pageData.accessory_exam_pointer.glaucoma_mri;
-        $api.byId("oct").value = pageData.accessory_exam_pointer.oct;
-        $api.byId("octa").value = pageData.accessory_exam_pointer.octa;
-        $api.byId("fundus_oculi_pic").value = pageData.accessory_exam_pointer.fundus_oculi_pic;
-        $api.byId("b_ultrasonic").value = pageData.accessory_exam_pointer.b_ultrasonic;
-        $api.byId("ffa").value = pageData.accessory_exam_pointer.ffa;
-        $api.byId("icg").value = pageData.accessory_exam_pointer.icg;
-        $api.byId("vep").value = pageData.accessory_exam_pointer.vep;
-        $api.byId("erg").value = pageData.accessory_exam_pointer.erg;
-        $api.byId("no_rnfl").value = pageData.accessory_exam_pointer.no_rnfl;
-        $api.byId("no_mri").value = pageData.accessory_exam_pointer.no_mri;
-        setImgs();
-        // 将附加检查数据存储在临时变量中，因为每次增加图片都需拼接图片
-        // 的 html，所以增加完图片要保存到
-        // localStorage中，这样就不能实现取消操作了，所以在此页面的所有操作先使用
-        // 临时变量，确认后再保存到localStorage中
-        setStorage("imgTmp", pageData.accessory_exam_pointer);
-    }
+    api.addEventListener({
+        name: 'accessoryExamSaveEvent'
+    }, function(ret, err) {
+        if (ret && ret.value) {
+            var accessoryExam = getStorage("accessoryExam");
+            setAccessoryExam(accessoryExam);
+        }
+    });
 
 }
 
-function addImg(id) {
-    var sourceType = "";
+function getAccessoryExam() {
+    showProgress("加载中...");
+    rmStorage("accessoryExam");
     var model = api.require('model');
-    var localPath = "";
+    var query = api.require('query');
     model.config({
         appId: historyConstants.appId,
         appKey: historyConstants.appKey,
         host: historyConstants.host
     });
-    api.confirm({
-        title: '请选择',
-        msg: '图片来源',
-        buttons: ['拍照', '相册']
-    }, function(ret, err) {
-        if (ret) {
-            if (ret.buttonIndex == 1) {
-                sourceType = "camera";
-            } else if (ret.buttonIndex == 2) {
-                sourceType = "library";
-            }
-            api.getPicture({
-                sourceType: sourceType,
-                encodingType: 'jpg',
-                mediaValue: 'pic',
-                destinationType: 'url',
-                allowEdit: false,
-                quality: 90,
-                // targetWidth: 100,
-                targetHeight: 960,
-                saveToPhotoAlbum: false
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            var queryId = ret.qid;
+            query.whereEqual({
+                qid: queryId,
+                column: 'source_id',
+                value: api.pageParam.source_id
+            })
+            model.findAll({
+                class: historyConstants.table.accessoryExam,
+                qid: queryId
             }, function(ret, err) {
-                if (ret) {
-                    if (ret.data != "") {
-                        showProgress("上传中...");
-                        localPath = ret.data;
-                        model.uploadFile({
-                            report: true,
-                            data: {
-                                file: {
-                                    url: localPath
-                                },
-                                // values: {
-                                //     key1: id.replace("btn", "img")
-                                // }
-                            }
-                        }, function(ret, err) {
-                            if (ret) {
-                                var state = ret.state;
-                                if (state == 1) {
-                                    var body = ret.body;
-                                    if (body) {
-                                        hideProgress();
-                                        setImg(id.replace("btn", "img"), body.url);
-                                    }
-                                } else {
-                                    // 可做进度条
-                                }
-                            } else {
-                                alert(JSON.stringify(err))
-                            }
-                        });
-                    }
-                } else {
+                hideProgress();
+                if (err) {
                     alert(JSON.stringify(err));
+                } else {
+                    if (ret[0]) {
+                        setStorage("accessoryExam", ret[0]);
+                        setAccessoryExam(ret[0]);
+                    }
                 }
             });
-        } else {
-            alert(JSON.stringify(err));
         }
     });
 }
 
-function setImg(id, url) {
-    var imgType = id.replace('btn', 'img');
-    var imgStrs = {};
-    var imgStr = "";
-
-    var pageData = {};
-    if (source == "history") {
-        pageData = getStorage("history");
-    } else {
-        pageData = getStorage("followup");
-    }
-
-    // 获取已添加的图片
-    var accessory_exam_pointer_tmp = getStorage("imgTmp");
-    // 第一次添加某栏位图片，需初始化
-    if (accessory_exam_pointer_tmp[imgType] == undefined) {
-        accessory_exam_pointer_tmp[imgType] = {};
-    }
-    imgStrs = accessory_exam_pointer_tmp[imgType];
-    // 按数字累加图片的key值，value为图片url
-    var imgId = JSONLength(imgStrs) + 1;
-    imgStrs[imgId] = url;
-
-    // 将图片组转换成可显示的html代码
-    var imgHtml = getImgHtml(imgStrs);
-    $api.byId(id).innerHTML = imgHtml;
-
-    setStorage("imgTmp", accessory_exam_pointer_tmp);
-}
-
-function setImgs() {
-    var pageData = {};
-    if (source == "history") {
-        pageData = getStorage("history");
-    } else {
-        pageData = getStorage("followup");
-    }
-    var idx = 0;
-    while (idx < historyConstants.imgGroup.length) {
-        var imgHtml = getImgHtml(pageData.accessory_exam_pointer[historyConstants.imgGroup[idx]]);
-        $api.byId(historyConstants.imgGroup[idx]).innerHTML = imgHtml;
-        idx = idx + 1;
-    }
-
-}
-
-function openImg(url) {
-    var photoBrowser = api.require('photoBrowser');
-    photoBrowser.open({
-        images: [
-            url,
-        ],
-        activeIndex: 0,
-        // placeholderImg: 'widget://res/img/apicloud.png',
-        bgColor: '#000'
-    }, function(ret) {
-        if (ret.eventType == "click") {
-            photoBrowser.close();
+function modiAccessoryExam() {
+    api.openWin({
+        name: api.winName + "_modi_accessory_exam",
+        url: './accessoryExam.html',
+        pageParam: {
+            source_id: api.pageParam.source_id
+        },
+        reload: true,
+        bounces: false,
+        vScrollBarEnabled: false,
+        animation: {
+            type: "movein",
+            duration: 0
         }
     });
-}
-
-function getImgHtml(obj) {
-    // alert(JSON.stringify(obj));
-    var size = JSONLength(obj);
-    var idx = 1;
-    var imgHtml = "";
-    while (idx <= size) {
-        imgHtml = imgHtml + "<img src=" + obj[idx + ""] + " onclick='openImg(this.src)' />";
-        idx = idx + 1;
-    }
-    return imgHtml;
 }
 </script>
 

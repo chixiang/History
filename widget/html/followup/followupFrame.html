@@ -16,7 +16,7 @@
     <div id="wrap" class="flex-wrap flex-vertical">
         <header class="header-silver">
             <a id="left" tapmode="" onclick="window.closeWin();" class="button button-raised button-silver">
-                    &lt; 取消
+                    &lt; 返回
                 </a>
             <div id="middle">
                 <span id="title">随访信息</span>
@@ -41,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            <div class="groupName">检查</div>
+            <!--             <div class="groupName">检查</div>
             <div class="group">
                 <div class="field" tapmode="onFieldClick" onclick="openWin('physical');">
                     <div class="key">体检信息</div>
@@ -51,7 +51,7 @@
                     <div class="key">辅助检查</div>
                     <div class="value more"><span>&gt;</span></div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     </div>
@@ -91,14 +91,14 @@ function getFullFollowUp(follow_up_id) {
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             var queryId = ret.qid;
-            query.include({
-                qid: queryId,
-                column: 'physical_pointer'
-            });
-            query.include({
-                qid: queryId,
-                column: 'accessory_exam_pointer'
-            });
+            // query.include({
+            //     qid: queryId,
+            //     column: 'physical_pointer'
+            // });
+            // query.include({
+            //     qid: queryId,
+            //     column: 'accessory_exam_pointer'
+            // });
             query.whereEqual({
                 qid: queryId,
                 column: 'id',
@@ -125,132 +125,176 @@ function getFullFollowUp(follow_up_id) {
 }
 
 function saveFollowUp(callback) {
-    showProgress("保存中...");
+    showProgress("正在保存...");
+
+    var history = getStorage("history");
+    var followup = getStorage("followup");
+
+    followup.condition = $api.byId('condition').value;
+    followup.treatment = $api.byId('treatment').value;
+
+    var type = "";
+    if (followup.id == undefined) {
+        type = "new";
+    } else {
+        type = "modi";
+    }
+
     var model = api.require('model');
-    var query = api.require('query');
     model.config({
         appId: historyConstants.appId,
         appKey: historyConstants.appKey,
         host: historyConstants.host
     });
-    var history = getStorage("history");
-    var followup = getStorage("followup");
-    var accessory_exam_pointer_id = "";
-    if (followup.accessory_exam_pointer != undefined) {
-        accessory_exam_pointer_id = followup.accessory_exam_pointer.id;
-    }
-    if (followup.physical_pointer != undefined) {
-        model.updateById({ // 保存体检信息
-            class: historyConstants.table.physical,
-            id: followup.physical_pointer.id,
-            value: {
-                // followup_id: followup.id,
-                vod: followup.physical_pointer.vod,
-                vos: followup.physical_pointer.vos,
-                corrected_vod: followup.physical_pointer.corrected_vod,
-                corrected_vos: followup.physical_pointer.corrected_vos,
-                tod: followup.physical_pointer.tod,
-                tos: followup.physical_pointer.tos,
-                outer_eye: followup.physical_pointer.outer_eye,
-                conjunctiva: followup.physical_pointer.conjunctiva,
-                cornea: followup.physical_pointer.cornea,
-                anterior_chamber: followup.physical_pointer.anterior_chamber,
-                lens: followup.physical_pointer.lens,
-                vitreous: followup.physical_pointer.vitreous,
-                eyeground: followup.physical_pointer.eyeground
-            }
-        }, function(ret, err) {
-            if (ret) {
-                followup.physical_pointer.id = ret.id;
-                followup.condition = $api.byId('condition').value;
-                followup.treatment = $api.byId('treatment').value;
-                model.updateById({ // 保存体检信息
-                    class: historyConstants.table.followup,
-                    id: followup.id,
-                    value: {
-                        history_id: history.id,
-                        condition: followup.condition,
-                        treatment: followup.treatment,
-                        physical_pointer: followup.physical_pointer.id,
-                        accessory_exam_pointer: accessory_exam_pointer_id
-                    }
-                }, function(ret, err) {
-                    if (ret) {
-                        hideProgress();
-                        api.toast({
-                            msg: "保存随访信息成功"
-                        })
-                        followupSaveEvent();
-                        api.closeWin();
-                    } else {
-                        hideProgress();
-                        alert("保存随访信息失败\n" + JSON.stringify(err));
-                    }
-                });
-            } else {
-                hideProgress();
-                alert("保存体检信息失败\n" + JSON.stringify(err));
-            }
-        });
-    } else {
-        followup.condition = $api.byId('condition').value;
-        followup.treatment = $api.byId('treatment').value;
-
-        model.updateById({ // 保存体检信息
-            class: historyConstants.table.followup,
-            id: followup.id,
-            value: {
-                history_id: history.id,
-                condition: followup.condition,
-                treatment: followup.treatment,
-                accessory_exam_pointer: accessory_exam_pointer_id
-            }
-        }, function(ret, err) {
-            if (ret) {
-                hideProgress();
-                api.toast({
-                    msg: "保存随访信息成功"
-                })
-                followupSaveEvent();
-                api.closeWin();
-            } else {
-                hideProgress();
-                alert("保存随访信息失败\n" + JSON.stringify(err));
-            }
-        });
-    }
-}
-
-function openWin(type) {
-    var name = "";
-    var page = "";
-    var pageParam = {
-        "source": "followup"
-    }
-    switch (type) {
-        case 'physical':
-            name = api.winName + "_physical";
-            page = "physical/physical";
-            break;
-        case 'accessory_exam':
-            name = api.winName + "_accessory_exam";
-            page = "accessoryexam/accessoryExam"
-        default:
-            break;
-    }
-    api.openWin({
-        name: name,
-        url: '../' + page + '.html',
-        pageParam: pageParam,
-        reload: true,
-        bounces: false,
-        vScrollBarEnabled: false,
-        animation: {
-            type: "movein",
-            duration: 0
+    model.updateById({ // 保存体检信息
+        class: historyConstants.table.followup,
+        id: followup.id,
+        value: {
+            history_id: history.id,
+            condition: followup.condition,
+            treatment: followup.treatment,
         }
-    })
+    }, function(ret, err) {
+        hideProgress();
+        if (ret) {
+            api.toast({
+                msg: "保存随访信息成功"
+            })
+            followupSaveEvent(ret.id, type);
+            api.closeWin();
+        } else {
+            alert("保存随访信息失败\n" + JSON.stringify(err));
+        }
+    });
 }
+
+// function saveFollowUp(callback) {
+//     showProgress("保存中...");
+//     var model = api.require('model');
+//     var query = api.require('query');
+//     model.config({
+//         appId: historyConstants.appId,
+//         appKey: historyConstants.appKey,
+//         host: historyConstants.host
+//     });
+//     var history = getStorage("history");
+//     var followup = getStorage("followup");
+//     var accessory_exam_pointer_id = "";
+//     if (followup.accessory_exam_pointer != undefined) {
+//         accessory_exam_pointer_id = followup.accessory_exam_pointer.id;
+//     }
+//     if (followup.physical_pointer != undefined) {
+//         model.updateById({ // 保存体检信息
+//             class: historyConstants.table.physical,
+//             id: followup.physical_pointer.id,
+//             value: {
+//                 // followup_id: followup.id,
+//                 vod: followup.physical_pointer.vod,
+//                 vos: followup.physical_pointer.vos,
+//                 corrected_vod: followup.physical_pointer.corrected_vod,
+//                 corrected_vos: followup.physical_pointer.corrected_vos,
+//                 tod: followup.physical_pointer.tod,
+//                 tos: followup.physical_pointer.tos,
+//                 outer_eye: followup.physical_pointer.outer_eye,
+//                 conjunctiva: followup.physical_pointer.conjunctiva,
+//                 cornea: followup.physical_pointer.cornea,
+//                 anterior_chamber: followup.physical_pointer.anterior_chamber,
+//                 lens: followup.physical_pointer.lens,
+//                 vitreous: followup.physical_pointer.vitreous,
+//                 eyeground: followup.physical_pointer.eyeground
+//             }
+//         }, function(ret, err) {
+//             if (ret) {
+//                 followup.physical_pointer.id = ret.id;
+//                 followup.condition = $api.byId('condition').value;
+//                 followup.treatment = $api.byId('treatment').value;
+//                 model.updateById({ // 保存体检信息
+//                     class: historyConstants.table.followup,
+//                     id: followup.id,
+//                     value: {
+//                         history_id: history.id,
+//                         condition: followup.condition,
+//                         treatment: followup.treatment,
+//                         physical_pointer: followup.physical_pointer.id,
+//                         accessory_exam_pointer: accessory_exam_pointer_id
+//                     }
+//                 }, function(ret, err) {
+//                     if (ret) {
+//                         hideProgress();
+//                         api.toast({
+//                             msg: "保存随访信息成功"
+//                         })
+//                         followupSaveEvent();
+//                         api.closeWin();
+//                     } else {
+//                         hideProgress();
+//                         alert("保存随访信息失败\n" + JSON.stringify(err));
+//                     }
+//                 });
+//             } else {
+//                 hideProgress();
+//                 alert("保存体检信息失败\n" + JSON.stringify(err));
+//             }
+//         });
+//     } else {
+//         followup.condition = $api.byId('condition').value;
+//         followup.treatment = $api.byId('treatment').value;
+
+//         model.updateById({ // 保存体检信息
+//             class: historyConstants.table.followup,
+//             id: followup.id,
+//             value: {
+//                 history_id: history.id,
+//                 condition: followup.condition,
+//                 treatment: followup.treatment,
+//                 accessory_exam_pointer: accessory_exam_pointer_id
+//             }
+//         }, function(ret, err) {
+//             if (ret) {
+//                 hideProgress();
+//                 api.toast({
+//                     msg: "保存随访信息成功"
+//                 })
+//                 followupSaveEvent();
+//                 api.closeWin();
+//             } else {
+//                 hideProgress();
+//                 alert("保存随访信息失败\n" + JSON.stringify(err));
+//             }
+//         });
+//     }
+// }
+
+// function openWin(type) {
+//     var name = "";
+//     var page = "";
+//     var pageParam = {
+//         "source": "followup"
+//     }
+//     switch (type) {
+//         case 'physical':
+//             name = api.winName + "_physical";
+//             page = "physical/physical";
+//             break;
+//         case 'accessory_exam':
+//             name = api.winName + "_accessory_exam";
+//             page = "accessoryexam/accessoryExam"
+//         default:
+//             break;
+//     }
+//     api.openWin({
+//         name: name,
+//         url: '../' + page + '.html',
+//         pageParam: pageParam,
+//         reload: true,
+//         bounces: false,
+//         vScrollBarEnabled: false,
+//         animation: {
+//             type: "movein",
+//             duration: 0
+//         }
+//     })
+// }
 </script>
 
 </html>

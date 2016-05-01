@@ -16,10 +16,6 @@
     flex: 1;
 }
 
-.onFieldClick {
-    background-color: #688CD4;
-    color: #FFF;
-}
 
 html {
     padding: 0px;
@@ -111,17 +107,22 @@ a:visited {
     background-color: #FFF;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    /*border: 1px solid #f0f0f0;*/
+    border: 1px solid #D5D7DC;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.9);
 }
 
 .group.group-view:hover {
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.9);
 }
 
 .group.group-edit:hover {
-    box-shadow: inset 0px 0px 15px rgba(0,0,0,0.5);
+    box-shadow: inset 0px 0px 5px rgba(0,0,0,0.9);
+}
+
+.onFieldClick {
+    background-color: #688CD4;
+    color: #FFF;
 }
 
 .field {
@@ -255,7 +256,7 @@ input {
 
 textarea {
     width: 100%;
-    height: 60px;
+    height: 30px;
     border: none;
     resize: none;
     background-color: #FFF;

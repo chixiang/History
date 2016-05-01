@@ -237,6 +237,39 @@ function setPhysical(data) {
     }
 }
 
+function setAccessoryExam(data) {
+    if (data != undefined) {
+        $api.byId("but_r").value = data.but_r;
+        $api.byId("but_l").value = data.but_l;
+        $api.byId("sit_r").value = data.sit_r;
+        $api.byId("sit_l").value = data.sit_l;
+        $api.byId("qjzx").value = data.qjzx;
+        $api.byId("corneal_curvature").value = data.corneal_curvature;
+        $api.byId("corneal_topography").value = data.corneal_topography;
+        $api.byId("iol_master").value = data.iol_master;
+        $api.byId("ubm").value = data.ubm;
+        $api.byId("view_horizon").value = data.view_horizon;
+        $api.byId("glaucoma_rnfl").value = data.glaucoma_rnfl;
+        $api.byId("glaucoma_mri").value = data.glaucoma_mri;
+        $api.byId("oct").value = data.oct;
+        $api.byId("octa").value = data.octa;
+        $api.byId("fundus_oculi_pic").value = data.fundus_oculi_pic;
+        $api.byId("b_ultrasonic").value = data.b_ultrasonic;
+        $api.byId("ffa").value = data.ffa;
+        $api.byId("icg").value = data.icg;
+        $api.byId("vep").value = data.vep;
+        $api.byId("erg").value = data.erg;
+        $api.byId("no_rnfl").value = data.no_rnfl;
+        $api.byId("no_mri").value = data.no_mri;
+        setImgs(data);
+        // 将附加检查数据存储在临时变量中，因为每次增加图片都需拼接图片
+        // 的 html，所以增加完图片要保存到
+        // localStorage中，这样就不能实现取消操作了，所以在此页面的所有操作先使用
+        // 临时变量，确认后再保存到localStorage中
+        // setStorage("imgTmp", data);
+    }
+}
+
 function setFullHistory(data) {
     if (data != undefined) {
 
@@ -258,23 +291,43 @@ function setFullHistory(data) {
         $api.byId('address').value = adata.address;
         $api.byId('job').value = adata.job;
 
-        hdata = data.physical_pointer;
-        if (hdata != undefined && hdata != null) {
-            $api.byId('vod').value = hdata.vod;
-            $api.byId('vos').value = hdata.vos;
-            $api.byId('corrected_vod').value = hdata.corrected_vod;
-            $api.byId('corrected_vos').value = hdata.corrected_vos;
-            $api.byId('tod').value = hdata.tod;
-            $api.byId('tos').value = hdata.tos;
-            $api.byId('outer_eye').value = hdata.outer_eye;
-            $api.byId('conjunctiva').value = hdata.conjunctiva;
-            $api.byId('cornea').value = hdata.cornea;
-            $api.byId('anterior_chamber').value = hdata.anterior_chamber;
-            $api.byId('lens').value = hdata.lens;
-            $api.byId('vitreous').value = hdata.vitreous;
-            $api.byId('eyeground').value = hdata.eyeground;
-        }
     }
+}
+
+function setImgs(data) {
+    var idx = 0;
+    while (idx < historyConstants.imgGroup.length) {
+        var imgHtml = getImgHtml(data[historyConstants.imgGroup[idx]]);
+        $api.byId(historyConstants.imgGroup[idx]).innerHTML = imgHtml;
+        idx = idx + 1;
+    }
+}
+
+function getImgHtml(obj) {
+    var size = JSONLength(obj);
+    var idx = 1;
+    var imgHtml = "";
+    while (idx <= size) {
+        imgHtml = imgHtml + "<img src=" + obj[idx + ""] + " onclick='openImg(this.src)' />";
+        idx = idx + 1;
+    }
+    return imgHtml;
+}
+
+function openImg(url) {
+    var photoBrowser = api.require('photoBrowser');
+    photoBrowser.open({
+        images: [
+            url,
+        ],
+        activeIndex: 0,
+        // placeholderImg: 'widget://res/img/apicloud.png',
+        bgColor: '#000'
+    }, function(ret) {
+        if (ret.eventType == "click") {
+            photoBrowser.close();
+        }
+    });
 }
 
 /**
@@ -400,24 +453,6 @@ function patientAddEvent() {
 //     });
 // }
 
-function physicalAddEvent(physical_id) {
-    api.sendEvent({
-        name: 'physicalAddEvent',
-        extra: {
-            physical_id: physical_id
-        }
-    });
-}
-
-function physicalModiEvent(physical_id) {
-    api.sendEvent({
-        name: 'physicalModiEvent',
-        extra: {
-            physical_id: physical_id
-        }
-    });
-}
-
 function historySaveEvent(history_id) {
     api.sendEvent({
         name: 'historySaveEvent',
@@ -436,11 +471,12 @@ function historyModiEvent(history_id) {
     });
 }
 
-function followupSaveEvent(follow_up_id) {
+function followupSaveEvent(follow_up_id, type) {
     api.sendEvent({
         name: 'followupSaveEvent',
         extra: {
-            follow_up_id: follow_up_id
+            follow_up_id: follow_up_id,
+            type: type
         }
     });
 }
@@ -452,6 +488,15 @@ function accessoryExamSaveEvent(accessory_exam_id) {
             accessory_exam_id: accessory_exam_id
         }
     });
+}
+
+function physicalSaveEvent(physical_id) {
+    api.sendEvent({
+        name: 'physicalSaveEvent',
+        extra: {
+            physical_id: physical_id
+        }
+    })
 }
 
 function getFollowUp(follow_up_id) {
