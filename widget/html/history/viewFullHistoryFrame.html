@@ -21,7 +21,7 @@
             <div id="middle">
                 <span id="title"></span>
             </div>
-            <a id="rightleft" tapmode="" onclick="openWin('followupList');" class="button button-raised button-silver">
+            <a id="rightleft" tapmode="" onclick="openWin('followupList');" class="button button-raised button-green">
                     随访
                 </a>
             <a id="right" tapmode="" onclick="openWin('modiHistory');" class="button button-raised button-silver">
@@ -150,7 +150,7 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
-        rm.setStorage("history");
+        rmStorage("history");
         api.closeWin();
     }
 
@@ -239,22 +239,39 @@ function openWin(type) {
     };
     var page = "";
     var name = "";
+    var animation = {};
     switch (type) {
         case "modiHistory":
-            name = api.winName + "_history"
+            name = api.winName + "_history";
             page = "history/history";
+            animation = {
+                type: "fade",
+                duration: 0
+            }
             break;
         case "followupList":
-            name = api.winName + "_follow_up_list"
+            name = api.winName + "_follow_up_list";
             page = "followup/followupList";
+            animation = {
+                type: "movein",
+                duration: 0
+            }
             break;
         case "physical":
-            name = api.winName + "_physical"
+            name = api.winName + "_physical";
             page = "physical/viewPhysical";
+            animation = {
+                type: "movein",
+                duration: 0
+            }
             break;
         case "accessory_exam":
-            name = api.winName + "_accessory_exam"
+            name = api.winName + "_accessory_exam";
             page = "accessoryexam/viewAccessoryExam";
+            animation = {
+                type: "movein",
+                duration: 0
+            }
             break;
         default:
             break;
@@ -266,10 +283,7 @@ function openWin(type) {
         vScrollBarEnabled: false,
         reload: true,
         bounces: false,
-        animation: {
-            type: "movein",
-            duration: 0
-        }
+        animation: animation
     });
 }
 </script>

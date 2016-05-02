@@ -39,8 +39,6 @@ apiready = function() {
         api.closeWin();
     }
 
-    initLocalFollowUp();
-
     var history = getStorage("history");
     history_id = history.id;
 
@@ -234,7 +232,6 @@ function loadData(data) {
 }
 
 function viewFollowUp(follow_up_id) {
-    initLocalFollowUp();
     api.openWin({
         name: "followup",
         url: './viewFollowUp.html',
@@ -252,7 +249,6 @@ function viewFollowUp(follow_up_id) {
 }
 
 function newFollowUp() {
-    initLocalFollowUp();
     api.openWin({
         name: "followup",
         url: './followup.html',
@@ -270,7 +266,6 @@ function newFollowUp() {
 }
 
 function modiFollowUp(follow_up_id) {
-    initLocalFollowUp();
     api.openWin({
         name: "followup",
         url: './followup.html',
