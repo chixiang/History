@@ -163,18 +163,12 @@ apiready = function() {
     });
 
     api.addEventListener({
-        name: 'returnBirthday'
+        name: 'returnDate'
     }, function(ret, err) {
         if (ret) {
-            $api.byId('birthday').value = ret.value.birthday;
-            $api.byId('age').value = getAge(ret.value.birthday);
+            $api.byId('birthday').value = ret.value.date;
+            $api.byId('age').value = getAge(ret.value.date);
         }
-    });
-
-    api.addEventListener({
-        name: 'keyback'
-    }, function(ret, err) {
-        initLocalHistory();
     });
 
 }

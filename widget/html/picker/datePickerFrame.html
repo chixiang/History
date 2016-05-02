@@ -39,14 +39,14 @@
 apiready = function() {
     // $api.fixIos7Bar($api.dom('header'));
 
-    birthday = "";
+    date = "";
 
     window.closeFrame = function(frameName) {
         api.closeFrame();
     }
 
     window.saveFrame = function(frameName) {
-        returnBirthday();
+        returnDate();
         api.closeFrame();
     }
 
@@ -77,12 +77,12 @@ apiready = function() {
         rows: 5,
         autoHide: false,
         loop: false,
-        fixedOn: "birthdayPickerFrame",
+        fixedOn: "datePickerFrame",
         fixed: true
     }, function(ret, err) {
         if (ret) {
             if (ret.eventType == "selected") {
-                birthday = (ret.data[0] + "-" + ret.data[1] + "-" + ret.data[2]).replace(/\b(\w)\b/g, '0$1');
+                date = (ret.data[0] + "-" + ret.data[1] + "-" + ret.data[2]).replace(/\b(\w)\b/g, '0$1');
             }
         } else {
             alert(JSON.stringify(err));
@@ -94,11 +94,11 @@ apiready = function() {
  * [returnPatient 通过event返回本页的数据]
  * @return {[type]} [description]
  */
-function returnBirthday() {
+function returnDate() {
     api.sendEvent({
-        name: 'returnBirthday',
+        name: 'returnDate',
         extra: {
-            birthday: birthday,
+            date: date,
         }
     });
 }

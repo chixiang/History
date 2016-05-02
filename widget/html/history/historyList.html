@@ -348,7 +348,6 @@ function addHistory() {
  * @return {[type]}      [description]
  */
 function viewHistory(history_id) {
-    initLocalHistory();
     api.openWin({
         name: api.winName + "_full_history",
         url: 'widget://html/history/viewFullHistory.html',
@@ -371,7 +370,6 @@ function viewHistory(history_id) {
  * @return {[type]}      [description]
  */
 function modiHistory(history_id) {
-    initLocalHistory();
     api.openWin({
         name: api.winName + "_modi_history",
         url: 'widget://html/history/history.html',

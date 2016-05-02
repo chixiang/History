@@ -1,14 +1,4 @@
 window.onload = function() {
-    // 模拟hover事件
-    // var myLinks = document.getElementsByTagName('li');
-    // for (var i = 0; i < myLinks.length; i++) {
-    //     myLinks[i].addEventListener('touchstart', function() {
-    //         this.className = "hover";
-    //     }, false);
-    //     myLinks[i].addEventListener('touchend', function() {
-    //         this.className = "";
-    //     }, false);
-    // }
     document.body.addEventListener('touchstart', function() {});
 }
 
@@ -126,24 +116,6 @@ function confirmCloseWin() {
     });
 }
 
-function initLocalHistory() {
-    $api.rmStorage("history");
-    $api.rmStorage("imgTmp");
-    var history = {};
-    var accessory_exam_pointer_tmp = {};
-    $api.setStorage("history", history);
-    $api.setStorage("imgTmp", accessory_exam_pointer_tmp);
-}
-
-function initLocalFollowUp() {
-    $api.rmStorage("followup");
-    $api.rmStorage("imgTmp");
-    var followup = {};
-    var accessory_exam_pointer_tmp = {};
-    $api.setStorage("followup", followup);
-    $api.setStorage("imgTmp", accessory_exam_pointer_tmp);
-}
-
 function setStorage(key, value) {
     $api.setStorage(key, value);
 }
@@ -154,68 +126,6 @@ function getStorage(key) {
 
 function rmStorage(key) {
     $api.rmStorage(key);
-}
-
-function clearNullHistory() {
-    var model = api.require('model');
-    var query = api.require('query');
-    model.config({
-        appId: historyConstants.appId,
-        appKey: historyConstants.appKey,
-        host: historyConstants.host
-    });
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            model.findById({
-                class: "followUp",
-                id: follow_up_id
-            }, function(ret, err) {
-                if (err) {
-                    alert(JSON.stringify(err));
-                } else {
-                    if (ret) {
-                        setFollowUp(ret);
-                        api.hideProgress();
-                        return ret;
-                    }
-                }
-                api.hideProgress();
-            });
-        }
-    });
-}
-
-/**
- * [setHistory description]
- * @param {[type]} data [description]
- */
-function setHistory(data) {
-    if (data != undefined && data != null) {
-        $api.byId('consultation_department').value = data.consultation_department;
-        $api.byId('diagnosis').value = data.diagnosis;
-        $api.byId('chief_complaint').value = data.chief_complaint;
-        $api.byId('treatment').value = data.treatment;
-    }
-}
-
-/**
- * [setPatient 给患者信息页面字段赋值]
- * @param {[type]} data [患者信息data]
- */
-function setPatient(data) {
-    if (data != undefined && data != null) {
-        $api.byId('name').value = data.name;
-        $api.byId('gender').value = data.gender;
-        if (data.birthday != undefined) {
-            $api.byId('birthday').value = data.birthday.substring(0, 10);
-        }
-        $api.byId('age').value = data.age;
-        $api.byId('admission_number').value = data.admission_number;
-        $api.byId('outpatient_number').value = data.outpatient_number;
-        $api.byId('phone').value = data.phone;
-        $api.byId('address').value = data.address;
-        $api.byId('job').value = data.job;
-    }
 }
 
 /**
@@ -265,11 +175,6 @@ function setAccessoryExam(data) {
         $api.byId("no_rnfl").value = data.no_rnfl;
         $api.byId("no_mri").value = data.no_mri;
         setImgs(data);
-        // 将附加检查数据存储在临时变量中，因为每次增加图片都需拼接图片
-        // 的 html，所以增加完图片要保存到
-        // localStorage中，这样就不能实现取消操作了，所以在此页面的所有操作先使用
-        // 临时变量，确认后再保存到localStorage中
-        // setStorage("imgTmp", data);
     }
 }
 
@@ -333,25 +238,6 @@ function openImg(url) {
 }
 
 /**
- * [setBlur description]
- * @param {[type]}  id     [description]
- * @param {Boolean} isTrue [description]
- */
-function setBlur(id, isTrue) {
-    if (isTrue) {
-        $api.byId(id).style.webkitFilter = "blur(5px) contrast(0.4) brightness(1.4)";
-    } else {
-        $api.byId(id).style.webkitFilter = "";
-    }
-}
-
-function setBlurNone() {
-    api.sendEvent({
-        name: 'setBlurNone'
-    })
-}
-
-/**
  * [openPicker description]
  * @param  {[type]} type [description]
  * @return {[type]}      [description]
@@ -364,7 +250,7 @@ function openPicker(type) {
     pageParam = {};
     switch (type) {
         case "date":
-            frameName = "birthdayPickerFrame";
+            frameName = "datePickerFrame";
             height = 300;
             break;
         case "gender":
@@ -437,36 +323,9 @@ function hideProgress() {
     api.hideProgress();
 }
 
-function patientAddEvent() {
-    api.sendEvent({
-        name: 'patientAddEvent',
-        // extra: {
-        //     patient_id: patient_id
-        // }
-    });
-}
-
-// function patientModiEvent(patient_id) {
-//     api.sendEvent({
-//         name: 'patientModiEvent',
-//         extra: {
-//             patient_id: patient_id
-//         }
-//     });
-// }
-
 function historySaveEvent(history_id) {
     api.sendEvent({
         name: 'historySaveEvent',
-        extra: {
-            history_id: history_id
-        }
-    });
-}
-
-function historyModiEvent(history_id) {
-    api.sendEvent({
-        name: 'historyModiEvent',
         extra: {
             history_id: history_id
         }
@@ -499,38 +358,4 @@ function physicalSaveEvent(physical_id) {
             physical_id: physical_id
         }
     })
-}
-
-function getFollowUp(follow_up_id) {
-    showProgress();
-    model = api.require('model');
-    query = api.require('query');
-    model.config({
-        appId: 'A6903478274381',
-        appKey: '460A4799-0424-A29B-6809-F06FDF1D888F',
-        host: 'https://d.apicloud.com'
-    });
-    query.createQuery(function(ret, err) {
-        if (ret && ret.qid) {
-            model.findById({
-                class: "followUp",
-                id: follow_up_id
-            }, function(ret, err) {
-                if (err) {
-                    alert(JSON.stringify(err));
-                } else {
-                    if (ret) {
-                        setFollowUp(ret);
-                        api.hideProgress();
-                        return ret;
-                    }
-                }
-                api.hideProgress();
-            });
-        }
-    });
-}
-
-function setFollowUp(data) {
-    $api.byId("condition").value = data.condition;
 }
