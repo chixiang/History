@@ -150,6 +150,7 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
+        rm.setStorage("history");
         api.closeWin();
     }
 
@@ -202,10 +203,6 @@ function getFullHistory(history_id) {
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             var queryId = ret.qid;
-            query.include({
-                qid: queryId,
-                column: 'patient_pointer'
-            });
             query.whereEqual({
                 qid: queryId,
                 column: "id",

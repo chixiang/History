@@ -35,7 +35,7 @@
  */
 var apiready = function() {
     userName = $api.getStorage("userName");
-    patients = api.pageParam.patients;
+    dupName = api.pageParam.name;
 
     window.closeWin = function(winName) {
         // api.closeToWin({
@@ -126,10 +126,6 @@ function loadList() {
                 qid: queryId,
                 column: "updatedAt"
             });
-            query.include({
-                qid: queryId,
-                column: 'patient_pointer'
-            });
             if (userName != "admin") {
                 query.whereEqual({
                     qid: queryId,
@@ -137,27 +133,11 @@ function loadList() {
                     value: userName
                 });
             }
-            var i = 0;
-            var ids = [];
-            while (i < patients.length) {
-                ids[i] = patients[i].id;
-                i = i + 1;
-            }
-            // 测试发现：如果条件只有一个，不能使用whereContainAll和whereContain，所以判断
-            // 当条件只有一个时，使用whereEqual
-            if (ids.length == 1) {
-                query.whereEqual({
-                    qid: queryId,
-                    column: "patient_pointer",
-                    value: ids[0]
-                })
-            } else {
-                query.whereContainAll({
-                    qid: queryId,
-                    column: "patient_pointer",
-                    value: ids
-                });
-            }
+            query.whereEqual({
+                qid: queryId,
+                column: "name",
+                value: dupName
+            })
             var json_objs = [];
             model.findAll({
                 class: historyConstants.table.history,
@@ -173,9 +153,9 @@ function loadList() {
                             var historyItem = {
                                 history_id: ret[idx].id,
                                 record_doctor: ret[idx].record_doctor,
-                                title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
-                                subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].createdAt.substring(0, 10),
-                                remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
+                                title: ret[idx].name + "   " + ret[idx].diagnosis,
+                                subTitle: ret[idx].gender + " - " + getAge(ret[idx].birthday) + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].createdAt.substring(0, 10),
+                                remark: (ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)
                             };
                             if (userName == "admin") {
                                 historyItem.subTitle = "记录: " + ret[idx].record_doctor + " - " + historyItem.subTitle;

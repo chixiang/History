@@ -52,7 +52,6 @@
 var apiready = function() {
     // openDB("history");
     userName = $api.getStorage("userName");
-    initLocalHistory();
 
     // 接收刷新列表event
     api.addEventListener({
@@ -239,10 +238,6 @@ function loadList(type) {
                 qid: queryId,
                 column: "updatedAt"
             });
-            query.include({
-                qid: queryId,
-                column: 'patient_pointer'
-            });
             if (userName != "admin") {
                 query.whereEqual({
                     qid: queryId,
@@ -264,13 +259,13 @@ function loadList(type) {
                         var json_objs = [];
                         if (ret != undefined && ret.length > 0) {
                             while (idx < ret.length) {
-                                if (ret[idx] != undefined && ret[idx].patient_pointer != undefined) {
+                                if (ret[idx] != undefined) {
                                     var historyItem = {
                                         history_id: ret[idx].id,
                                         record_doctor: ret[idx].record_doctor,
-                                        title: ret[idx].patient_pointer.name + "   " + ret[idx].diagnosis,
-                                        subTitle: ret[idx].patient_pointer.gender + " - " + ret[idx].patient_pointer.age + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].createdAt.substring(0, 10),
-                                        remark: (ret[idx].patient_pointer.admission_number != "") ? (ret[idx].patient_pointer.admission_number + "(住)") : (ret[idx].patient_pointer.outpatient_number)
+                                        title: ret[idx].name + "   " + ret[idx].diagnosis,
+                                        subTitle: ret[idx].gender + " - " + getAge(ret[idx].birthday) + " - " + ret[idx].consultation_department + " - " + ret[idx].createdAt.substring(0, 10),
+                                        remark: (ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)
                                     };
                                     if (userName == "admin") {
                                         historyItem.subTitle = "记录: " + historyItem.record_doctor + " - " + historyItem.subTitle;
@@ -332,7 +327,7 @@ function appendData(json_objs) {
 }
 
 function addHistory() {
-    initLocalHistory();
+    rmStorage("history");
     api.openWin({
         name: api.winName + "_new_history",
         url: 'widget://html/history/history.html',

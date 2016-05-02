@@ -27,16 +27,19 @@ function getDate() {
  * @param  {[type]} age [description]
  * @return {[type]}     [description]
  */
-function getAge(age) {
-    var r = age.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+function getAge(birthday) {
+    if (birthday == "" || birthday == undefined || birthday == null) {
+        return "";
+    }
+    var r = birthday.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
     if (r == null) {
         return false;
     }
     var d = new Date(r[1], r[3] - 1, r[4]);
     if (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4]) {
         var Y = new Date().getFullYear();
-        // $api.byId('age').value = (Y - r[1]);
-        return (Y - r[1]);
+        // $api.byId('birthday').value = (Y - r[1]);
+        return (Y - r[1]) + "岁";
     }
 }
 
@@ -278,18 +281,17 @@ function setFullHistory(data) {
         $api.byId('chief_complaint').value = data.chief_complaint;
         $api.byId('treatment').value = data.treatment;
 
-        adata = data.patient_pointer;
-        $api.byId('name').value = adata.name;
-        $api.byId('gender').value = adata.gender;
-        if (adata.birthday != undefined) {
-            $api.byId('birthday').value = adata.birthday.substring(0, 10);
+        $api.byId('name').value = data.name;
+        $api.byId('gender').value = data.gender;
+        if (data.birthday != undefined) {
+            $api.byId('birthday').value = data.birthday;
+            $api.byId('age').value = getAge(data.birthday);
         }
-        $api.byId('age').value = adata.age;
-        $api.byId('admission_number').value = adata.admission_number;
-        $api.byId('outpatient_number').value = adata.outpatient_number;
-        $api.byId('phone').value = adata.phone;
-        $api.byId('address').value = adata.address;
-        $api.byId('job').value = adata.job;
+        $api.byId('admission_number').value = data.admission_number;
+        $api.byId('outpatient_number').value = data.outpatient_number;
+        $api.byId('phone').value = data.phone;
+        $api.byId('address').value = data.address;
+        $api.byId('job').value = data.job;
 
     }
 }

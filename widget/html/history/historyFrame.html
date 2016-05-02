@@ -26,11 +26,67 @@
                 </a>
         </header>
         <div id="main" class="flex-con">
-            <div class="groupName">患者</div>
-            <div class="group">
-                <div class="field bottom" tapmode="onFieldClick" onclick="openWin('patient');">
-                    <div class="key">患者信息</div>
-                    <div class="value more"><span>&gt;</span></div>
+            <div class="groupName">基本信息</div>
+            <div class="group group-edit">
+                <div class="field">
+                    <div class="key">姓名</div>
+                    <div class="value">
+                        <input type="text" id="name" onblur="checkPatientName();" />
+                    </div>
+                </div>
+                <div class="field" onclick="openPicker('gender');">
+                    <div class="key">性别</div>
+                    <div class="value">
+                        <input type="text" id="gender" />
+                    </div>
+                </div>
+                <div class="field" onclick="openPicker('date');">
+                    <div class="key">出生日期</div>
+                    <div class="value">
+                        <input type="text" id="birthday" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="key">年龄</div>
+                    <div class="value">
+                        <input type="text" id="age" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">职业</div>
+                    <div class="value">
+                        <input type="text" id="job" />
+                    </div>
+                </div>
+            </div>
+            <div class="groupName">编号</div>
+            <div class="group group-edit">
+                <div class="field">
+                    <div class="key">住院号</div>
+                    <div class="value">
+                        <input type="text" id="admission_number" />
+                    </div>
+                </div>
+                <div class="field bottom">
+                    <div class="key">门诊号</div>
+                    <div class="value">
+                        <input type="text" id="outpatient_number" />
+                    </div>
+                </div>
+            </div>
+            <div class="groupName">联系方式</div>
+            <div class="group group-edit">
+                <div class="field">
+                    <div class="key">电话</div>
+                    <div class="value">
+                        <input type="text" id="phone" />
+                    </div>
+                </div>
+                <div class="field textarea_field bottom">
+                    <div class="textarea_key">地址</div>
+                    <div class="textarea_value">
+                        <textarea id="address" placeholder="请输入联系地址"></textarea>
+                    </div>
                 </div>
             </div>
             <div class="groupName">诊疗</div>
@@ -70,7 +126,6 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
-        // initLocalHistory();
         api.closeWin();
     }
 
@@ -78,21 +133,41 @@ apiready = function() {
     var history = getStorage("history");
     var history_id = api.pageParam.history_id;
 
-    // 从viewFullHistory页面跳转
-    if (history.id != undefined) {
-        setHistory(history);
-    } else if (history_id != "" && history_id != undefined) {
+    if (history != undefined && history.id != undefined) { // 从viewFullHistory页面跳转
+        setFullHistory(history);
+    } else if (history_id != "" && history_id != undefined) { // 病历列表左划修改
         getFullHistory(history_id);
     }
 
-    // 会诊科室使用选择器
+    // 使用选择器
     $api.attr($api.byId('consultation_department'), 'readonly', 'true');
+    $api.attr($api.byId('age'), 'readonly', 'true');
+    $api.attr($api.byId('gender'), 'readonly', 'true');
+    $api.attr($api.byId('birthday'), 'readonly', 'true');
+
     // 回填Picker返回的会诊科室
     api.addEventListener({
         name: 'returnCondep'
     }, function(ret, err) {
         if (ret) {
             $api.byId('consultation_department').value = ret.value.consultation_department;
+        }
+    });
+
+    api.addEventListener({
+        name: 'returnGender'
+    }, function(ret, err) {
+        if (ret) {
+            $api.byId('gender').value = ret.value.gender;
+        }
+    });
+
+    api.addEventListener({
+        name: 'returnBirthday'
+    }, function(ret, err) {
+        if (ret) {
+            $api.byId('birthday').value = ret.value.birthday;
+            $api.byId('age').value = getAge(ret.value.birthday);
         }
     });
 
@@ -116,18 +191,6 @@ function getFullHistory(history_id) {
     query.createQuery(function(ret, err) {
         if (ret && ret.qid) {
             var queryId = ret.qid;
-            query.include({
-                qid: queryId,
-                column: 'patient_pointer'
-            });
-            query.include({
-                qid: queryId,
-                column: 'physical_pointer'
-            });
-            query.include({
-                qid: queryId,
-                column: 'accessory_exam_pointer'
-            });
             query.whereEqual({
                 qid: queryId,
                 column: "id",
@@ -144,11 +207,81 @@ function getFullHistory(history_id) {
                     if (ret[0]) {
                         var history = ret[0];
                         setStorage("history", history);
-                        setHistory(history);
+                        setFullHistory(history);
                     }
                 }
             });
         }
+    });
+}
+
+function checkPatientName() {
+    var history = getStorage("history");
+    if (history != undefined && history.id != undefined) {
+        return;
+    }
+    var model = api.require('model');
+    var query = api.require('query');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    query.createQuery(function(ret, err) {
+        if (ret && ret.qid) {
+            var queryId = ret.qid;
+            query.desc({
+                qid: queryId,
+                column: "updatedAt"
+            });
+            query.whereEqual({
+                qid: queryId,
+                column: 'name',
+                value: $api.byId('name').value
+            });
+            if (userName != "admin") {
+                query.whereEqual({
+                    qid: queryId,
+                    column: 'record_doctor',
+                    value: userName
+                });
+            }
+            var dupHistory = [];
+            model.findAll({
+                class: historyConstants.table.history,
+                qid: queryId
+            }, function(ret, err) {
+                if (err) {
+                    alert(JSON.stringify(err));
+                } else {
+                    if (ret) {
+                        var idx = 0;
+                        while (ret[idx] != undefined) {
+                            dupHistory[idx] = ret[idx];
+                            idx = idx + 1;
+                        }
+                        if (idx > 0) {
+                            if (confirm("已有同名患者！\n\n【取消】- 继续新增\n【确定】- 查看已有患者信息")) {
+                                showDupHistoryList($api.byId('name').value);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+}
+
+function showDupHistoryList(name) {
+    api.openWin({
+        name: api.winName + "_dup_historyList",
+        url: '../history/dupHistoryList.html',
+        pageParam: {
+            name: name
+        },
+        vScrollBarEnabled: false,
+        reload: true,
+        bounces: false
     });
 }
 
@@ -157,34 +290,32 @@ function getFullHistory(history_id) {
  * @return {[type]} [description]
  */
 function saveHistory() {
-    // history.consultation_department = $api.byId('consultation_department').value;
-    // history.diagnosis = $api.byId('diagnosis').value;
-    // history.chief_complaint = $api.byId('chief_complaint').value;
-    // history.treatment = $api.byId('treatment').value;
     var history = getStorage("history");
-
-    if (history.patient_pointer == undefined || history.patient_pointer.name == "") {
+    var name = $api.byId("name").value;
+    if (name == undefined || name == "") {
         alert("未输入患者姓名");
         return;
     }
     showProgress();
 
     var record_doctor = "";
-    if (history.record_doctor != undefined) {
-        record_doctor = history.record_doctor;
-    } else {
-        record_doctor = userName;
+    if (history == undefined) {
+        history = {};
+        history.record_doctor = userName;
     }
 
     history.consultation_department = $api.byId('consultation_department').value;
     history.chief_complaint = $api.byId('chief_complaint').value;
     history.diagnosis = $api.byId('diagnosis').value;
     history.treatment = $api.byId('treatment').value;
-
-    var accessory_exam_pointer_id = "";
-    if (history.accessory_exam_pointer != undefined) {
-        accessory_exam_pointer_id = history.accessory_exam_pointer.id;
-    }
+    history.name = $api.byId('name').value;
+    history.gender = $api.byId('gender').value;
+    history.birthday = $api.byId('birthday').value;
+    history.admission_number = $api.byId('admission_number').value;
+    history.outpatient_number = $api.byId('outpatient_number').value;
+    history.phone = $api.byId('phone').value;
+    history.address = $api.byId('address').value;
+    history.job = $api.byId('job').value;
 
     var model = api.require('model');
     var query = api.require('query');
@@ -194,113 +325,23 @@ function saveHistory() {
         host: historyConstants.host
     });
     model.updateById({ // 保存患者信息
-        class: historyConstants.table.patient,
-        id: history.patient_pointer.id,
-        value: {
-            // history_id: history.id,
-            name: history.patient_pointer.name,
-            gender: history.patient_pointer.gender,
-            birthday: history.patient_pointer.birthday,
-            age: history.patient_pointer.age,
-            admission_number: history.patient_pointer.admission_number,
-            outpatient_number: history.patient_pointer.outpatient_number,
-            phone: history.patient_pointer.phone,
-            address: history.patient_pointer.address,
-            job: history.patient_pointer.job,
-            record_doctor: history.patient_pointer.record_doctor
-        }
+        class: historyConstants.table.history,
+        id: history.id,
+        value: history
     }, function(ret, err) {
         if (ret) {
-            history.patient_pointer.id = ret.id;
-            if (history.physical_pointer != undefined) {
-                model.updateById({ // 保存体检信息
-                    class: historyConstants.table.physical,
-                    id: history.physical_pointer.id,
-                    value: {
-                        // history_id: history.id,
-                        vod: history.physical_pointer.vod,
-                        vos: history.physical_pointer.vos,
-                        corrected_vod: history.physical_pointer.corrected_vod,
-                        corrected_vos: history.physical_pointer.corrected_vos,
-                        tod: history.physical_pointer.tod,
-                        tos: history.physical_pointer.tos,
-                        outer_eye: history.physical_pointer.outer_eye,
-                        conjunctiva: history.physical_pointer.conjunctiva,
-                        cornea: history.physical_pointer.cornea,
-                        anterior_chamber: history.physical_pointer.anterior_chamber,
-                        lens: history.physical_pointer.lens,
-                        vitreous: history.physical_pointer.vitreous,
-                        eyeground: history.physical_pointer.eyeground
-                    }
-                }, function(ret, err) {
-                    hideProgress();
-                    if (ret) {
-                        history.physical_pointer.id = ret.id;
-                        model.updateById({ // 保存病历信息
-                            class: historyConstants.table.history,
-                            id: history.id,
-                            value: {
-                                consultation_department: history.consultation_department,
-                                chief_complaint: history.chief_complaint,
-                                diagnosis: history.diagnosis,
-                                treatment: history.treatment,
-                                record_doctor: history.record_doctor,
-                                patient_pointer: history.patient_pointer.id,
-                                physical_pointer: history.physical_pointer.id,
-                                accessory_exam_pointer: accessory_exam_pointer_id,
-                                record_doctor: record_doctor
-                            }
-                        }, function(ret, err) {
-                            hideProgress();
-                            if (ret) {
-                                historySaveEvent();
-                                hideProgress();
-                                api.toast({
-                                    msg: "保存病历成功"
-                                })
-                                api.closeWin();
-                            } else {
-                                hideProgress();
-                                alert("保存病历失败！");
-                            }
-                        });
-                    } else {
-                        hideProgress();
-                        alert("保存病历失败！");
-                    }
-                });
-            } else {
-                model.updateById({ // 保存病历信息
-                    class: historyConstants.table.history,
-                    id: history.id,
-                    value: {
-                        consultation_department: history.consultation_department,
-                        chief_complaint: history.chief_complaint,
-                        diagnosis: history.diagnosis,
-                        treatment: history.treatment,
-                        record_doctor: history.record_doctor,
-                        patient_pointer: history.patient_pointer.id,
-                        accessory_exam_pointer: accessory_exam_pointer_id,
-                        record_doctor: record_doctor
-                    }
-                }, function(ret, err) {
-                    hideProgress();
-                    if (ret) {
-                        hideProgress();
-                        historySaveEvent();
-                        api.toast({
-                            msg: "保存病历成功"
-                        })
-                        api.closeWin();
-                    } else {
-                        hideProgress();
-                        alert("保存病历失败！");
-                    }
-                });
-            }
-        } else {
             hideProgress();
-            alert("保存病历失败！");
+            if (ret) {
+                hideProgress();
+                historySaveEvent();
+                api.toast({
+                    msg: "保存病历成功"
+                })
+                api.closeWin();
+            } else {
+                hideProgress();
+                alert("保存病历失败！");
+            }
         }
     });
 }
