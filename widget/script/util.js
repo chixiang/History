@@ -1,6 +1,6 @@
-window.onload = function() {
-    document.body.addEventListener('touchstart', function() {});
-}
+// window.onload = function() {
+//     document.body.addEventListener('touchstart', function() {});
+// }
 
 /**
  * [getDate 获得当前日期，格式为YYYY-MM-DD]
@@ -201,41 +201,6 @@ function setFullHistory(data) {
     }
 }
 
-function setImgs(data) {
-    var idx = 0;
-    while (idx < historyConstants.imgGroup.length) {
-        var imgHtml = getImgHtml(data[historyConstants.imgGroup[idx]]);
-        $api.byId(historyConstants.imgGroup[idx]).innerHTML = imgHtml;
-        idx = idx + 1;
-    }
-}
-
-function getImgHtml(obj) {
-    var size = JSONLength(obj);
-    var idx = 1;
-    var imgHtml = "";
-    while (idx <= size) {
-        imgHtml = imgHtml + "<img src=" + obj[idx + ""] + " onclick='openImg(this.src)' />";
-        idx = idx + 1;
-    }
-    return imgHtml;
-}
-
-function openImg(url) {
-    var photoBrowser = api.require('photoBrowser');
-    photoBrowser.open({
-        images: [
-            url,
-        ],
-        activeIndex: 0,
-        // placeholderImg: 'widget://res/img/apicloud.png',
-        bgColor: '#000'
-    }, function(ret) {
-        if (ret.eventType == "click") {
-            photoBrowser.close();
-        }
-    });
-}
 
 /**
  * [openPicker description]
