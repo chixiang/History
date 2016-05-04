@@ -276,10 +276,13 @@ apiready = function() {
 
     accessoryExam = {};
     var accessoryExamTmp = getStorage("accessoryExam");
+    if (accessoryExamTmp != undefined) {
+        setStorage("accessoryExamTmp", accessoryExamTmp);
+    }
     setAccessoryExam(accessoryExamTmp);
 
     // 设置长按时间计时器
-    timeOutEvent=0;
+    timeOutEvent = 0;
 
     // 绑定android后退键事件
     api.addEventListener({
@@ -377,48 +380,63 @@ function addImg(id) {
 
 function setImg(id, url) {
     var imgType = id.replace('btn', 'img');
-    var imgStrs = {};
+    // var imgStrs = {};
+    var imgStrs = [];
     var imgStr = "";
+    var accessoryExamTmp = getStorage("accessoryExamTmp");
+    if (accessoryExamTmp == undefined) {
+        accessoryExamTmp = {};
+    }
 
     // 获取已添加的图片
     // var accessoryExam = getStorage("accessoryExamTmp");
     // 第一次添加某栏位图片，需初始化
-    if (accessoryExam[imgType] == undefined) {
-        accessoryExam[imgType] = {};
+    if (accessoryExamTmp[imgType] == undefined) {
+        accessoryExamTmp[imgType] = [];
     }
-    imgStrs = accessoryExam[imgType];
+    imgStrs = accessoryExamTmp[imgType];
+
     // 按数字累加图片的key值，value为图片url
-    var imgId = JSONLength(imgStrs) + 1;
-    imgStrs[imgId] = url;
+    // var imgId = JSONLength(imgStrs) + 1;
+    // imgStrs[imgId] = url;
+    imgStrs.push(url);
 
     // 将图片组转换成可显示的html代码
     var imgHtml = getImgHtml(imgStrs);
     $api.byId(id).innerHTML = imgHtml;
 
-    // setStorage("accessoryExam", accessoryExamTmp);
+    // 如果不加这一句，添加图片再直接删除图片会取不到图片的imgGroup，原因待查
+    setImgs(accessoryExamTmp);
+
+    setStorage("accessoryExamTmp", accessoryExamTmp);
 }
 
 
 function setImgs(data) {
     var idx = 0;
     while (idx < historyConstants.imgGroup.length) {
-        var imgHtml = getImgHtml(data[historyConstants.imgGroup[idx]]);
+        var imgHtml = getImgHtml(data[historyConstants.imgGroup[idx]], historyConstants.imgGroup[idx]);
         $api.byId(historyConstants.imgGroup[idx]).innerHTML = imgHtml;
         idx = idx + 1;
     }
 }
 
-function getImgHtml(obj, id) {
-    var size = JSONLength(obj);
-    var idx = 1;
+function getImgHtml(obj, imgGroup) {
+    if (obj == undefined) {
+        return "";
+    }
+    var size = obj.length;
+    if (size == 0) {
+        return "";
+    }
+    var idx = 0;
     var imgHtml = "";
-    while (idx <= size) {
-        imgHtml = imgHtml + "<img src=" + obj[idx + ""] +
-        " onclick='openImg(this.src)' ontouchstart='confirmDeleteImg(this)' \
+    while (idx < size) {
+        imgHtml = imgHtml + "<img src=" + obj[idx] + " id=" + imgGroup + idx +
+            " onclick='openImg(this.src)' ontouchstart='confirmDeleteImg(this.id)' \
          ontouchmove='gtouchmove()' ontouchend='gtouchend()' />";
         idx = idx + 1;
     }
-    alert(imgHtml);
     return imgHtml;
 }
 
@@ -438,68 +456,78 @@ function openImg(url) {
     });
 }
 
-
 function confirmDeleteImg(id) {
     timeOutEvent = setTimeout(function() {
         timeOutEvent = 0;
-        alert("删除此照片");
-    },800);//这里设置定时器，定义长按500毫秒触发长按事件，时间可以自己改，个人感觉500毫秒非常合适
+        api.confirm({
+            title: '请选择',
+            msg: '删除图片？',
+            buttons: ['删除', '取消']
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.buttonIndex == 1) {
+                    var imgGroup = id.substr(0, id.length - 1);
+                    var imgId = id.substr(-1);
+                    var accessoryExamTmp = getStorage("accessoryExamTmp");
+                    accessoryExamTmp[imgGroup].splice(imgId, 1);
+                    setStorage("accessoryExamTmp", accessoryExamTmp);
+                    setImgs(accessoryExamTmp);
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+    }, 600);
     return false;
 }
 
-function longPress(){
-    timeOutEvent = 0;
-    //执行长按要执行的内容，如弹出菜单
-    alert("长按事件触发发");
-}
-
-function gtouchend(){
-    clearTimeout(timeOutEvent);//清除定时器
-    if(timeOutEvent!=0){
+function gtouchend() {
+    clearTimeout(timeOutEvent); //清除定时器
+    if (timeOutEvent != 0) {
         //这里写要执行的内容（尤如onclick事件）
         // alert("你这是点击，不是长按");
     }
     return false;
 };
 //如果手指有移动，则取消所有事件，此时说明用户只是要移动而不是长按
-function gtouchmove(){
-    clearTimeout(timeOutEvent);//清除定时器
+function gtouchmove() {
+    clearTimeout(timeOutEvent); //清除定时器
     timeOutEvent = 0;
 };
 
-function deleteImg(src) {
-    alert(src);
-}
-
 function saveAccessoryExam() {
     var id = "";
-    var accessoryExamTmp = getStorage("accessoryExam");
-    if (accessoryExamTmp != undefined) {
+    var accessoryExamTmp = getStorage("accessoryExamTmp");
+    if (accessoryExamTmp == undefined) {
+        accessoryExamTmp = {};
+    }
+    if (accessoryExamTmp.id != undefined) {
         id = accessoryExamTmp.id;
     }
-    accessoryExam.source_id = api.pageParam.source_id;
-    accessoryExam.but_r = $api.byId("but_r").value;
-    accessoryExam.but_l = $api.byId("but_l").value;
-    accessoryExam.sit_r = $api.byId("sit_r").value;
-    accessoryExam.sit_l = $api.byId("sit_l").value;
-    accessoryExam.qjzx = $api.byId("qjzx").value;
-    accessoryExam.corneal_curvature = $api.byId("corneal_curvature").value;
-    accessoryExam.corneal_topography = $api.byId("corneal_topography").value;
-    accessoryExam.iol_master = $api.byId("iol_master").value;
-    accessoryExam.ubm = $api.byId("ubm").value;
-    accessoryExam.view_horizon = $api.byId("view_horizon").value;
-    accessoryExam.glaucoma_rnfl = $api.byId("glaucoma_rnfl").value;
-    accessoryExam.glaucoma_mri = $api.byId("glaucoma_mri").value;
-    accessoryExam.oct = $api.byId("oct").value;
-    accessoryExam.octa = $api.byId("octa").value;
-    accessoryExam.fundus_oculi_pic = $api.byId("fundus_oculi_pic").value;
-    accessoryExam.b_ultrasonic = $api.byId("b_ultrasonic").value;
-    accessoryExam.ffa = $api.byId("ffa").value;
-    accessoryExam.icg = $api.byId("icg").value;
-    accessoryExam.vep = $api.byId("vep").value;
-    accessoryExam.erg = $api.byId("erg").value;
-    accessoryExam.no_rnfl = $api.byId("no_rnfl").value;
-    accessoryExam.no_mri = $api.byId("no_mri").value;
+    accessoryExamTmp.source_id = api.pageParam.source_id;
+    accessoryExamTmp.but_r = $api.byId("but_r").value;
+    accessoryExamTmp.but_l = $api.byId("but_l").value;
+    accessoryExamTmp.sit_r = $api.byId("sit_r").value;
+    accessoryExamTmp.sit_l = $api.byId("sit_l").value;
+    accessoryExamTmp.qjzx = $api.byId("qjzx").value;
+    accessoryExamTmp.corneal_curvature = $api.byId("corneal_curvature").value;
+    accessoryExamTmp.corneal_topography = $api.byId("corneal_topography").value;
+    accessoryExamTmp.iol_master = $api.byId("iol_master").value;
+    accessoryExamTmp.ubm = $api.byId("ubm").value;
+    accessoryExamTmp.view_horizon = $api.byId("view_horizon").value;
+    accessoryExamTmp.glaucoma_rnfl = $api.byId("glaucoma_rnfl").value;
+    accessoryExamTmp.glaucoma_mri = $api.byId("glaucoma_mri").value;
+    accessoryExamTmp.oct = $api.byId("oct").value;
+    accessoryExamTmp.octa = $api.byId("octa").value;
+    accessoryExamTmp.fundus_oculi_pic = $api.byId("fundus_oculi_pic").value;
+    accessoryExamTmp.b_ultrasonic = $api.byId("b_ultrasonic").value;
+    accessoryExamTmp.ffa = $api.byId("ffa").value;
+    accessoryExamTmp.icg = $api.byId("icg").value;
+    accessoryExamTmp.vep = $api.byId("vep").value;
+    accessoryExamTmp.erg = $api.byId("erg").value;
+    accessoryExamTmp.no_rnfl = $api.byId("no_rnfl").value;
+    accessoryExamTmp.no_mri = $api.byId("no_mri").value;
     var model = api.require('model');
     model.config({
         appId: historyConstants.appId,
@@ -509,14 +537,15 @@ function saveAccessoryExam() {
     model.updateById({
         class: historyConstants.table.accessoryExam,
         id: id,
-        value: accessoryExam
+        value: accessoryExamTmp
     }, function(ret, err) {
         if (ret) {
             setStorage("accessoryExam", ret);
+            rmStorage("accessoryExamTmp");
             accessoryExamSaveEvent(ret.id);
             api.closeWin();
         } else {
-            alert(JSON.stringify(ret));
+            alert(JSON.stringify(err));
         }
     });
 }

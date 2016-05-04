@@ -10,7 +10,7 @@ var historyConstants = {
         history: "historyTest",
         patient: "patientTest",
         physical: "physicalTest",
-        accessoryExam: "accessoryExam",
+        accessoryExam: "accessoryExamTest",
         followup: "followUpTest",
         log: "historyLog"
     },

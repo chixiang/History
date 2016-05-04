@@ -337,18 +337,24 @@ function getAccessoryExam() {
 function setImgs(data) {
     var idx = 0;
     while (idx < historyConstants.imgGroup.length) {
-        var imgHtml = getImgHtml(data[historyConstants.imgGroup[idx]]);
+        var imgHtml = getImgHtml(data[historyConstants.imgGroup[idx]], historyConstants.imgGroup[idx]);
         $api.byId(historyConstants.imgGroup[idx]).innerHTML = imgHtml;
         idx = idx + 1;
     }
 }
 
-function getImgHtml(obj) {
-    var size = JSONLength(obj);
-    var idx = 1;
+function getImgHtml(obj, imgGroup) {
+    if (obj == undefined) {
+        return "";
+    }
+    var size = obj.length;
+    if (size == 0) {
+        return "";
+    }
+    var idx = 0;
     var imgHtml = "";
-    while (idx <= size) {
-        imgHtml = imgHtml + "<img src=" + obj[idx + ""] +
+    while(idx < size) {
+        imgHtml = imgHtml + "<img src=" + obj[idx] + " id=" + imgGroup + idx +
         " onclick='openImg(this.src)' />";
         idx = idx + 1;
     }
@@ -372,6 +378,7 @@ function openImg(url) {
 }
 
 function modiAccessoryExam() {
+    rmStorage("accessoryExamTmp");
     api.openWin({
         name: api.winName + "_modi_accessory_exam",
         url: './accessoryExam.html',
