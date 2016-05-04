@@ -249,6 +249,7 @@ function viewFollowUp(follow_up_id) {
 }
 
 function newFollowUp() {
+    rmStorage("followup");
     api.openWin({
         name: "followup",
         url: './followup.html',
@@ -266,6 +267,8 @@ function newFollowUp() {
 }
 
 function modiFollowUp(follow_up_id) {
+    // 先清一下本地存储，重新查询，可能存在之前缓存在本地的数据
+    rmStorage("followup");
     api.openWin({
         name: "followup",
         url: './followup.html',

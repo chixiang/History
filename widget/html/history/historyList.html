@@ -370,6 +370,8 @@ function viewHistory(history_id) {
  * @return {[type]}      [description]
  */
 function modiHistory(history_id) {
+    // 先清一下本地存储，重新查询，可能存在之前缓存在本地的数据
+    rmStorage("history");
     api.openWin({
         name: api.winName + "_modi_history",
         url: 'widget://html/history/history.html',

@@ -133,9 +133,12 @@ apiready = function() {
     var history = getStorage("history");
     var history_id = api.pageParam.history_id;
 
+    // 如果有本地存储，先取本地存储回填页面（从view页面修改时），如果页面传入了
+    // history_id，则重新查询history_id回填，适用于列表页面直接修改
     if (history != undefined && history.id != undefined) { // 从viewFullHistory页面跳转
         setFullHistory(history);
-    } else if (history_id != "" && history_id != undefined) { // 病历列表左划修改
+    }
+    if (history_id != "" && history_id != undefined) { // 病历列表左划修改
         getFullHistory(history_id);
     }
 
