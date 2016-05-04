@@ -5,7 +5,7 @@
 }
 
 html {
-  background: #d5d7dc;
+  background: #E2E2E2;
 /*  background: -moz-radial-gradient(center, ellipse cover, #7A6D67 0%, #59504B 100%);
   background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #7A6D67), color-stop(100%, #59504B));
   background: -webkit-radial-gradient(center, ellipse cover, #7A6D67 0%, #59504B 100%);
@@ -25,16 +25,16 @@ body {
 }
 
 .login-form-wrap {
-  background: #7A6D67;
-  background: -moz-radial-gradient(center, ellipse cover, #6f96d1 0%, #415997 100%);
-  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #6f96d1), color-stop(100%, #415997));
-  background: -webkit-radial-gradient(center, ellipse cover, #6f96d1 0%, #415997 100%);
-  background: -o-radial-gradient(center, ellipse cover, #6f96d1 0%, #415997 100%);
-  background: -ms-radial-gradient(center, ellipse cover, #6f96d1 0%, #415997 100%);
-  background: radial-gradient(ellipse at center, #6f96d1 0%, #415997 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6f96d1', endColorstr='#415997',GradientType=1 );
-  border: 1px solid #415997;
-  box-shadow: 0 .5px #6f96d1 inset, 0 0 10px 5px rgba(0, 0, 0, 0.3);
+  background: #5170AD;
+  background: -moz-radial-gradient(center, ellipse cover, #5170AD 0%, #355493 100%);
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #5170AD), color-stop(100%, #355493));
+  background: -webkit-radial-gradient(center, ellipse cover, #5170AD 0%, #355493 100%);
+  background: -o-radial-gradient(center, ellipse cover, #5170AD 0%, #355493 100%);
+  background: -ms-radial-gradient(center, ellipse cover, #5170AD 0%, #355493 100%);
+  background: radial-gradient(ellipse at center, #5170AD 0%, #355493 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5170AD', endColorstr='#355493',GradientType=1 );
+  border: 1px solid #355493;
+  box-shadow: 0 .5px #5170AD inset, 0 0 10px 5px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   position: relative;
   width: 300px;
@@ -109,7 +109,7 @@ body {
   border-radius: 3px;
   padding: 8px;
   font-size: 17px;
-  color: #424758;
+  color: #636363;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
   font-weight: 700;
   box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.17), 0 1px 0 rgba(255, 255, 255, 0.36) inset;

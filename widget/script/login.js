@@ -50,7 +50,7 @@ function register() {
     userName = $api.byId('userName').value;
     passWord = $api.byId('passWord').value;
     if (userName == "" || passWord == "") {
-        alert("请输入用户名和密码后点击【注册】");
+        alert("新用户请输入用户名和密码后点击【注册】");
         return;
     }
     showProgress();

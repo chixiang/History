@@ -278,6 +278,9 @@ apiready = function() {
     var accessoryExamTmp = getStorage("accessoryExam");
     setAccessoryExam(accessoryExamTmp);
 
+    // 设置长按时间计时器
+    timeOutEvent=0;
+
     // 绑定android后退键事件
     api.addEventListener({
         name: 'keyback'
@@ -395,6 +398,79 @@ function setImg(id, url) {
     // setStorage("accessoryExam", accessoryExamTmp);
 }
 
+
+function setImgs(data) {
+    var idx = 0;
+    while (idx < historyConstants.imgGroup.length) {
+        var imgHtml = getImgHtml(data[historyConstants.imgGroup[idx]]);
+        $api.byId(historyConstants.imgGroup[idx]).innerHTML = imgHtml;
+        idx = idx + 1;
+    }
+}
+
+function getImgHtml(obj, id) {
+    var size = JSONLength(obj);
+    var idx = 1;
+    var imgHtml = "";
+    while (idx <= size) {
+        imgHtml = imgHtml + "<img src=" + obj[idx + ""] +
+        " onclick='openImg(this.src)' ontouchstart='confirmDeleteImg(this)' \
+         ontouchmove='gtouchmove()' ontouchend='gtouchend()' />";
+        idx = idx + 1;
+    }
+    alert(imgHtml);
+    return imgHtml;
+}
+
+function openImg(url) {
+    var photoBrowser = api.require('photoBrowser');
+    photoBrowser.open({
+        images: [
+            url,
+        ],
+        activeIndex: 0,
+        // placeholderImg: 'widget://res/img/apicloud.png',
+        bgColor: '#000'
+    }, function(ret) {
+        if (ret.eventType == "click") {
+            photoBrowser.close();
+        }
+    });
+}
+
+
+function confirmDeleteImg(id) {
+    timeOutEvent = setTimeout(function() {
+        timeOutEvent = 0;
+        alert("删除此照片");
+    },800);//这里设置定时器，定义长按500毫秒触发长按事件，时间可以自己改，个人感觉500毫秒非常合适
+    return false;
+}
+
+function longPress(){
+    timeOutEvent = 0;
+    //执行长按要执行的内容，如弹出菜单
+    alert("长按事件触发发");
+}
+
+function gtouchend(){
+    clearTimeout(timeOutEvent);//清除定时器
+    if(timeOutEvent!=0){
+        //这里写要执行的内容（尤如onclick事件）
+        // alert("你这是点击，不是长按");
+    }
+    return false;
+};
+//如果手指有移动，则取消所有事件，此时说明用户只是要移动而不是长按
+function gtouchmove(){
+    clearTimeout(timeOutEvent);//清除定时器
+    timeOutEvent = 0;
+};
+
+function deleteImg(src) {
+    alert(src);
+}
+
 function saveAccessoryExam() {
     var id = "";
     var accessoryExamTmp = getStorage("accessoryExam");
@@ -444,7 +520,6 @@ function saveAccessoryExam() {
         }
     });
 }
-
 </script>
 
 </html>
