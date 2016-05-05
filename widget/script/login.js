@@ -5,17 +5,12 @@
 var apiready = function() {
     userName = $api.getStorage("userName");
     if (userName != "" && userName != undefined && userName != null) {
+        api.toast({
+            msg: "已登陆"
+        });
         openHistory();
     }
     passWord = "";
-
-    model = api.require('model');
-    query = api.require('query');
-    model.config({
-        appId: historyConstants.appId,
-        appKey: historyConstants.appKey,
-        host: historyConstants.host
-    });
 
     user = api.require('user');
 
@@ -31,7 +26,6 @@ function login() {
     }, function(ret, err) {
         hideProgress();
         if (ret) {
-            // alert("登录成功！");
             api.toast({
                 msg: "登陆成功"
             });
@@ -40,6 +34,30 @@ function login() {
             openHistory();
         } else {
             alert("登陆失败！");
+        }
+    });
+}
+
+function checkMessage() {
+    var model = api.require('model');
+    var query = api.require('query');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
+    model.findAll({
+        class: historyConstants.table.history,
+        qid: queryId
+    }, function(ret, err) {
+        if (ret) {
+            var idx = 0;
+            while (ret[idx] != undefined) {
+                if (ret[idx].msgType == "v") {
+
+                }
+                idx = idx + 1;
+            }
         }
     });
 }

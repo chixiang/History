@@ -34,7 +34,8 @@
                         <input type="text" id="name" onblur="checkPatientName();" />
                     </div>
                 </div>
-                <div class="field" onclick="openPicker('gender');">
+                <div class="field" onclick="selectGender();">
+                    <!-- <div class="field" onclick="openPicker('gender');"> -->
                     <div class="key">性别</div>
                     <div class="value">
                         <input type="text" id="gender" />
@@ -157,13 +158,13 @@ apiready = function() {
         }
     });
 
-    api.addEventListener({
-        name: 'returnGender'
-    }, function(ret, err) {
-        if (ret) {
-            $api.byId('gender').value = ret.value.gender;
-        }
-    });
+    // api.addEventListener({
+    //     name: 'returnGender'
+    // }, function(ret, err) {
+    //     if (ret) {
+    //         $api.byId('gender').value = ret.value.gender;
+    //     }
+    // });
 
     api.addEventListener({
         name: 'returnDate'
@@ -378,6 +379,26 @@ function openWin(type) {
         animation: {
             type: "movein",
             duration: 0
+        }
+    });
+}
+
+function selectGender() {
+    api.actionSheet({
+        title: '请选择性别',
+        cancelTitle: '取消',
+        // destructiveTitle: '红色警告按钮',
+        buttons: ['男', '女']
+    }, function(ret, err) {
+        if (ret) {
+            if (ret.buttonIndex == 1) {
+                $api.byId('gender').value = "男";
+            }
+            if (ret.buttonIndex == 2) {
+                $api.byId('gender').value = "女";
+            }
+        } else {
+            alert(JSON.stringify(err));
         }
     });
 }
