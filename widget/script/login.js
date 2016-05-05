@@ -101,6 +101,7 @@ function openHistory() {
             duration: 300
         },
         vScrollBarEnabled: false,
+        slidBackEnabled: false,
         reload: true,
         bounces: false
     });
