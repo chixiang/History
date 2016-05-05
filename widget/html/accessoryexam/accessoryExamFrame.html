@@ -443,11 +443,12 @@ function getImgHtml(obj, imgGroup) {
 
 function openImg(imgId) {
     var imgGroup = imgId.substr(0, imgId.length - 1);
+    var id = imgId.substr(-1);
     var accessoryExamTmp = getStorage("accessoryExamTmp");
     var photoBrowser = api.require('photoBrowser');
     photoBrowser.open({
         images: accessoryExamTmp[imgGroup],
-        activeIndex: 0,
+        activeIndex: id,
         // placeholderImg: 'widget://res/img/apicloud.png',
         bgColor: '#000'
     }, function(ret) {
