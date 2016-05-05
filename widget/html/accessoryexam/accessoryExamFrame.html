@@ -259,19 +259,7 @@
  */
 apiready = function() {
     window.closeWin = function(winName) {
-        api.confirm({
-            title: '请选择',
-            msg: '未确认的修改会丢失，是否确认退出？',
-            buttons: ['退出', '取消']
-        }, function(ret, err) {
-            if (ret) {
-                if (ret.buttonIndex == 1) {
-                    api.closeWin();
-                }
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
+        confirmChosen();
     }
 
     // 因为处理图片的时候需要暂时存储在本地，所以不能直接使用accessoryExam，否则取消修改无法实现
@@ -286,26 +274,6 @@ apiready = function() {
     // 设置长按时间计时器
     timeOutEvent = 0;
 
-    // 绑定android后退键事件
-    api.addEventListener({
-        name: 'keyback'
-    }, function(ret, err) {
-        if (ret) {
-            api.confirm({
-                title: '请选择',
-                msg: '未确认的修改会丢失，是否确认退出？',
-                buttons: ['退出', '取消']
-            }, function(ret, err) {
-                if (ret) {
-                    if (ret.buttonIndex == 1) {
-                        api.closeWin();
-                    }
-                } else {
-                    alert(JSON.stringify(err));
-                }
-            });
-        }
-    });
 }
 
 function addImg(id) {

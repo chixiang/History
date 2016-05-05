@@ -44,6 +44,34 @@ function JSONLength(obj) {
     return size;
 };
 
+function confirmChosen(msg, button1, button2) {
+    var defaultMsg = '未确认的修改会丢失，是否确认退出？';
+    var defaultButton1 = "退出";
+    var defaultButton2 = "取消";
+    if (msg != undefined)  {
+        defalutMsg = msg;
+    }
+    if (button1 != undefined) {
+        defalutButton1 = button1;
+    }
+    if (button2 != undefined) {
+        defalutButton2 = button2;
+    }
+    api.confirm({
+        title: '请选择',
+        msg: defaultMsg,
+        buttons: [defaultButton1, defaultButton2]
+    }, function(ret, err) {
+        if (ret) {
+            if (ret.buttonIndex == 1) {
+                api.closeWin();
+            }
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
+}
+
 function preLog(deal_table, deal_type) {
     var model = api.require('model');
     model.config({

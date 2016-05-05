@@ -137,6 +137,15 @@ apiready = function() {
             duration: 100
         },
     });
+    
+    // 绑定android后退键事件
+    api.addEventListener({
+        name: 'keyback'
+    }, function(ret, err) {
+        if (ret) {
+            confirmChosen();
+        }
+    });
 }
 </script>
 

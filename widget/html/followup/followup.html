@@ -39,17 +39,6 @@
                     </div>
                 </div>
             </div>
-<!--             <div class="groupName">检查</div>
-            <div class="group">
-                <div class="field">
-                    <div class="key">体检信息</div>
-                    <div class="value more"><span>&gt;</span></div>
-                </div>
-                <div class="field bottom">
-                    <div class="key">辅助检查</div>
-                    <div class="value more"><span>&gt;</span></div>
-                </div>
-            </div> -->
         </div>
     </div>
     </div>
@@ -70,6 +59,15 @@ apiready = function() {
         animation: {
             type: "fade",
             duration: 0
+        }
+    });
+    
+    // 绑定android后退键事件
+    api.addEventListener({
+        name: 'keyback'
+    }, function(ret, err) {
+        if (ret) {
+            confirmChosen();
         }
     });
 }
