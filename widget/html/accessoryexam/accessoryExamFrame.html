@@ -349,11 +349,6 @@ function addImg(id) {
 }
 
 function setImg(imgGroup, url) {
-    // var imgGroup = id.replace('btn', 'img');
-
-    // 一组图片的url，数据库中存储为array格式
-    // var imgStrs = [];
-
     var accessoryExamTmp = getStorage("accessoryExamTmp");
     if (accessoryExamTmp == undefined) {
         accessoryExamTmp = {};
@@ -362,18 +357,9 @@ function setImg(imgGroup, url) {
         accessoryExamTmp[imgGroup] = [];
     }
 
-    // // 将本次新增的图片添加到图片组中
-    // imgStrs = accessoryExamTmp[imgGroup];
-    // imgStrs.push(url);
-
-    // // 将图片组转换成可显示的html代码
-    // var imgHtml = getImgHtml(imgStrs);
-    // $api.byId(id).innerHTML = imgHtml;
-
-    // // 如果不加这一句，添加图片再直接删除图片会取不到图片的imgGroup，原因待查
-    // setImgs(accessoryExamTmp);
-
+    // 将本次新增的图片添加到图片组中
     accessoryExamTmp[imgGroup].push(url);
+    // 将图片组转换成可显示的html代码
     var imgHtml = getImgHtml(accessoryExamTmp[imgGroup], imgGroup);
     $api.byId(imgGroup).innerHTML = imgHtml;
 

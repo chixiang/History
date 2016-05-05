@@ -3,8 +3,6 @@
  * @return {[type]} [description]
  */
 var apiready = function() {
-    // $api.fixIos7Bar($api.dom('header'));
-
     userName = $api.getStorage("userName");
     if (userName != "" && userName != undefined && userName != null) {
         openHistory();

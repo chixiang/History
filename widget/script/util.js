@@ -45,7 +45,7 @@ function JSONLength(obj) {
 };
 
 function confirmChosen(msg, button1, button2) {
-    var defaultMsg = '未确认的修改会丢失，是否确认退出？';
+    var defaultMsg = '未保存的修改会丢失，是否确认退出？';
     var defaultButton1 = "退出";
     var defaultButton2 = "取消";
     if (msg != undefined)  {
