@@ -274,7 +274,9 @@ apiready = function() {
         });
     }
 
-    accessoryExam = {};
+    // 因为处理图片的时候需要暂时存储在本地，所以不能直接使用accessoryExam，否则取消修改无法实现
+    // 所以在此页面首先取出accessoryExam存储为accessoryExamTmp，图片处理都使用accessoryExamTmp
+    // 最后保存退出时再存储为accessoryExam
     var accessoryExamTmp = getStorage("accessoryExam");
     if (accessoryExamTmp != undefined) {
         setStorage("accessoryExamTmp", accessoryExamTmp);
@@ -335,7 +337,7 @@ function addImg(id) {
                 quality: 90,
                 // targetWidth: 100,
                 targetHeight: 960,
-                saveToPhotoAlbum: false
+                saveToPhotoAlbum: true
             }, function(ret, err) {
                 if (ret) {
                     if (ret.data != "") {
@@ -378,35 +380,34 @@ function addImg(id) {
     });
 }
 
-function setImg(id, url) {
-    var imgType = id.replace('btn', 'img');
-    // var imgStrs = {};
-    var imgStrs = [];
-    var imgStr = "";
+function setImg(imgGroup, url) {
+    // var imgGroup = id.replace('btn', 'img');
+
+    // 一组图片的url，数据库中存储为array格式
+    // var imgStrs = [];
+
     var accessoryExamTmp = getStorage("accessoryExamTmp");
     if (accessoryExamTmp == undefined) {
         accessoryExamTmp = {};
     }
-
-    // 获取已添加的图片
-    // var accessoryExam = getStorage("accessoryExamTmp");
-    // 第一次添加某栏位图片，需初始化
-    if (accessoryExamTmp[imgType] == undefined) {
-        accessoryExamTmp[imgType] = [];
+    if (accessoryExamTmp[imgGroup] == undefined) {
+        accessoryExamTmp[imgGroup] = [];
     }
-    imgStrs = accessoryExamTmp[imgType];
 
-    // 按数字累加图片的key值，value为图片url
-    // var imgId = JSONLength(imgStrs) + 1;
-    // imgStrs[imgId] = url;
-    imgStrs.push(url);
+    // // 将本次新增的图片添加到图片组中
+    // imgStrs = accessoryExamTmp[imgGroup];
+    // imgStrs.push(url);
 
-    // 将图片组转换成可显示的html代码
-    var imgHtml = getImgHtml(imgStrs);
-    $api.byId(id).innerHTML = imgHtml;
+    // // 将图片组转换成可显示的html代码
+    // var imgHtml = getImgHtml(imgStrs);
+    // $api.byId(id).innerHTML = imgHtml;
 
-    // 如果不加这一句，添加图片再直接删除图片会取不到图片的imgGroup，原因待查
-    setImgs(accessoryExamTmp);
+    // // 如果不加这一句，添加图片再直接删除图片会取不到图片的imgGroup，原因待查
+    // setImgs(accessoryExamTmp);
+
+    accessoryExamTmp[imgGroup].push(url);
+    var imgHtml = getImgHtml(accessoryExamTmp[imgGroup], imgGroup);
+    $api.byId(imgGroup).innerHTML = imgHtml;
 
     setStorage("accessoryExamTmp", accessoryExamTmp);
 }
@@ -433,19 +434,19 @@ function getImgHtml(obj, imgGroup) {
     var imgHtml = "";
     while (idx < size) {
         imgHtml = imgHtml + "<img src=" + obj[idx] + " id=" + imgGroup + idx +
-            " onclick='openImg(this.src)' ontouchstart='confirmDeleteImg(this.id)' \
+            " onclick='openImg(this.id)' ontouchstart='confirmDeleteImg(this.id)' \
          ontouchmove='gtouchmove()' ontouchend='gtouchend()' />";
         idx = idx + 1;
     }
     return imgHtml;
 }
 
-function openImg(url) {
+function openImg(imgId) {
+    var imgGroup = imgId.substr(0, imgId.length - 1);
+    var accessoryExamTmp = getStorage("accessoryExamTmp");
     var photoBrowser = api.require('photoBrowser');
     photoBrowser.open({
-        images: [
-            url,
-        ],
+        images: accessoryExamTmp[imgGroup],
         activeIndex: 0,
         // placeholderImg: 'widget://res/img/apicloud.png',
         bgColor: '#000'
