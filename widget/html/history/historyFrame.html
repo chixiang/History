@@ -40,7 +40,7 @@
                         <input type="text" id="gender" />
                     </div>
                 </div>
-                <div class="field" onclick="openPicker('date');">
+                <div class="field" onclick="selectDate('birthday');">
                     <div class="key">出生日期</div>
                     <div class="value">
                         <input type="text" id="birthday" />
@@ -147,15 +147,6 @@ apiready = function() {
     $api.attr($api.byId('age'), 'readonly', 'true');
     $api.attr($api.byId('gender'), 'readonly', 'true');
     $api.attr($api.byId('birthday'), 'readonly', 'true');
-
-    api.addEventListener({
-        name: 'returnDate'
-    }, function(ret, err) {
-        if (ret) {
-            $api.byId('birthday').value = ret.value.date;
-            $api.byId('age').value = getAge(ret.value.date);
-        }
-    });
 
 }
 
@@ -396,6 +387,22 @@ function selectCondep() {
     }, function(ret, err) {
         if (ret) {
             $api.byId('consultation_department').value = historyConstants.consultation_department[ret.buttonIndex - 1];
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
+}
+
+function selectDate(id) {
+    api.openPicker({
+        type: 'date',
+        date: $api.byId(id).value,
+        title: '请选择日期'
+    }, function(ret, err) {
+        if (ret) {
+            var birthday = (ret.year + "-" + ret.month + "-" + ret.day).replace(/\b(\w)\b/g, '0$1');
+            $api.byId(id).value = birthday;
+            $api.byId('age').value = getAge(birthday);
         } else {
             alert(JSON.stringify(err));
         }

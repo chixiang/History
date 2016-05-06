@@ -235,59 +235,59 @@ function setFullHistory(data) {
  * @param  {[type]} type [description]
  * @return {[type]}      [description]
  */
-function openPicker(type) {
-    var frameName = "";
-    // 选择器的高度：行数*50+50，小于3行算3行
-    var height = 200;
-    var reload = false;
-    pageParam = {};
-    switch (type) {
-        case "date":
-            frameName = "datePickerFrame";
-            height = 300;
-            break;
-        case "gender":
-            frameName = "genderPickerFrame";
-            height = 200;
-            break;
-        case "consultation_department":
-            frameName = "condepPickerFrame";
-            height = 300;
-            break;
-        case "vod":
-        case "vos":
-        case "corrected_vod":
-        case "corrected_vos":
-            frameName = "visionPickerFrame";
-            height = 300;
-            reload = true;
-            pageParam = {
-                "visionType": type
-            }
-            break;
-        default:
-            break;
-    }
-    api.openFrame({
-        name: frameName,
-        url: 'widget://html/picker/' + frameName + '.html',
-        pageParam: pageParam,
-        reload: reload,
-        bounces: false,
-        rect: {
-            marginLeft: 0,
-            marginTop: api.winHeight - height,
-            marginBottom: 0,
-            marginRight: 0
-        },
-        animation: {
-            type: "fade",
-            subType: "from_right",
-            duration: 300
-        }
-    })
+// function openPicker(type) {
+//     var frameName = "";
+//     // 选择器的高度：行数*50+50，小于3行算3行
+//     var height = 200;
+//     var reload = false;
+//     pageParam = {};
+//     switch (type) {
+//         case "date":
+//             frameName = "datePickerFrame";
+//             height = 300;
+//             break;
+//         case "gender":
+//             frameName = "genderPickerFrame";
+//             height = 200;
+//             break;
+//         case "consultation_department":
+//             frameName = "condepPickerFrame";
+//             height = 300;
+//             break;
+//         case "vod":
+//         case "vos":
+//         case "corrected_vod":
+//         case "corrected_vos":
+//             frameName = "visionPickerFrame";
+//             height = 300;
+//             reload = true;
+//             pageParam = {
+//                 "visionType": type
+//             }
+//             break;
+//         default:
+//             break;
+//     }
+//     api.openFrame({
+//         name: frameName,
+//         url: 'widget://html/picker/' + frameName + '.html',
+//         pageParam: pageParam,
+//         reload: reload,
+//         bounces: false,
+//         rect: {
+//             marginLeft: 0,
+//             marginTop: api.winHeight - height,
+//             marginBottom: 0,
+//             marginRight: 0
+//         },
+//         animation: {
+//             type: "fade",
+//             subType: "from_right",
+//             duration: 300
+//         }
+//     })
 
-}
+// }
 
 /**
  * [showProgress description]
