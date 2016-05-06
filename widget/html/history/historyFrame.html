@@ -35,7 +35,6 @@
                     </div>
                 </div>
                 <div class="field" onclick="selectGender();">
-                    <!-- <div class="field" onclick="openPicker('gender');"> -->
                     <div class="key">性别</div>
                     <div class="value">
                         <input type="text" id="gender" />
@@ -92,7 +91,7 @@
             </div>
             <div class="groupName">诊疗</div>
             <div class="group group-edit">
-                <div class="field" onclick="openPicker('consultation_department');">
+                <div class="field" onclick="selectCondep();">
                     <div class="key">会诊科室</div>
                     <div class="value">
                         <input type="text" id="consultation_department" />
@@ -148,23 +147,6 @@ apiready = function() {
     $api.attr($api.byId('age'), 'readonly', 'true');
     $api.attr($api.byId('gender'), 'readonly', 'true');
     $api.attr($api.byId('birthday'), 'readonly', 'true');
-
-    // 回填Picker返回的会诊科室
-    api.addEventListener({
-        name: 'returnCondep'
-    }, function(ret, err) {
-        if (ret) {
-            $api.byId('consultation_department').value = ret.value.consultation_department;
-        }
-    });
-
-    // api.addEventListener({
-    //     name: 'returnGender'
-    // }, function(ret, err) {
-    //     if (ret) {
-    //         $api.byId('gender').value = ret.value.gender;
-    //     }
-    // });
 
     api.addEventListener({
         name: 'returnDate'
@@ -399,6 +381,21 @@ function selectGender() {
             if (ret.buttonIndex == 2) {
                 $api.byId('gender').value = "女";
             }
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
+}
+
+function selectCondep() {
+    api.actionSheet({
+        title: '请选择会诊科室',
+        cancelTitle: '取消',
+        // destructiveTitle: '红色警告按钮',
+        buttons: historyConstants.consultation_department
+    }, function(ret, err) {
+        if (ret) {
+            $api.byId('consultation_department').value = historyConstants.consultation_department[ret.buttonIndex - 1];
         } else {
             alert(JSON.stringify(err));
         }

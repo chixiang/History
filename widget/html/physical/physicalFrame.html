@@ -31,13 +31,14 @@
                 <div class="field">
                     <div class="key">Vod</div>
                     <div class="value">
-                        <input type="text" id="vod" onclick="openPicker('vod')" />
+                        <input type="text" id="vod" onclick="selectVision('vod')" />
+                        <!-- <input type="text" id="vod" onclick="openPicker('vod')" /> -->
                     </div>
                 </div>
                 <div class="field bottom">
                     <div class="key">Vos</div>
                     <div class="value">
-                        <input type="text" id="vos" onclick="openPicker('vos')" />
+                        <input type="text" id="vos" onclick="selectVision('vos')" />
                     </div>
                 </div>
             </div>
@@ -46,13 +47,13 @@
                 <div class="field">
                     <div class="key">Vod</div>
                     <div class="value">
-                        <input type="text" id="corrected_vod" onclick="openPicker('corrected_vod')" />
+                        <input type="text" id="corrected_vod" onclick="selectVision('corrected_vod')" />
                     </div>
                 </div>
                 <div class="field bottom">
                     <div class="key">Vos</div>
                     <div class="value">
-                        <input type="text" id="corrected_vos" onclick="openPicker('corrected_vos')" />
+                        <input type="text" id="corrected_vos" onclick="selectVision('corrected_vos')" />
                     </div>
                 </div>
             </div>
@@ -136,13 +137,6 @@ apiready = function() {
     $api.attr($api.byId('vos'), 'readonly', 'true');
     $api.attr($api.byId('corrected_vod'), 'readonly', 'true');
     $api.attr($api.byId('corrected_vos'), 'readonly', 'true');
-    api.addEventListener({
-        name: 'returnVision'
-    }, function(ret, err) {
-        if (ret) {
-            $api.byId(ret.value.visionType).value = ret.value.vision;
-        }
-    });
 
     var physical = getStorage("physical");
     setPhysical(physical);
@@ -188,6 +182,21 @@ function savePhysical() {
             api.closeWin();
         } else {
             alert(JSON.stringify(ret));
+        }
+    });
+}
+
+function selectVision(id) {
+    api.actionSheet({
+        title: '请选择',
+        cancelTitle: '取消',
+        // destructiveTitle: '红色警告按钮',
+        buttons: historyConstants.vision
+    }, function(ret, err) {
+        if (ret) {
+            $api.byId(id).value = historyConstants.vision[ret.buttonIndex - 1];
+        } else {
+            alert(JSON.stringify(err));
         }
     });
 }
