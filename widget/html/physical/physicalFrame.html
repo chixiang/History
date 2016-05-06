@@ -193,7 +193,9 @@ function selectVision(id) {
         buttons: historyConstants.vision
     }, function(ret, err) {
         if (ret) {
-            $api.byId(id).value = historyConstants.vision[ret.buttonIndex - 1];
+            if (ret.buttonIndex != historyConstants.vision.length + 1) {
+                $api.byId(id).value = historyConstants.vision[ret.buttonIndex - 1];
+            }
         } else {
             alert(JSON.stringify(err));
         }

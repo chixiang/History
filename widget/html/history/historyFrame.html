@@ -386,7 +386,9 @@ function selectCondep() {
         buttons: historyConstants.consultation_department
     }, function(ret, err) {
         if (ret) {
-            $api.byId('consultation_department').value = historyConstants.consultation_department[ret.buttonIndex - 1];
+            if (ret.buttonIndex != historyConstants.consultation_department.length + 1) {
+                $api.byId('consultation_department').value = historyConstants.consultation_department[ret.buttonIndex - 1];
+            }
         } else {
             alert(JSON.stringify(err));
         }
