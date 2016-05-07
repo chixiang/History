@@ -56,6 +56,9 @@ apiready = function() {
     }
 
     var followup = getStorage("followup");
+    if (followup == undefined) {
+        followup = {};
+    }
     if (followup.condition != undefined) {
         $api.byId('condition').value = followup.condition;
     }
@@ -111,15 +114,12 @@ function saveFollowUp(callback) {
     var history = getStorage("history");
     var followup = getStorage("followup");
 
+    if (followup == undefined) {
+        followup = {};
+    }
+
     followup.condition = $api.byId('condition').value;
     followup.treatment = $api.byId('treatment').value;
-
-    var type = "";
-    if (followup.id == undefined) {
-        type = "new";
-    } else {
-        type = "modi";
-    }
 
     var model = api.require('model');
     model.config({
@@ -127,26 +127,48 @@ function saveFollowUp(callback) {
         appKey: historyConstants.appKey,
         host: historyConstants.host
     });
-    model.updateById({ // 保存体检信息
-        class: historyConstants.table.followup,
-        id: followup.id,
-        value: {
-            history_id: history.id,
-            condition: followup.condition,
-            treatment: followup.treatment,
-        }
-    }, function(ret, err) {
-        hideProgress();
-        if (ret) {
-            api.toast({
-                msg: "保存随访信息成功"
-            })
-            followupSaveEvent(ret.id, type);
-            api.closeWin();
-        } else {
-            alert("保存随访信息失败\n" + JSON.stringify(err));
-        }
-    });
+    if (followup.id != "" && followup.id != undefined) {
+        model.updateById({ // 保存体检信息
+            class: historyConstants.table.followup,
+            id: followup.id,
+            value: {
+                history_id: history.id,
+                condition: followup.condition,
+                treatment: followup.treatment,
+            }
+        }, function(ret, err) {
+            hideProgress();
+            if (ret) {
+                api.toast({
+                    msg: "保存随访信息成功"
+                })
+                followupSaveEvent(ret.id, "modi");
+                api.closeWin();
+            } else {
+                alert("保存随访信息失败\n" + JSON.stringify(err));
+            }
+        });
+    } else {
+        model.insert({ // 保存体检信息
+            class: historyConstants.table.followup,
+            value: {
+                history_id: history.id,
+                condition: followup.condition,
+                treatment: followup.treatment,
+            }
+        }, function(ret, err) {
+            hideProgress();
+            if (ret) {
+                api.toast({
+                    msg: "保存随访信息成功"
+                })
+                followupSaveEvent(ret.id, "new");
+                api.closeWin();
+            } else {
+                alert("保存随访信息失败\n" + JSON.stringify(err));
+            }
+        });
+    }
 }
 </script>
 

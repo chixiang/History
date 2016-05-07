@@ -265,7 +265,7 @@ function saveHistory() {
     var history = getStorage("history");
     var name = $api.byId("name").value;
     if (name == undefined || name == "") {
-        alert("未输入患者姓名");
+        alert("请输入患者姓名");
         return;
     }
     showProgress();
@@ -296,26 +296,48 @@ function saveHistory() {
         appKey: historyConstants.appKey,
         host: historyConstants.host
     });
-    model.updateById({ // 保存患者信息
-        class: historyConstants.table.history,
-        id: history.id,
-        value: history
-    }, function(ret, err) {
-        if (ret) {
-            hideProgress();
+    if (history.id != "" && history.id != undefined) {
+        model.updateById({ // 保存患者信息
+            class: historyConstants.table.history,
+            id: history.id,
+            value: history
+        }, function(ret, err) {
             if (ret) {
                 hideProgress();
-                historySaveEvent();
-                api.toast({
-                    msg: "保存病历成功"
-                })
-                api.closeWin();
-            } else {
-                hideProgress();
-                alert("保存病历失败！");
+                if (ret) {
+                    hideProgress();
+                    historySaveEvent();
+                    api.toast({
+                        msg: "保存病历成功"
+                    })
+                    api.closeWin();
+                } else {
+                    hideProgress();
+                    alert("保存病历失败！");
+                }
             }
-        }
-    });
+        });
+    } else {
+        model.insert({ // 保存患者信息
+            class: historyConstants.table.history,
+            value: history
+        }, function(ret, err) {
+            if (ret) {
+                hideProgress();
+                if (ret) {
+                    hideProgress();
+                    historySaveEvent();
+                    api.toast({
+                        msg: "保存病历成功"
+                    })
+                    api.closeWin();
+                } else {
+                    hideProgress();
+                    alert("保存病历失败！");
+                }
+            }
+        });
+    }
 }
 
 /**
@@ -363,7 +385,15 @@ function selectGender() {
         title: '请选择性别',
         cancelTitle: '取消',
         // destructiveTitle: '红色警告按钮',
-        buttons: ['男', '女']
+        buttons: ['男', '女'],
+        style: {
+            layerColor: 'rgba(0,0,0,0.4)', //遮蔽层颜色，仅支持 rgba颜色，默认值：rgba（0, 0, 0, 0.4）
+            itemNormalColor: '#F1F1F1', //选项按钮正常状态背景颜色，支持#000、#000000、rgb、rgba，默认值：#F1F1F1
+            itemPressColor: '#688CD4', //选项按钮按下时背景颜色，支持#000、#000000、rgb、rgba，默认值：#E6E6E6
+            fontNormalColor: '#007AFF', //选项按钮正常状态文字颜色，支持#000、#000000、rgb、rgba，默认值：#007AFF
+            fontPressColor: '#FFF', //选项按钮按下时文字颜色，支持#000、#000000、rgb、rgba，默认值：#0060F0
+            titleFontColor: '#8F8F8F' //标题文字颜色，支持#000、#000000、rgb、rgba，默认值：#8F8F8F
+        }
     }, function(ret, err) {
         if (ret) {
             if (ret.buttonIndex == 1) {
@@ -383,7 +413,15 @@ function selectCondep() {
         title: '请选择会诊科室',
         cancelTitle: '取消',
         // destructiveTitle: '红色警告按钮',
-        buttons: historyConstants.consultation_department
+        buttons: historyConstants.consultation_department,
+        style: {
+            layerColor: 'rgba(0,0,0,0.4)', //遮蔽层颜色，仅支持 rgba颜色，默认值：rgba（0, 0, 0, 0.4）
+            itemNormalColor: '#F1F1F1', //选项按钮正常状态背景颜色，支持#000、#000000、rgb、rgba，默认值：#F1F1F1
+            itemPressColor: '#688CD4', //选项按钮按下时背景颜色，支持#000、#000000、rgb、rgba，默认值：#E6E6E6
+            fontNormalColor: '#007AFF', //选项按钮正常状态文字颜色，支持#000、#000000、rgb、rgba，默认值：#007AFF
+            fontPressColor: '#FFF', //选项按钮按下时文字颜色，支持#000、#000000、rgb、rgba，默认值：#0060F0
+            titleFontColor: '#8F8F8F' //标题文字颜色，支持#000、#000000、rgb、rgba，默认值：#8F8F8F
+        }
     }, function(ret, err) {
         if (ret) {
             if (ret.buttonIndex != historyConstants.consultation_department.length + 1) {

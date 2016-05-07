@@ -131,7 +131,8 @@ a:visited {
     line-height: 45px;
     padding-left: 10px;
     padding-right: 10px;
-    color: #424758;
+    /*color: #424758;*/
+    color: #6D7386;
     border-bottom: 1px solid #f0f0f0;
     display: -webkit-box;
 }
@@ -182,7 +183,7 @@ a:visited {
 
 .key {
     width: 30%;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .more {
@@ -218,7 +219,7 @@ a:visited {
 
 .textarea_key {
     width: 100%;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .textarea_value {
@@ -231,7 +232,7 @@ a:visited {
 
 .textarea_key_with_img {
     width: 70%;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .img_button {
@@ -246,12 +247,13 @@ a:visited {
 
 input {
     width: 100%;
-    /*font-size: 17px;*/
+    font-size: 16px;
     overflow-x: visible;
     overflow-y: visible;
     background-color: #FFF;
     border: none;
     text-align: right;
+    /*font-weight: bold;*/
 }
 
 textarea {
@@ -260,8 +262,9 @@ textarea {
     border: none;
     resize: none;
     background-color: #FFF;
-    /*font-size: 17px;*/
+    font-size: 16px;
     padding: 0px;
+    /*font-weight: bold;*/
 }
 
 nav {

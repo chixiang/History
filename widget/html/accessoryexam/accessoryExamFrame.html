@@ -490,20 +490,36 @@ function saveAccessoryExam() {
         appKey: historyConstants.appKey,
         host: historyConstants.host
     });
-    model.updateById({
-        class: historyConstants.table.accessoryExam,
-        id: id,
-        value: accessoryExamTmp
-    }, function(ret, err) {
-        if (ret) {
-            setStorage("accessoryExam", ret);
-            rmStorage("accessoryExamTmp");
-            accessoryExamSaveEvent(ret.id);
-            api.closeWin();
-        } else {
-            alert(JSON.stringify(err));
-        }
-    });
+    if (id != "" && id != undefined) {
+        model.updateById({
+            class: historyConstants.table.accessoryExam,
+            id: id,
+            value: accessoryExamTmp
+        }, function(ret, err) {
+            if (ret) {
+                setStorage("accessoryExam", ret);
+                rmStorage("accessoryExamTmp");
+                accessoryExamSaveEvent(ret.id);
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    } else {
+        model.insert({
+            class: historyConstants.table.accessoryExam,
+            value: accessoryExamTmp
+        }, function(ret, err) {
+            if (ret) {
+                setStorage("accessoryExam", ret);
+                rmStorage("accessoryExamTmp");
+                accessoryExamSaveEvent(ret.id);
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
 }
 </script>
 
