@@ -116,9 +116,9 @@ a:visited {
     box-shadow: 0px 0px 5px rgba(0,0,0,0.9);
 }
 
-.group.group-edit:hover {
+/*.group.group-edit:hover {
     box-shadow: inset 0px 0px 5px rgba(0,0,0,0.9);
-}
+}*/
 
 .onFieldClick {
     background-color: #688CD4;
@@ -135,6 +135,11 @@ a:visited {
     color: #6D7386;
     border-bottom: 1px solid #f0f0f0;
     display: -webkit-box;
+}
+
+.field.field-edit:hover {
+    box-shadow: inset 0px 0px 3px rgba(0,0,0,0.5);
+    border-radius: 5px;
 }
 
 .leftColumn {

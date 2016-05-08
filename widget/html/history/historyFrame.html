@@ -28,31 +28,31 @@
         <div id="main" class="flex-con">
             <div class="groupName">基本信息</div>
             <div class="group group-edit">
-                <div class="field">
+                <div class="field field-edit">
                     <div class="key">姓名</div>
                     <div class="value">
                         <input type="text" id="name" onblur="checkPatientName();" />
                     </div>
                 </div>
-                <div class="field" onclick="selectGender();">
+                <div class="field field-edit" onclick="selectGender();">
                     <div class="key">性别</div>
                     <div class="value">
                         <input type="text" id="gender" />
                     </div>
                 </div>
-                <div class="field" onclick="selectDate('birthday');">
+                <div class="field field-edit" onclick="selectDate('birthday');">
                     <div class="key">出生日期</div>
                     <div class="value">
                         <input type="text" id="birthday" />
                     </div>
                 </div>
-                <div class="field">
+                <div class="field field-edit">
                     <div class="key">年龄</div>
                     <div class="value">
                         <input type="text" id="age" />
                     </div>
                 </div>
-                <div class="field bottom">
+                <div class="field field-edit bottom">
                     <div class="key">职业</div>
                     <div class="value">
                         <input type="text" id="job" />
@@ -61,13 +61,13 @@
             </div>
             <div class="groupName">编号</div>
             <div class="group group-edit">
-                <div class="field">
+                <div class="field field-edit">
                     <div class="key">住院号</div>
                     <div class="value">
                         <input type="text" id="admission_number" />
                     </div>
                 </div>
-                <div class="field bottom">
+                <div class="field field-edit bottom">
                     <div class="key">门诊号</div>
                     <div class="value">
                         <input type="text" id="outpatient_number" />
@@ -76,13 +76,13 @@
             </div>
             <div class="groupName">联系方式</div>
             <div class="group group-edit">
-                <div class="field">
+                <div class="field field-edit">
                     <div class="key">电话</div>
                     <div class="value">
                         <input type="text" id="phone" />
                     </div>
                 </div>
-                <div class="field textarea_field bottom">
+                <div class="field field-edit textarea_field bottom">
                     <div class="textarea_key">地址</div>
                     <div class="textarea_value">
                         <textarea id="address" placeholder="请输入联系地址"></textarea>
@@ -91,25 +91,25 @@
             </div>
             <div class="groupName">诊疗</div>
             <div class="group group-edit">
-                <div class="field" onclick="selectCondep();">
+                <div class="field field-edit" onclick="selectCondep();">
                     <div class="key">会诊科室</div>
                     <div class="value">
                         <input type="text" id="consultation_department" />
                     </div>
                 </div>
-                <div class="field">
+                <div class="field field-edit">
                     <div class="key">主诉</div>
                     <div class="value">
                         <input type="text" id="chief_complaint" />
                     </div>
                 </div>
-                <div class="field textarea_field">
+                <div class="field field-edit textarea_field">
                     <div class="textarea_key">诊断</div>
                     <div class="textarea_value">
                         <textarea id="diagnosis" placeholder="请输入诊断信息"></textarea>
                     </div>
                 </div>
-                <div class="field textarea_field bottom">
+                <div class="field field-edit textarea_field bottom">
                     <div class="textarea_key">治疗</div>
                     <div class="textarea_value">
                         <textarea id="treatment" placeholder="请输入治疗信息"></textarea>

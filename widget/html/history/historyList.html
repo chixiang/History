@@ -116,11 +116,10 @@ var apiready = function() {
                 bgColor: '#FFF',
                 activeBgColor: '#688CD4',
                 height: 80,
-                imgWidth: 60,
-                imgHeight: 60,
-                imgCorner: 0,
-                placeholderImg: '',
-                // placeholderImg: 'widget://image/medical_32.png',
+                // imgWidth: 30,
+                // imgHeight: 30,
+                // imgCorner: 0,
+                // placeholderImg: 'widget://image/history.png',
                 titleSize: 18,
                 titleColor: '#424758',
                 subTitleSize: 14.0,
@@ -264,8 +263,9 @@ function loadList(type) {
                                         history_id: ret[idx].id,
                                         record_doctor: ret[idx].record_doctor,
                                         title: ret[idx].name + "   " + ret[idx].diagnosis,
-                                        subTitle: ret[idx].gender + " - " + getAge(ret[idx].birthday) + " - " + ret[idx].consultation_department + " - " + ret[idx].createdAt.substring(0, 10),
-                                        remark: (ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)
+                                        subTitle: ret[idx].gender + " - " + getAge(ret[idx].birthday) + "\n" + ret[idx].consultation_department + " - " + ((ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)),
+                                        // remark: (ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)
+                                        remark: ret[idx].createdAt.substring(2, 10)
                                     };
                                     if (userName == "admin") {
                                         historyItem.subTitle = "记录: " + historyItem.record_doctor + " - " + historyItem.subTitle;
