@@ -120,21 +120,18 @@ a:visited {
     box-shadow: inset 0px 0px 5px rgba(0,0,0,0.9);
 }*/
 
-.onFieldClick {
-    background-color: #688CD4;
-    color: #FFF;
-}
-
 .field {
     height: 60px;
     font-size: 18px;
     line-height: 60px;
-    /*padding-left: 10px;*/
-    /*padding-right: 10px;*/
-    /*color: #424758;*/
     color: #6D7386;
     border-bottom: 1px solid #f0f0f0;
     display: -webkit-box;
+}
+
+.onFieldClick {
+    background-color: #688CD4;
+    color: #FFF;
 }
 
 .field.field-edit:hover {
@@ -159,28 +156,6 @@ a:visited {
     text-align: center;
 }
 
-.textarea_field {
-    /*height: 120px;*/
-    height: auto;
-    /*font-size: 17px;*/
-    -webkit-box-orient: vertical;
-}
-
-.accessory_img {
-    display: inline;
-    overflow: hidden;
-}
-
-.accessory_img>img {
-    margin: 0px 5px;
-    /*border: 1px solid #424758;*/
-    /*height: 70px;*/
-    /*width: 70px;*/
-    max-height: 70px;
-    /*max-width: 70px;*/
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
-    /*overflow: hidden;*/
-}
 
 .bottom {
     border: none;
@@ -213,34 +188,28 @@ a:visited {
 }
 
 .value_with_unit {
-    width: 50%;
-}
-
-.value_with_unit_3 {
-    width: 30%;
-}
-
-.value_with_unit_4 {
-    width: 40%;
-}
-
-.value_with_unit_6 {
-    width: 50%;
+    -webkit-box-flex: 1;
+    margin-right: 10px;
 }
 
 .unit {
-    padding: 0px 0px 0px 10px;
-    width: 20%;
-/*    text-align: right;*/
+    width: 80px;
+    margin-right: 10px;
+}
+
+.textarea_field {
+    height: auto;
+    -webkit-box-orient: vertical;
 }
 
 .textarea_key {
-    width: 100%;
-    /*font-weight: bold;*/
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .textarea_value {
-    width: 100%
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .field_img {
@@ -248,13 +217,14 @@ a:visited {
 }
 
 .textarea_key_with_img {
-    width: 70%;
-    /*font-weight: bold;*/
+    -webkit-box-flex: 1;
+    margin-left: 10px;
 }
 
 .img_button {
-    width: 30%;
+    width: 50px;
     text-align: right;
+    margin-right: 10px;
 }
 
 .img_button>img {
@@ -262,7 +232,22 @@ a:visited {
     vertical-align: middle;
 }
 
+.accessory_img {
+    /*display: inline-block;*/
+    overflow: hidden;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.accessory_img>img {
+    margin: 5px 5px;
+    /*border: 1px solid #424758;*/
+    max-height: 70px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+}
+
 input {
+    outline: none;
     width: 100%;
     font-size: 18px;
     overflow-x: visible;
@@ -270,18 +255,18 @@ input {
     background-color: #FFF;
     border: none;
     text-align: right;
-    /*font-weight: bold;*/
 }
 
 textarea {
+    outline: none;
     width: 100%;
-    height: 40px;
+    height: 50px;
     border: none;
     resize: none;
     background-color: #FFF;
     font-size: 18px;
     padding: 0px;
-    /*font-weight: bold;*/
+    line-height: 1.5;
 }
 
 nav {
