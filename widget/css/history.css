@@ -135,7 +135,7 @@ a:visited {
 }
 
 .field.field-edit:hover {
-    box-shadow: inset 0px 0px 1px rgba(0,0,0,0.5);
+    box-shadow: inset 0px 0px 5px rgba(0,0,0,0.6);
     border-radius: 5px;
 }
 
@@ -169,7 +169,7 @@ a:visited {
 
 .key_icon_div img {
     vertical-align: middle;
-    width: 30px;
+    width: 25px;
 }
 
 .key {
