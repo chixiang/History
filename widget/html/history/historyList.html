@@ -466,18 +466,20 @@ function openSearch() {
 }
 
 function logout() {
-    if (confirm("是否确定退出？")) {
-        $api.setStorage("userName", "");
-        // closeDB();
-        api.closeToWin({
-            name: 'root',
-            animation: {
-                type: 'flip',
-                subType: 'from_bottom',
-                duration: 500
+    api.confirm({
+        title: '请选择',
+        msg: "确定退出？",
+        buttons: ["退出", "取消"]
+    }, function(ret, err) {
+        if (ret) {
+            if (ret.buttonIndex == 1) {
+                rmStorage("userName");
+                api.closeWin();
             }
-        });
-    }
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
 }
 </script>
 
