@@ -130,14 +130,24 @@ apiready = function() {
 
         // 左划第二个按钮事件，删除
         if (ret.eventType == "clickRightBtn" && ret.btnIndex == "1") {
-            if (confirm("确定删除？")) {
-                followupList.getDataByIndex({
-                    index: ret.index
-                }, function(ret, err) {
-                    deleteFollowUp(ret.data.follow_up_id);
-                    loadList();
-                });
-            }
+            api.confirm({
+                title: '请选择',
+                msg: '确定删除？',
+                buttons: ['删除', '取消']
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.buttonIndex == 1) {
+                        followupList.getDataByIndex({
+                            index: ret.index
+                        }, function(ret, err) {
+                            deleteFollowUp(ret.data.follow_up_id);
+                            loadList();
+                        });
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
         }
     });
 

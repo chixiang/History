@@ -239,9 +239,19 @@ function checkPatientName() {
                             idx = idx + 1;
                         }
                         if (idx > 0) {
-                            if (confirm("已有同名患者！\n\n【取消】- 继续新增\n【确定】- 查看已有患者信息")) {
-                                showDupHistoryList($api.byId('name').value);
-                            }
+                            api.confirm({
+                                title: '已有同名患者！',
+                                msg: '【取消】- 继续新增，【确定】- 查看已有患者信息',
+                                buttons: ['取消', '确定']
+                            }, function(ret, err) {
+                                if (ret) {
+                                    if (ret.buttonIndex == 2) {
+                                        showDupHistoryList($api.byId('name').value);
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
                         }
                     }
                 }
