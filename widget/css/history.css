@@ -96,10 +96,9 @@ a:visited {
 }
 
 .remark {
-    padding: 10px 0px 15px 10px;
+    padding: 10px 10px 15px 10px;
     color: #93979e;
     font-size: 14px;
-    text-align: center;
 }
 
 .subGroupName {
