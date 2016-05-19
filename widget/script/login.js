@@ -6,12 +6,18 @@ var apiready = function() {
     userName = $api.getStorage("userName");
     if (userName != "" && userName != undefined && userName != null) {
         api.toast({
-            msg: "已登陆"
+            msg: "已登录"
         });
         openHistory();
     }
     passWord = "";
 
+    var model = api.require('model');
+    model.config({
+        appId: historyConstants.appId,
+        appKey: historyConstants.appKey,
+        host: historyConstants.host
+    });
     user = api.require('user');
 
 }
