@@ -33,7 +33,7 @@ function login() {
         hideProgress();
         if (ret) {
             api.toast({
-                msg: "登陆成功"
+                msg: "登录成功"
             });
             $api.setStorage('userName', userName);
             $api.byId('passWord').value = "";
