@@ -124,8 +124,10 @@
                 </div>
             </div>
             <div id="remark" class="remark">
-                <span>说明：</span><br>
-                <span>1. 新增成功后，可在查看界面新增体检和辅助检查信息</span><br>
+                <span>说明：</span>
+                <br>
+                <span>1. 新增成功后，可在查看界面新增体检和辅助检查信息</span>
+                <br>
                 <span>2. 修改体检和辅助检查信息请从查看页面进入</span>
             </div>
         </div>
@@ -287,7 +289,10 @@ function saveHistory() {
     var history = getStorage("history");
     var name = $api.byId("name").value;
     if (name == undefined || name == "") {
-        alert("请输入患者姓名");
+        // alert("请输入患者姓名");
+        api.alert({
+            msg: "请输入患者姓名"
+        }, function(ret, err) {});
         return;
     }
     showProgress();

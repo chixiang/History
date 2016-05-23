@@ -62,15 +62,13 @@ function register() {
     if (userName == "" || passWord == "" || passWordSec == "") {
         api.alert({
             msg: "请输入完整"
-        }, function(ret, err) {
-        });
+        }, function(ret, err) {});
         return;
     }
     if (passWord != passWordSec) {
         api.alert({
             msg: "两次输入密码不一致"
-        }, function(ret, err) {
-        });
+        }, function(ret, err) {});
         return;
     }
     showProgress();
@@ -80,17 +78,14 @@ function register() {
         password: passWord
     }, function(ret, err) {
         hideProgress();
-        if (ret.error) {
-            switch (ret.error.statusCode) {
-                case 202:
-                    alert("用户已存在");
-                    break;
-                default:
-                    alert("注册用户失败！");
-                    break;
-            }
+        if(!!err || !!ret.error) {
+            api.alert({
+                msg: "用户名已被使用，请更换用户名"
+            }, function(ret, err) {});
         } else {
-            alert("用户注册成功！");
+            api.alert({
+                msg: "注册成功！"
+            }, function(ret, err) {});
             api.closeWin();
         }
     });

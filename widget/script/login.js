@@ -39,7 +39,11 @@ function login() {
             $api.byId('passWord').value = "";
             openHistory();
         } else {
-            alert("登陆失败！");
+            // alert("登陆失败！");
+            api.alert({
+                msg: "登录失败"
+            }, function(ret, err){
+            });
         }
     });
 }
