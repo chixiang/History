@@ -95,6 +95,12 @@ a:visited {
     font-weight: bold;
 }
 
+.remark {
+    padding: 10px 10px 15px 10px;
+    color: #93979e;
+    font-size: 14px;
+}
+
 .subGroupName {
     padding: 5px 5px 0px 5px;
     color: #93979e;

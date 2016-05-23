@@ -434,7 +434,7 @@ function openSearch() {
     UISearchBar.open({
         placeholder: '请输入病历关键字',
         historyCount: 10,
-        showRecordBtn: true,
+        showRecordBtn: false,
         texts: {
             cancelText: '取消',
             clearText: '清除搜索记录'
@@ -467,11 +467,25 @@ function openSearch() {
             }
         }
     }, function(ret, err) {
-        api.toast({
-            msg: ret,
-            duration: 2000,
-            location: "top"
-        });
+        if(ret) {
+            if(ret.eventType == "search" || ret.eventType == "history") {
+                openSearchWin(ret.text);
+            }
+        }
+    });
+}
+
+function openSearchWin(condition) {
+    api.openWin({
+        name: api.winName + "_search_historyList",
+        url: './dupHistoryList.html',
+        pageParam: {
+            condition: condition
+        },
+        vScrollBarEnabled: false,
+        slidBackEnabled: false,
+        reload: true,
+        bounces: false
     });
 }
 
