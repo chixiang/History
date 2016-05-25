@@ -56,6 +56,7 @@
  * @return {[type]} [description]
  */
 apiready = function() {
+    _fixIos7Bar();
     api.openFrame({
         name: "followup",
         url: './followupFrame.html',
@@ -68,7 +69,7 @@ apiready = function() {
             duration: 0
         }
     });
-    
+
     // 绑定android后退键事件
     api.addEventListener({
         name: 'keyback'

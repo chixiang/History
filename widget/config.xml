@@ -13,8 +13,8 @@
 	<preference name="frameBackgroundColor" value="rgba(0,0,0,0)"/>
 	<preference name="autoLaunch" value="true"/>
 	<preference name="debug" value="false"/>
-	<preference name="statusBarAppearance" value="false"/>
-    <preference name="iOS7StatusBarAppearance" value="false"/>
+	<!-- <preference name="statusBarAppearance" value="false"/> -->
+    <preference name="iOS7StatusBarAppearance" value="true"/>
 	<permission name="internet"/>
 	<access origin="*"/>
 </widget>
