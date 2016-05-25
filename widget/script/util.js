@@ -2,6 +2,13 @@
 //     document.body.addEventListener('touchstart', function() {});
 // }
 
+function _fixIos7Bar() {
+    $api.fixIos7Bar($api.dom('header'));
+    if(api.systemType == 'ios') {
+        $api.css($api.dom('body'), 'margin-top: 70px');
+    }
+}
+
 /**
  * [getDate 获得当前日期，格式为YYYY-MM-DD]
  * @return {[type]} [description]

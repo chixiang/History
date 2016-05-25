@@ -127,6 +127,7 @@
  * @return {[type]} [description]
  */
 apiready = function() {
+    _fixIos7Bar();
 
     $api.attr($api.byId('vod'), 'readonly', 'true');
     $api.attr($api.byId('vos'), 'readonly', 'true');

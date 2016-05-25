@@ -7,7 +7,6 @@
     <author email="chixiang1983@gmail.com" href="http://www.chixiang.name">
         池翔
     </author>
-    <!-- <content src="historyList.html" /> -->
     <content src="login.html" />
 	<preference name="appBackground" value="rgba(0,0,0,0)"/>
 	<preference name="windowBackground" value="rgba(0,0,0,0)"/>
@@ -16,9 +15,8 @@
 	<preference name="autoUpdate" value="true"/>
 	<preference name="smartUpdate" value="false"/>
 	<preference name="debug" value="false"/>
-	<preference name="statusBarAppearance" value="false"/>
-    <preference name="iOS7StatusBarAppearance" value="false"/>
-	<!-- <permission name="location"/> -->
+	<!-- <preference name="statusBarAppearance" value="false"/> -->
+    <preference name="iOS7StatusBarAppearance" value="true"/>
 	<permission name="internet"/>
 	<access origin="*"/>
 </widget>
