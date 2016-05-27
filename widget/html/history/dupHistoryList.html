@@ -22,7 +22,7 @@
             <div id="middle">
                 <span id="title"></span>
             </div>
-            <a id="right" tapmode="" onclick="" class="button button-raised button-silver">
+            <a id="right" tapmode="" onclick="" class="button button-raised button-silver" style="visibility:hidden">
             </a>
         </header>
         <div id="main" class="flex-con">
@@ -88,10 +88,10 @@ var apiready = function() {
                 bgColor: '#FFF',
                 activeBgColor: '#688CD4',
                 height: 80,
-                imgWidth: 40,
-                imgHeight: 40,
-                imgCorner: 4,
-                placeholderImg: '',
+                // imgWidth: 40,
+                // imgHeight: 40,
+                // imgCorner: 4,
+                // placeholderImg: '',
                 titleSize: 18,
                 titleColor: '#424758',
                 subTitleSize: 14.0,
@@ -168,8 +168,9 @@ function loadList() {
                                     history_id: ret[idx].id,
                                     record_doctor: ret[idx].record_doctor,
                                     title: ret[idx].name + "   " + ret[idx].diagnosis,
-                                    subTitle: ret[idx].gender + " - " + getAge(ret[idx].birthday) + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].createdAt.substring(0, 10),
-                                    remark: (ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)
+                                    subTitle: ret[idx].gender + " - " + getAge(ret[idx].birthday) + "\n" + ret[idx].consultation_department + " - " + ((ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)),
+                                    // remark: (ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)
+                                    remark: ret[idx].createdAt.substring(2, 10)
                                 };
                                 if (userName == "admin") {
                                     historyItem.subTitle = "记录: " + ret[idx].record_doctor + " - " + historyItem.subTitle;
@@ -183,37 +184,65 @@ function loadList() {
                 });
             }
         });
-    } else if (_func == "search") {
+    } else if (_func == "search" && userName != "admin") {
         var client = new Resource(historyConstants.appId, historyConstants.appKey);
         var Model = client.Factory(historyConstants.table.history);
         var json_objs = [];
         Model.query({
             filter: {
                 "where": {
-                    "or": [{
-                        "record_doctor": {"like": searchCondition}
+                    "and": [{
+                        "record_doctor": userName
                     }, {
-                        "consultation_department": {"like": searchCondition}
-                    }, {
-                        "chief_complaint": {"like": searchCondition}
-                    }, {
-                        "diagnosis": {"like": searchCondition}
-                    }, {
-                        "treatment": {"like": searchCondition}
-                    }, {
-                        "name": {"like": searchCondition}
-                    }, {
-                        "gender": {"like": searchCondition}
-                    }, {
-                        "admission_number": {"like": searchCondition}
-                    }, {
-                        "outpatient_number": {"like": searchCondition}
-                    }, {
-                        "phone": {"like": searchCondition}
-                    }, {
-                        "address": {"like": searchCondition}
-                    }, {
-                        "job": {"like": searchCondition}
+                        "or": [{
+                            "record_doctor": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "consultation_department": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "chief_complaint": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "diagnosis": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "treatment": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "name": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "gender": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "admission_number": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "outpatient_number": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "phone": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "address": {
+                                "like": searchCondition
+                            }
+                        }, {
+                            "job": {
+                                "like": searchCondition
+                            }
+                        }]
                     }]
                 }
             }
@@ -229,8 +258,93 @@ function loadList() {
                             history_id: ret[idx].id,
                             record_doctor: ret[idx].record_doctor,
                             title: ret[idx].name + "   " + ret[idx].diagnosis,
-                            subTitle: ret[idx].gender + " - " + getAge(ret[idx].birthday) + "岁 - " + ret[idx].consultation_department + " - " + ret[idx].createdAt.substring(0, 10),
-                            remark: (ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)
+                            subTitle: ret[idx].gender + " - " + getAge(ret[idx].birthday) + "\n" + ret[idx].consultation_department + " - " + ((ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)),
+                            // remark: (ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)
+                            remark: ret[idx].createdAt.substring(2, 10)
+                        };
+                        if (userName == "admin") {
+                            historyItem.subTitle = "记录: " + ret[idx].record_doctor + " - " + historyItem.subTitle;
+                        }
+                        json_objs.push(historyItem);
+                        idx = idx + 1;
+                    }
+                    loadData(json_objs);
+                }
+            }
+        });
+    } else if (_func == "search" && userName == "admin") {
+        var client = new Resource(historyConstants.appId, historyConstants.appKey);
+        var Model = client.Factory(historyConstants.table.history);
+        var json_objs = [];
+        Model.query({
+            filter: {
+                "where": {
+                    "or": [{
+                        "record_doctor": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "consultation_department": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "chief_complaint": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "diagnosis": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "treatment": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "name": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "gender": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "admission_number": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "outpatient_number": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "phone": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "address": {
+                            "like": searchCondition
+                        }
+                    }, {
+                        "job": {
+                            "like": searchCondition
+                        }
+                    }]
+                }
+            }
+        }, function(ret, err) {
+            hideProgress();
+            if (err) {
+                alert(JSON.stringify(err));
+            } else {
+                if (ret) {
+                    var idx = 0;
+                    while (ret[idx] != undefined) {
+                        var historyItem = {
+                            history_id: ret[idx].id,
+                            record_doctor: ret[idx].record_doctor,
+                            title: ret[idx].name + "   " + ret[idx].diagnosis,
+                            subTitle: ret[idx].gender + " - " + getAge(ret[idx].birthday) + "\n" + ret[idx].consultation_department + " - " + ((ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)),
+                            // remark: (ret[idx].admission_number != "") ? (ret[idx].admission_number + "(住)") : (ret[idx].outpatient_number)
+                            remark: ret[idx].createdAt.substring(2, 10)
                         };
                         if (userName == "admin") {
                             historyItem.subTitle = "记录: " + ret[idx].record_doctor + " - " + historyItem.subTitle;
